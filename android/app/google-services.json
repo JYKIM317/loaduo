@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "897393362733",
+    "project_id": "loaduo",
+    "storage_bucket": "loaduo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897393362733:android:788abdf38d67f1beee75a4",
+        "android_client_info": {
+          "package_name": "com.delivalue.loaduo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ--MkzbBI9WX-t6cw3roeFM66GCalv24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
