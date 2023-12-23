@@ -146,7 +146,7 @@ class Purpose extends ConsumerWidget {
                   Expanded(
                     child: Center(
                       child: Text(
-                        '일일숙제 같이 빼기',
+                        '일일 숙제 같이 빼기',
                         style: TextStyle(
                           color: homeworkState
                               ? Colors.deepOrange[400]

@@ -10,7 +10,7 @@ class InitialDataViewModel {
     List<String> concernList = [];
     raid ? concernList.add('레이드') : null;
     adventure ? concernList.add('내실') : null;
-    homework ? concernList.add('일일숙제') : null;
+    homework ? concernList.add('일일 숙제') : null;
     myConcern.addAll({'concern': concernList});
     await InitialDataModel().updateMyInfo(data: myConcern);
   }

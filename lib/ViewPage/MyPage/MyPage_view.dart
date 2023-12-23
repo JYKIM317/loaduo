@@ -30,7 +30,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                     children: <TextSpan>[
                       TextSpan(
                         style: TextStyle(color: Colors.deepOrange[400]),
-                        text: '레이드, 일일숙제', //concern
+                        text: '레이드, 일일 숙제', //concern
                       ),
                       const TextSpan(
                         text: ' 깐부를 찾고 있어요\n저는 레이드를 ',
