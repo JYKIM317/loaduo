@@ -24,7 +24,6 @@ void main() async {
   await FirebaseAuth.instance.signInAnonymously();
   _apikey = prefs.getString('apikey') ?? 'null';
   _initialdata = prefs.getBool('initialdata') ?? false;
-  print('$_apikey is apikey and initialdata is $_initialdata');
   String? userUID = FirebaseAuth.instance.currentUser!.uid;
   try {
     await FirebaseFirestore.instance.collection('Users').doc(userUID).update({

@@ -38,7 +38,7 @@ class Purpose extends ConsumerWidget {
               padding: EdgeInsets.only(left: 10.w, right: 10.w),
               decoration: BoxDecoration(
                 color: bossState ? Colors.white : Colors.deepOrange[200],
-                borderRadius: BorderRadius.circular(16.sp),
+                borderRadius: BorderRadius.circular(8.sp),
                 border: bossState
                     ? Border.all(
                         color: Colors.deepOrange[400]!,
@@ -84,7 +84,7 @@ class Purpose extends ConsumerWidget {
               padding: EdgeInsets.only(left: 10.w, right: 10.w),
               decoration: BoxDecoration(
                 color: adventureState ? Colors.white : Colors.deepOrange[100],
-                borderRadius: BorderRadius.circular(16.sp),
+                borderRadius: BorderRadius.circular(8.sp),
                 border: adventureState
                     ? Border.all(
                         color: Colors.deepOrange[400]!,
@@ -131,7 +131,7 @@ class Purpose extends ConsumerWidget {
               padding: EdgeInsets.only(left: 10.w, right: 10.w),
               decoration: BoxDecoration(
                 color: homeworkState ? Colors.white : Colors.deepOrange[200],
-                borderRadius: BorderRadius.circular(16.sp),
+                borderRadius: BorderRadius.circular(8.sp),
                 border: homeworkState
                     ? Border.all(
                         color: Colors.deepOrange[400]!,
@@ -206,7 +206,7 @@ class PlayStyle extends ConsumerWidget {
                   padding: EdgeInsets.only(left: 10.w, right: 10.w),
                   decoration: BoxDecoration(
                     color: mood == 0 ? Colors.white : Colors.deepOrange[200],
-                    borderRadius: BorderRadius.circular(16.sp),
+                    borderRadius: BorderRadius.circular(8.sp),
                     border: mood == 0
                         ? Border.all(
                             color: Colors.deepOrange[400]!,
@@ -246,7 +246,7 @@ class PlayStyle extends ConsumerWidget {
                   padding: EdgeInsets.only(left: 10.w, right: 10.w),
                   decoration: BoxDecoration(
                     color: mood == 1 ? Colors.white : Colors.deepOrange[200],
-                    borderRadius: BorderRadius.circular(16.sp),
+                    borderRadius: BorderRadius.circular(8.sp),
                     border: mood == 1
                         ? Border.all(
                             color: Colors.deepOrange[400]!,
@@ -292,7 +292,7 @@ class PlayStyle extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color:
                         distribute == 0 ? Colors.white : Colors.deepOrange[100],
-                    borderRadius: BorderRadius.circular(16.sp),
+                    borderRadius: BorderRadius.circular(8.sp),
                     border: distribute == 0
                         ? Border.all(
                             color: Colors.deepOrange[400]!,
@@ -334,7 +334,7 @@ class PlayStyle extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color:
                         distribute == 1 ? Colors.white : Colors.deepOrange[100],
-                    borderRadius: BorderRadius.circular(16.sp),
+                    borderRadius: BorderRadius.circular(8.sp),
                     border: distribute == 1
                         ? Border.all(
                             color: Colors.deepOrange[400]!,
@@ -383,7 +383,7 @@ class PlayStyle extends ConsumerWidget {
                     padding: EdgeInsets.only(left: 10.w, right: 10.w),
                     decoration: BoxDecoration(
                       color: skill == 0 ? Colors.white : Colors.deepOrange[200],
-                      borderRadius: BorderRadius.circular(16.sp),
+                      borderRadius: BorderRadius.circular(8.sp),
                       border: skill == 0
                           ? Border.all(
                               color: Colors.deepOrange[400]!,
@@ -424,7 +424,7 @@ class PlayStyle extends ConsumerWidget {
                     padding: EdgeInsets.only(left: 10.w, right: 10.w),
                     decoration: BoxDecoration(
                       color: skill == 1 ? Colors.white : Colors.deepOrange[200],
-                      borderRadius: BorderRadius.circular(16.sp),
+                      borderRadius: BorderRadius.circular(8.sp),
                       border: skill == 1
                           ? Border.all(
                               color: Colors.deepOrange[400]!,
@@ -465,7 +465,7 @@ class PlayStyle extends ConsumerWidget {
                     padding: EdgeInsets.only(left: 10.w, right: 10.w),
                     decoration: BoxDecoration(
                       color: skill == 2 ? Colors.white : Colors.deepOrange[200],
-                      borderRadius: BorderRadius.circular(16.sp),
+                      borderRadius: BorderRadius.circular(8.sp),
                       border: skill == 2
                           ? Border.all(
                               color: Colors.deepOrange[400]!,
@@ -506,7 +506,7 @@ class PlayStyle extends ConsumerWidget {
                     padding: EdgeInsets.only(left: 10.w, right: 10.w),
                     decoration: BoxDecoration(
                       color: skill == 3 ? Colors.white : Colors.deepOrange[200],
-                      borderRadius: BorderRadius.circular(16.sp),
+                      borderRadius: BorderRadius.circular(8.sp),
                       border: skill == 3
                           ? Border.all(
                               color: Colors.deepOrange[400]!,
@@ -600,7 +600,7 @@ class _PlayTimeState extends ConsumerState<PlayTime> {
               height: 240.h,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(5.sp),
+                borderRadius: BorderRadius.circular(8.sp),
               ),
               child: ListView.separated(
                 physics: const ClampingScrollPhysics(),
@@ -661,7 +661,7 @@ class _PlayTimeState extends ConsumerState<PlayTime> {
               height: 210.h,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(5.sp),
+                borderRadius: BorderRadius.circular(8.sp),
               ),
               child: ListView.separated(
                 physics: const ClampingScrollPhysics(),
@@ -766,7 +766,7 @@ class _PlayTimeState extends ConsumerState<PlayTime> {
                       height: 50.h,
                       decoration: BoxDecoration(
                         color: Colors.deepOrange[100],
-                        borderRadius: BorderRadius.circular(12.w),
+                        borderRadius: BorderRadius.circular(8.sp),
                       ),
                       alignment: Alignment.center,
                       child: Text(
@@ -813,7 +813,7 @@ class _PlayTimeState extends ConsumerState<PlayTime> {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: Colors.deepOrange[100],
-                        borderRadius: BorderRadius.circular(12.w),
+                        borderRadius: BorderRadius.circular(8.sp),
                       ),
                       child: Text(
                         weekend.toString(),

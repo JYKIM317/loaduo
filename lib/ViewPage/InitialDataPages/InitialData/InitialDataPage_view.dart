@@ -83,7 +83,7 @@ class InitialDataPage extends ConsumerWidget {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: Colors.deepOrange[400],
-                      borderRadius: BorderRadius.circular(16.sp),
+                      borderRadius: BorderRadius.circular(8.sp),
                     ),
                     child: Text(
                       '확인',
