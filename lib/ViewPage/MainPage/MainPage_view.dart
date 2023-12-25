@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'MainPage_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loaduo/ViewPage/MyPage/MyPage_view.dart';
+import 'package:loaduo/ViewPage/SearchUserPage/SearchUserPage_view.dart';
 
 class MainPage extends ConsumerWidget {
   const MainPage({super.key});
@@ -16,15 +17,18 @@ class MainPage extends ConsumerWidget {
     }
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        color: Colors.white,
-        child: [
-          MyPage(uid: userUID),
-          MyPage(uid: userUID),
-          MyPage(uid: userUID),
-        ][currentIndex],
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          color: Colors.white,
+          child: [
+            MyPage(uid: userUID),
+            SearchUserPage(),
+            MyPage(uid: userUID),
+          ][currentIndex],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[

@@ -2,11 +2,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loaduo/ViewPage/MainPage/MainPage_provider.dart';
 
 import 'package:loaduo/ViewPage/MyPage/MyPage_provider.dart';
 import 'MyPage_viewmodel.dart';
-
 import 'package:loaduo/ViewPage/InitialDataPages/InitialData/InitialDataPage_view.dart';
+import 'package:loaduo/ViewPage/InitialDataPages/ApiData/ApiDataPage_view.dart';
 
 class MyPage extends ConsumerStatefulWidget {
   final String uid;
@@ -30,15 +31,80 @@ class _MyPageState extends ConsumerState<MyPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 40.h),
-            Padding(
-              padding: EdgeInsets.only(left: 16.w),
-              child: Text(
-                '자기소개',
-                style: TextStyle(
-                  fontSize: 24.sp,
-                  color: Colors.black,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 16.w),
+                      child: Text(
+                        '자기소개',
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    if (isMe)
+                      IconButton(
+                        onPressed: () {
+                          ref.read(myPageInfo.notifier).remove();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => InitialDataPage(),
+                            ),
+                          );
+                        },
+                        icon: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.fromLTRB(6.w, 4.h, 6.w, 4.h),
+                          decoration: BoxDecoration(
+                            color: Colors.deepOrange[200],
+                            borderRadius: BorderRadius.circular(8.sp),
+                          ),
+                          child: Text(
+                            '수정하기',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-              ),
+                if (isMe)
+                  Padding(
+                    padding: EdgeInsets.only(right: 16.w),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ApiDataPage(),
+                          ),
+                        );
+                      },
+                      icon: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.fromLTRB(6.w, 4.h, 6.w, 4.h),
+                        decoration: BoxDecoration(
+                          color: Colors.deepOrange[400],
+                          borderRadius: BorderRadius.circular(8.sp),
+                        ),
+                        child: Text(
+                          'API Key',
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
             Divider(
               color: Colors.grey[300],
@@ -54,7 +120,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SizedBox(
-                      height: 200.h,
+                      height: 246.h,
                       child: Center(
                           child: CircularProgressIndicator(
                         color: Colors.deepOrange[400],
@@ -155,10 +221,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: IconButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => InitialDataPage()));
+                    ref.read(mainpageIndex.notifier).update(1);
                   },
                   icon: Container(
                     width: double.infinity,

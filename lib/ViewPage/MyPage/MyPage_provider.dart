@@ -13,6 +13,10 @@ class MyPageInfoNotifier extends StateNotifier<Map<String, dynamic>> {
   }) {
     state.addAll(data);
   }
+
+  remove() {
+    state.clear();
+  }
 }
 
 final myPageCharacter =

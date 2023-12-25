@@ -119,7 +119,14 @@ class _ApiDataPageState extends ConsumerState<ApiDataPage> {
                       onPressed: () {
                         ref.read(apikey.notifier).update('nulll');
                         final myInitialDataExist = ref.watch(initialDataExist);
-                        myInitialDataExist ? RoutePage() : InitialDataPage();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => myInitialDataExist
+                                  ? RoutePage()
+                                  : InitialDataPage(),
+                            ),
+                            (route) => false);
                       },
                       child: Text(
                         '나중에',
