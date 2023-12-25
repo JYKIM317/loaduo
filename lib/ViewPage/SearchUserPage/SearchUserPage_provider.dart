@@ -11,22 +11,3 @@ class SearchStringNotifier extends StateNotifier<String> {
     state = value;
   }
 }
-
-/*
-final searchHistory =
-    StateNotifierProvider<SearchHistoryNotifier, List<dynamic>>((ref) {
-  return SearchHistoryNotifier();
-});
-
-class SearchHistoryNotifier extends StateNotifier<List<dynamic>> {
-  SearchHistoryNotifier() : super([]);
-
-  update(List<dynamic> history) {
-    state.addAll(history);
-  }
-
-  remove(int index) {
-    state.removeAt(index);
-  }
-}
-*/

@@ -2,7 +2,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:loaduo/ViewPage/MainPage/MainPage_provider.dart';
 
 import 'package:loaduo/ViewPage/MyPage/MyPage_provider.dart';
 import 'MyPage_viewmodel.dart';
@@ -221,7 +220,8 @@ class _MyPageState extends ConsumerState<MyPage> {
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: IconButton(
                   onPressed: () {
-                    ref.read(mainpageIndex.notifier).update(1);
+                    //유저 검색 후 등록하면 /characters/{characterName}/siblings 가져오는 로직
+                    // provider null일 시 fb에서 가져오기 -> 갱신 시간이 지금이랑 비교해서 1시간 이상 차이일 시 api로 갱신
                   },
                   icon: Container(
                     width: double.infinity,

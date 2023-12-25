@@ -16,7 +16,7 @@ class SearchUserPageModel {
 
   Future<dynamic> getUserDataAPI({required String userName}) async {
     String apiRequestUrl =
-        'https://developer-lostark.game.onstove.com/armories/characters/$userName?filters=profiles%2Bcards%2Bgems%2Bengravings%2Bequipment';
+        'https://developer-lostark.game.onstove.com/armories/characters/$userName?filters=profiles%2Bcards%2Bgems%2Bengravings%2Bequipment%2Bcollectibles';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? myAPIKey = prefs.getString('apikey');
     if (myAPIKey == null) {

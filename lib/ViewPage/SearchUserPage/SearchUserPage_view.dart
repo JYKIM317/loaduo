@@ -5,6 +5,7 @@ import 'package:loaduo/ViewPage/InitialDataPages/ApiData/ApiDataPage_view.dart';
 import 'package:loaduo/ViewPage/SearchUserPage/SearchUserPage_provider.dart';
 import 'package:loaduo/ViewPage/SearchUserPage/SearchUserPage_viewmodel.dart';
 import 'package:loaduo/ShowToastMsg.dart';
+import 'package:loaduo/ViewPage/UserPage/UserPage_view.dart';
 
 class SearchUserPage extends ConsumerStatefulWidget {
   const SearchUserPage({super.key});
@@ -15,6 +16,13 @@ class SearchUserPage extends ConsumerStatefulWidget {
 
 class _SearchUserPageState extends ConsumerState<SearchUserPage> {
   TextEditingController searchUserController = TextEditingController();
+  final _focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +69,7 @@ class _SearchUserPageState extends ConsumerState<SearchUserPage> {
                       minLines: 1,
                       maxLength: 12,
                       controller: searchUserController,
+                      focusNode: _focusNode,
                       onChanged: (value) {
                         ref.read(searchString.notifier).update(value);
                       },
@@ -72,13 +81,19 @@ class _SearchUserPageState extends ConsumerState<SearchUserPage> {
                             setState(() {});
                           });
                           if (result != null) {
-                            print(result['statusCode']);
                             switch (result['statusCode']) {
                               case 200:
                                 //요청 성공
                                 if (result['body'] != null) {
                                   //캐릭터 반환 성공
-                                  print(result['body'].toString());
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => UserPage(
+                                        userData: result['body'],
+                                      ),
+                                    ),
+                                  );
                                 } else {
                                   showToast('$value\n캐릭터 정보가 없습니다.');
                                 }
@@ -161,6 +176,7 @@ class _SearchUserPageState extends ConsumerState<SearchUserPage> {
                                 ref
                                     .read(searchString.notifier)
                                     .update(history[idx]);
+                                FocusScope.of(context).requestFocus(_focusNode);
                               },
                               child: Text(
                                 history[idx],
