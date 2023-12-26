@@ -10,9 +10,9 @@ class UserPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<String> noShowItem = ['나침반', '부적', '문장'],
         equipArmor = ['투구', '상의', '하의', '장갑', '어깨'],
-        equipAccessory = ['목걸이', '귀걸이', '반지'],
+        equipAccessory = ['목걸이', '귀걸이', '반지', '어빌리티 스톤'],
         supporter = ['바드', '홀리나이트', '도화가'];
-    String abiltyStone = '어빌리티 스톤', bracelet = '팔찌';
+    String bracelet = '팔찌';
 
     return Scaffold(
       body: Container(
@@ -930,6 +930,89 @@ class UserPage extends ConsumerWidget {
                                                 fontSize: 14.sp,
                                               ),
                                             ),
+                                          //악세서리
+                                          if (equipAccessory.contains(
+                                                  userData['ArmoryEquipment']
+                                                      [idx]['Type']) &&
+                                              tooltip['Element_006'] != null &&
+                                              tooltip['Element_006']['value']
+                                                      .runtimeType !=
+                                                  String)
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      tooltip['Element_006']['value']
+                                                                          [
+                                                                          'Element_000']
+                                                                      [
+                                                                      'contentStr']
+                                                                  [
+                                                                  'Element_000']
+                                                              ['contentStr']
+                                                          .replaceAllMapped(
+                                                              RegExp(
+                                                                  r'<[^>]*>'),
+                                                              (match) {
+                                                        return '';
+                                                      }).replaceFirstMapped(
+                                                              ' 활성도',
+                                                              (match) => ''),
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                    const Text(' '),
+                                                    Text(
+                                                      tooltip['Element_006']['value']
+                                                                          [
+                                                                          'Element_000']
+                                                                      [
+                                                                      'contentStr']
+                                                                  [
+                                                                  'Element_001']
+                                                              ['contentStr']
+                                                          .replaceAllMapped(
+                                                              RegExp(
+                                                                  r'<[^>]*>'),
+                                                              (match) {
+                                                        return '';
+                                                      }).replaceFirstMapped(
+                                                              ' 활성도',
+                                                              (match) => ''),
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Text(
+                                                  tooltip['Element_006']['value']
+                                                                      [
+                                                                      'Element_000']
+                                                                  ['contentStr']
+                                                              ['Element_002']
+                                                          ['contentStr']
+                                                      .replaceAllMapped(
+                                                          RegExp(r'<[^>]*>'),
+                                                          (match) {
+                                                    return '';
+                                                  }).replaceFirstMapped(' 활성도',
+                                                          (match) => ''),
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                    fontSize: 14.sp,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
                                         ],
                                       ),
                                     ],

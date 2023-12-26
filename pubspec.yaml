@@ -40,7 +40,6 @@ dependencies:
   firebase_auth: ^4.15.3
   url_launcher: ^6.1.14
   fluttertoast: ^8.2.4
-  html: ^0.15.4
 
 dev_dependencies:
   flutter_test:
