@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -5,15 +6,14 @@ import 'package:flutter/material.dart';
 class UserPage extends ConsumerWidget {
   final Map<String, dynamic> userData;
   const UserPage({super.key, required this.userData});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //print(this.userData['ArmoryProfile']);
-    //print(this.userData['ArmoryCard']);
-    //print(this.userData['ArmoryGem']);
-    //print(this.userData['ArmoryEquipment'][0][Name]);
-    //print(this.userData['ArmoryEngraving']['Effects'][0][Icon, Name]);
-    //print(this.userData['Collectibles']);
+    List<String> noShowItem = ['나침반', '부적', '문장'],
+        equipArmor = ['투구', '상의', '하의', '장갑', '어깨'],
+        equipAccessory = ['목걸이', '귀걸이', '반지'],
+        supporter = ['바드', '홀리나이트', '도화가'];
+    String abiltyStone = '어빌리티 스톤', bracelet = '팔찌';
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -22,7 +22,7 @@ class UserPage extends ConsumerWidget {
         child: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.only(top: 44.h),
+            padding: EdgeInsets.only(top: 44.h, bottom: 44.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -242,181 +242,725 @@ class UserPage extends ConsumerWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.fromLTRB(10.w, 10.h, 10.w, 10.h),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 21, 24, 29),
-                        borderRadius: BorderRadius.circular(8.sp),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 24.w,
-                                height: 24.h,
-                                child:
-                                    Image.asset('assets/images/collect_00.png'),
-                              ),
-                              Text(
-                                userData['Collectibles'][0]['Point'].toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
+                    width: double.infinity,
+                    height: 70.h,
+                    padding: EdgeInsets.fromLTRB(10.w, 10.h, 10.w, 10.h),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 21, 24, 29),
+                      borderRadius: BorderRadius.circular(8.sp),
+                    ),
+                    child: userData['Collectibles'] != null
+                        ? ListView.separated(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: userData['Collectibles'].length,
+                            itemBuilder: (BuildContext ctx, int idx) {
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 24.w,
+                                    height: 24.h,
+                                    child: Image.asset(
+                                        'assets/images/collect_0$idx.png'),
+                                  ),
+                                  Text(
+                                    userData['Collectibles'][idx]['Point']
+                                        .toString(),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                            separatorBuilder: (ctx, idx) {
+                              return SizedBox(width: 10.w);
+                            },
+                          )
+                        : Text(
+                            '수집품 정보가 없습니다.',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                            ),
                           ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 24.w,
-                                height: 24.h,
-                                child:
-                                    Image.asset('assets/images/collect_01.png'),
-                              ),
-                              Text(
-                                userData['Collectibles'][1]['Point'].toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 24.w,
-                                height: 24.h,
-                                child:
-                                    Image.asset('assets/images/collect_02.png'),
-                              ),
-                              Text(
-                                userData['Collectibles'][2]['Point'].toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 24.w,
-                                height: 24.h,
-                                child:
-                                    Image.asset('assets/images/collect_03.png'),
-                              ),
-                              Text(
-                                userData['Collectibles'][3]['Point'].toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 24.w,
-                                height: 24.h,
-                                child:
-                                    Image.asset('assets/images/collect_04.png'),
-                              ),
-                              Text(
-                                userData['Collectibles'][4]['Point'].toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 24.w,
-                                height: 24.h,
-                                child:
-                                    Image.asset('assets/images/collect_05.png'),
-                              ),
-                              Text(
-                                userData['Collectibles'][5]['Point'].toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 24.w,
-                                height: 24.h,
-                                child:
-                                    Image.asset('assets/images/collect_06.png'),
-                              ),
-                              Text(
-                                userData['Collectibles'][6]['Point'].toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 24.w,
-                                height: 24.h,
-                                child:
-                                    Image.asset('assets/images/collect_07.png'),
-                              ),
-                              Text(
-                                userData['Collectibles'][7]['Point'].toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: 24.w,
-                                height: 24.h,
-                                child:
-                                    Image.asset('assets/images/collect_08.png'),
-                              ),
-                              Text(
-                                userData['Collectibles'][8]['Point'].toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )),
+                  ),
                 ),
                 Container(
                   height: 20.h,
                   margin: EdgeInsets.symmetric(vertical: 20.h),
                   color: Colors.grey[200],
                 ),
-                /*Container(
-                    child: Image.network(
-                        userData['ArmoryGem']['Gems'][0]['Icon'] ?? '')),*/
+                userData['ArmoryGem'] != null
+                    ? SizedBox(
+                        width: double.infinity,
+                        height: 70.w,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          physics: const ClampingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16.w, vertical: 10.w),
+                          itemCount: userData['ArmoryGem']['Gems'].length,
+                          itemBuilder: (BuildContext ctx, int idx) {
+                            return Stack(
+                              alignment: AlignmentDirectional.bottomEnd,
+                              children: [
+                                Container(
+                                  width: 50.w,
+                                  height: 50.w,
+                                  padding: EdgeInsets.all(4.w),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        const Color.fromARGB(255, 21, 24, 29),
+                                    borderRadius: BorderRadius.circular(8.sp),
+                                  ),
+                                  child: Image.network(userData['ArmoryGem']
+                                      ['Gems'][idx]['Icon']),
+                                ),
+                                Transform.translate(
+                                  offset: Offset(5.w, 5.w),
+                                  child: Container(
+                                    width: 24.w,
+                                    height: 24.w,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          const Color.fromARGB(255, 21, 24, 29),
+                                      borderRadius: BorderRadius.circular(8.sp),
+                                      border: Border.all(
+                                        color: userData['ArmoryGem']['Gems']
+                                                    [idx]['Grade'] ==
+                                                '유물'
+                                            ? Colors.deepOrange[400]!
+                                            : userData['ArmoryGem']['Gems'][idx]
+                                                        ['Grade'] ==
+                                                    '전설'
+                                                ? Colors.yellow[800]!
+                                                : Colors.purple[800]!,
+                                        width: 2.sp,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      userData['ArmoryGem']['Gems'][idx]
+                                              ['Level']
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                          separatorBuilder: (ctx, idx) {
+                            return SizedBox(width: 6.w);
+                          },
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Container(
+                          width: double.infinity,
+                          height: 50.w,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 21, 24, 29),
+                            borderRadius: BorderRadius.circular(8.sp),
+                          ),
+                          child: Text(
+                            '장착한 보석이 없습니다.',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                Divider(
+                  color: Colors.grey[300],
+                  thickness: 2.h,
+                  height: 40.h,
+                ),
+                userData['ArmoryCard'] != null
+                    ? Column(
+                        children: [
+                          if (userData['ArmoryCard']['Effects'] != null)
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 40.h,
+                                child: Text(
+                                  userData['ArmoryCard']['Effects'][0]['Items']
+                                      .last['Name'],
+                                  style: TextStyle(
+                                    color: Colors.deepOrange[400],
+                                    fontSize: 18.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 120.w,
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              physics: const ClampingScrollPhysics(),
+                              padding: EdgeInsets.symmetric(horizontal: 16.w),
+                              itemCount: userData['ArmoryCard']['Cards'].length,
+                              itemBuilder: (BuildContext ctx, int idx) {
+                                return Container(
+                                  padding: EdgeInsets.all(4.w),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        const Color.fromARGB(255, 21, 24, 29),
+                                    borderRadius: BorderRadius.circular(8.sp),
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.bottomCenter,
+                                    children: [
+                                      Image.network(userData['ArmoryCard']
+                                          ['Cards'][idx]['Icon']),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: 20.w,
+                                            child: ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: userData['ArmoryCard']
+                                                  ['Cards'][idx]['AwakeCount'],
+                                              itemBuilder:
+                                                  (BuildContext ctx, int idx) {
+                                                return Image.asset(
+                                                    'assets/images/gem_active.png');
+                                              },
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 20.w,
+                                            child: ListView.builder(
+                                              shrinkWrap: true,
+                                              physics:
+                                                  const NeverScrollableScrollPhysics(),
+                                              scrollDirection: Axis.horizontal,
+                                              itemCount: userData['ArmoryCard']
+                                                          ['Cards'][idx]
+                                                      ['AwakeTotal'] -
+                                                  userData['ArmoryCard']
+                                                          ['Cards'][idx]
+                                                      ['AwakeCount'],
+                                              itemBuilder:
+                                                  (BuildContext ctx, int idx) {
+                                                return Image.asset(
+                                                    'assets/images/gem_deactive.png');
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (ctx, idx) {
+                                return SizedBox(width: 2.w);
+                              },
+                            ),
+                          ),
+                        ],
+                      )
+                    : Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Container(
+                          width: double.infinity,
+                          height: 50.w,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 21, 24, 29),
+                            borderRadius: BorderRadius.circular(8.sp),
+                          ),
+                          child: Text(
+                            '장착한 카드가 없습니다.',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                Divider(
+                  color: Colors.grey[300],
+                  thickness: 2.h,
+                  height: 40.h,
+                ),
+                userData['ArmoryEngraving'] != null
+                    ? Container(
+                        width: double.infinity,
+                        height: 70.w,
+                        alignment: Alignment.center,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          physics: const ClampingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16.w, vertical: 10.w),
+                          itemCount:
+                              userData['ArmoryEngraving']['Effects'].length,
+                          itemBuilder: (BuildContext ctx, int idx) {
+                            return Stack(
+                              alignment: AlignmentDirectional.bottomEnd,
+                              children: [
+                                Container(
+                                  width: 50.w,
+                                  height: 50.w,
+                                  padding: EdgeInsets.all(4.w),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        const Color.fromARGB(255, 21, 24, 29),
+                                    borderRadius: BorderRadius.circular(8.sp),
+                                  ),
+                                  child: Image.network(
+                                      userData['ArmoryEngraving']['Effects']
+                                          [idx]['Icon']),
+                                ),
+                                Transform.translate(
+                                  offset: Offset(5.w, 5.w),
+                                  child: Container(
+                                    width: 24.w,
+                                    height: 24.w,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color:
+                                          const Color.fromARGB(255, 21, 24, 29),
+                                      borderRadius: BorderRadius.circular(8.sp),
+                                      border: Border.all(
+                                        color: Colors.deepOrange[400]!,
+                                        width: 2.sp,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      userData['ArmoryEngraving']['Effects']
+                                              [idx]['Name'][
+                                          userData['ArmoryEngraving']['Effects']
+                                                      [idx]['Name']
+                                                  .length -
+                                              1],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                          separatorBuilder: (ctx, idx) {
+                            return SizedBox(width: 8.w);
+                          },
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Container(
+                          width: double.infinity,
+                          height: 50.w,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 21, 24, 29),
+                            borderRadius: BorderRadius.circular(8.sp),
+                          ),
+                          child: Text(
+                            '활성화 된 각인이 없습니다.',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                SizedBox(height: 20.h),
+                userData['ArmoryEngraving'] != null
+                    ? Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount:
+                              userData['ArmoryEngraving']['Effects'].length,
+                          itemBuilder: (BuildContext ctx, int idx) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  userData['ArmoryEngraving']['Effects'][idx]
+                                          ['Name']
+                                      .replaceFirstMapped(
+                                          'Lv. ', (match) => ''),
+                                  style: TextStyle(
+                                    color: userData['ArmoryEngraving']
+                                                ['Effects'][idx]['Name']
+                                            .contains('감소')
+                                        ? Colors.red
+                                        : Colors.black,
+                                    fontSize: 18.sp,
+                                  ),
+                                ),
+                                Text(
+                                  userData['ArmoryEngraving']['Effects'][idx]
+                                      ['Description'],
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14.sp,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                          separatorBuilder: (ctx, idx) {
+                            return SizedBox(height: 10.h);
+                          },
+                        ),
+                      )
+                    : const SizedBox(),
+                Divider(
+                  color: Colors.grey[300],
+                  thickness: 2.h,
+                  height: 40.h,
+                ),
+                userData['ArmoryEquipment'] != null
+                    ? Container(
+                        alignment: Alignment.topLeft,
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          physics: const ClampingScrollPhysics(),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16.w, vertical: 10.w),
+                          itemCount: userData['ArmoryEquipment'].length,
+                          itemBuilder: (BuildContext ctx, int idx) {
+                            Map<String, dynamic> tooltip = jsonDecode(
+                                userData['ArmoryEquipment'][idx]['Tooltip']);
+
+                            return noShowItem.contains(
+                                    userData['ArmoryEquipment'][idx]['Type'])
+                                ? const SizedBox()
+                                : Row(
+                                    children: [
+                                      Stack(
+                                        alignment:
+                                            AlignmentDirectional.bottomEnd,
+                                        children: [
+                                          Container(
+                                            width: 50.w,
+                                            height: 50.w,
+                                            padding: EdgeInsets.all(4.w),
+                                            decoration: BoxDecoration(
+                                              color: const Color.fromARGB(
+                                                  255, 21, 24, 29),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.sp),
+                                              border: Border.all(
+                                                width: 2.sp,
+                                                color: userData['ArmoryEquipment']
+                                                            [idx]['Grade'] ==
+                                                        '에스더'
+                                                    ? Colors.cyanAccent
+                                                    : userData['ArmoryEquipment']
+                                                                    [idx]
+                                                                ['Grade'] ==
+                                                            '고대'
+                                                        ? const Color.fromARGB(
+                                                            255, 186, 169, 128)
+                                                        : userData['ArmoryEquipment']
+                                                                        [idx]
+                                                                    ['Grade'] ==
+                                                                '유물'
+                                                            ? Colors.deepOrange[
+                                                                400]!
+                                                            : userData['ArmoryEquipment']
+                                                                            [idx]
+                                                                        ['Grade'] ==
+                                                                    '전설'
+                                                                ? Colors.yellow[800]!
+                                                                : Colors.purple[800]!,
+                                              ),
+                                            ),
+                                            child: Image.network(
+                                                userData['ArmoryEquipment'][idx]
+                                                    ['Icon']),
+                                          ),
+                                          if (tooltip['Element_001']['value']
+                                                  ['qualityValue'] >=
+                                              0)
+                                            Transform.translate(
+                                              offset: Offset(0, 10.w),
+                                              child: Container(
+                                                width: 50.w,
+                                                height: 20.w,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: const Color.fromARGB(
+                                                      255, 21, 24, 29),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.sp),
+                                                  border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 2.sp,
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  tooltip['Element_001']
+                                                              ['value']
+                                                          ['qualityValue']
+                                                      .toString(),
+                                                  style: TextStyle(
+                                                    color: tooltip['Element_001']
+                                                                    ['value'][
+                                                                'qualityValue'] ==
+                                                            100
+                                                        ? Colors.amber[800]
+                                                        : tooltip['Element_001']
+                                                                        ['value']
+                                                                    [
+                                                                    'qualityValue'] >=
+                                                                90
+                                                            ? Colors
+                                                                .purpleAccent
+                                                            : tooltip['Element_001']
+                                                                            ['value']
+                                                                        [
+                                                                        'qualityValue'] >=
+                                                                    70
+                                                                ? Colors
+                                                                    .blueAccent
+                                                                : Colors.greenAccent[
+                                                                    400],
+                                                    fontSize: 12.sp,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                      SizedBox(width: 10.w),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            userData['ArmoryEquipment'][idx]
+                                                ['Name'],
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14.sp,
+                                            ),
+                                          ),
+
+                                          //엘릭서
+                                          if (equipArmor.contains(userData['ArmoryEquipment'][idx]['Type']) &&
+                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName'])
+                                                      ? 'Element_009'
+                                                      : 'Element_008'] !=
+                                                  null &&
+                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName']) ? 'Element_009' : 'Element_008']
+                                                          ['value']
+                                                      .runtimeType !=
+                                                  String &&
+                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName']) ? 'Element_009' : 'Element_008']
+                                                              ['value']
+                                                          ['Element_000']
+                                                      .runtimeType !=
+                                                  String &&
+                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName']) ? 'Element_009' : 'Element_008']
+                                                              ['value']
+                                                          ['Element_000']
+                                                      ['contentStr'] !=
+                                                  null)
+                                            Row(
+                                              children: [
+                                                if (tooltip[supporter.contains(userData[
+                                                                        'ArmoryProfile']
+                                                                    [
+                                                                    'CharacterClassName'])
+                                                                ? 'Element_009'
+                                                                : 'Element_008']
+                                                            [
+                                                            'value']['Element_000']
+                                                        [
+                                                        'contentStr']['Element_000'] !=
+                                                    null)
+                                                  Text(
+                                                    tooltip[supporter.contains(
+                                                                        userData['ArmoryProfile'][
+                                                                            'CharacterClassName'])
+                                                                    ? 'Element_009'
+                                                                    : 'Element_008']['value']['Element_000']['contentStr']['Element_000']
+                                                                ['contentStr']
+                                                            .replaceAllMapped(
+                                                                RegExp(r'<[^>]*>'),
+                                                                (match) {
+                                                              return '';
+                                                            })
+                                                            .substring(
+                                                              0,
+                                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName'])
+                                                                              ? 'Element_009'
+                                                                              : 'Element_008']['value']['Element_000']['contentStr']['Element_000']
+                                                                          [
+                                                                          'contentStr']
+                                                                      .replaceAllMapped(
+                                                                          RegExp(
+                                                                              r'<[^>]*>'),
+                                                                          (match) {
+                                                                    return '';
+                                                                  }).indexOf(
+                                                                          'Lv.') +
+                                                                  4,
+                                                            )
+                                                            .replaceFirstMapped(
+                                                                'Lv.',
+                                                                (match) => '')
+                                                            .replaceAllMapped(
+                                                                RegExp(r'\[.*?\]'),
+                                                                (match) {
+                                                              return '';
+                                                            }) ??
+                                                        '',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14.sp,
+                                                    ),
+                                                  ),
+                                                Text(
+                                                  ' /',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 14.sp,
+                                                  ),
+                                                ),
+                                                if (tooltip[supporter.contains(userData[
+                                                                        'ArmoryProfile']
+                                                                    [
+                                                                    'CharacterClassName'])
+                                                                ? 'Element_009'
+                                                                : 'Element_008']
+                                                            [
+                                                            'value']['Element_000']
+                                                        [
+                                                        'contentStr']['Element_001'] !=
+                                                    null)
+                                                  Text(
+                                                    tooltip[supporter.contains(
+                                                                        userData['ArmoryProfile'][
+                                                                            'CharacterClassName'])
+                                                                    ? 'Element_009'
+                                                                    : 'Element_008']['value']['Element_000']['contentStr']['Element_001']
+                                                                ['contentStr']
+                                                            .replaceAllMapped(
+                                                                RegExp(r'<[^>]*>'),
+                                                                (match) {
+                                                              return '';
+                                                            })
+                                                            .substring(
+                                                              0,
+                                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName'])
+                                                                              ? 'Element_009'
+                                                                              : 'Element_008']['value']['Element_000']['contentStr']['Element_001']
+                                                                          [
+                                                                          'contentStr']
+                                                                      .replaceAllMapped(
+                                                                          RegExp(
+                                                                              r'<[^>]*>'),
+                                                                          (match) {
+                                                                    return '';
+                                                                  }).indexOf(
+                                                                          'Lv.') +
+                                                                  4,
+                                                            )
+                                                            .replaceFirstMapped(
+                                                                'Lv.',
+                                                                (match) => '')
+                                                            .replaceAllMapped(
+                                                                RegExp(r'\[.*?\]'),
+                                                                (match) {
+                                                              return '';
+                                                            }) ??
+                                                        '',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14.sp,
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                          //초월
+                                          if (equipArmor.contains(
+                                                  userData['ArmoryEquipment']
+                                                      [idx]['Type']) &&
+                                              tooltip['Element_007'] != null &&
+                                              tooltip['Element_007']['value']
+                                                      ['Element_000'] !=
+                                                  null)
+                                            Text(
+                                              tooltip['Element_007']['value']
+                                                      ['Element_000']['topStr']
+                                                  .replaceAllMapped(
+                                                      RegExp(r'<[^>]*>'),
+                                                      (match) {
+                                                return '';
+                                              }),
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 14.sp,
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                          },
+                          separatorBuilder: (ctx, idx) {
+                            return SizedBox(
+                              height: 18.h,
+                            );
+                          },
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: Container(
+                          width: double.infinity,
+                          height: 50.w,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 21, 24, 29),
+                            borderRadius: BorderRadius.circular(8.sp),
+                          ),
+                          child: Text(
+                            '장착중인 장비가 없습니다.',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.sp,
+                            ),
+                          ),
+                        ),
+                      ),
               ],
             ),
           ),

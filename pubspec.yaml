@@ -40,6 +40,7 @@ dependencies:
   firebase_auth: ^4.15.3
   url_launcher: ^6.1.14
   fluttertoast: ^8.2.4
+  html: ^0.15.4
 
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,8 @@ flutter:
     - assets/images/collect_06.png
     - assets/images/collect_07.png
     - assets/images/collect_08.png
+    - assets/images/gem_active.png
+    - assets/images/gem_deactive.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

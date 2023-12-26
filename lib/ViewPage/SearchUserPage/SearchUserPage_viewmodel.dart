@@ -23,7 +23,6 @@ class SearchUserPageViewModel {
       'statusCode': statusCode,
       'body': body,
     };
-
     return responseData;
   }
 
