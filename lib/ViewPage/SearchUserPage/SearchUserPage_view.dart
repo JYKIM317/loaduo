@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:loaduo/ViewPage/InitialDataPages/ApiData/ApiDataPage_view.dart';
 import 'package:loaduo/ViewPage/SearchUserPage/SearchUserPage_provider.dart';
 import 'package:loaduo/ViewPage/SearchUserPage/SearchUserPage_viewmodel.dart';
@@ -26,6 +27,7 @@ class _SearchUserPageState extends ConsumerState<SearchUserPage> {
 
   @override
   Widget build(BuildContext context) {
+    final progress = ProgressHUD.of(context);
     final searchUserString = ref.watch(searchString);
     bool searchInit = searchUserString == searchUserController.text;
     return Padding(
@@ -74,10 +76,12 @@ class _SearchUserPageState extends ConsumerState<SearchUserPage> {
                         ref.read(searchString.notifier).update(value);
                       },
                       onSubmitted: (value) async {
+                        progress?.show();
                         await SearchUserPageViewModel()
                             .searchUser(userName: value)
                             .then((result) {
                           Future.microtask(() {
+                            progress?.dismiss();
                             setState(() {});
                           });
                           if (result != null) {

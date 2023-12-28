@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'MainPage_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:loaduo/ViewPage/MyPage/MyPage_view.dart';
 import 'package:loaduo/ViewPage/SearchUserPage/SearchUserPage_view.dart';
 
@@ -25,7 +26,7 @@ class MainPage extends ConsumerWidget {
           color: Colors.white,
           child: [
             MyPage(uid: userUID),
-            SearchUserPage(),
+            ProgressHUD(child: SearchUserPage()),
             MyPage(uid: userUID),
           ][currentIndex],
         ),

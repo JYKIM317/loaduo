@@ -13,6 +13,16 @@ class UserPage extends ConsumerWidget {
         equipAccessory = ['목걸이', '귀걸이', '반지'];
     String bracelet = '팔찌';
 
+    String? cardEffect;
+    if (userData['ArmoryCard']['Effects'].length >= 2) {
+      userData['ArmoryCard']['Effects'][0]['Items'].length >=
+              userData['ArmoryCard']['Effects'].last['Items'].length
+          ? cardEffect =
+              userData['ArmoryCard']['Effects'][0]['Items'].last['Name']
+          : cardEffect =
+              userData['ArmoryCard']['Effects'].last['Items'].last['Name'];
+    }
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -398,13 +408,15 @@ class UserPage extends ConsumerWidget {
                                 width: double.infinity,
                                 height: 40.h,
                                 child: Text(
-                                  userData['ArmoryCard']['Effects']
-                                      .last['Items']
-                                      .last['Name'],
+                                  cardEffect ??
+                                      userData['ArmoryCard']['Effects'][0]
+                                              ['Items']
+                                          .last['Name'],
                                   style: TextStyle(
                                     color: Colors.deepOrange[400],
                                     fontSize: 18.sp,
                                   ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                             ),
@@ -1132,7 +1144,8 @@ class UserPage extends ConsumerWidget {
                                                     .replaceAll(',', ', ')
                                                     .replaceAll(
                                                         RegExp(r'][가-힣]+.*'),
-                                                        ']'),
+                                                        ']')
+                                                    .replaceAll(', 효과부여가능', ''),
                                                 style: TextStyle(
                                                   color: Colors.black,
                                                   fontSize: 10.sp,
