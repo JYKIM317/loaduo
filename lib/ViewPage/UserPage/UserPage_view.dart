@@ -10,8 +10,7 @@ class UserPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     List<String> noShowItem = ['나침반', '부적', '문장'],
         equipArmor = ['투구', '상의', '하의', '장갑', '어깨'],
-        equipAccessory = ['목걸이', '귀걸이', '반지', '어빌리티 스톤'],
-        supporter = ['바드', '홀리나이트', '도화가'];
+        equipAccessory = ['목걸이', '귀걸이', '반지'];
     String bracelet = '팔찌';
 
     return Scaffold(
@@ -399,7 +398,8 @@ class UserPage extends ConsumerWidget {
                                 width: double.infinity,
                                 height: 40.h,
                                 child: Text(
-                                  userData['ArmoryCard']['Effects'][0]['Items']
+                                  userData['ArmoryCard']['Effects']
+                                      .last['Items']
                                       .last['Name'],
                                   style: TextStyle(
                                     color: Colors.deepOrange[400],
@@ -655,367 +655,493 @@ class UserPage extends ConsumerWidget {
                           itemBuilder: (BuildContext ctx, int idx) {
                             Map<String, dynamic> tooltip = jsonDecode(
                                 userData['ArmoryEquipment'][idx]['Tooltip']);
+                            String ablitiyStone = 'Element_006';
+                            String transcendence = 'Element_008',
+                                elixir = 'Element_009';
+
+                            if (tooltip['Element_007'] != null) {
+                              transcendence =
+                                  tooltip['Element_007']['type'] == 'Progress'
+                                      ? 'Element_008'
+                                      : 'Element_007';
+                              elixir =
+                                  tooltip['Element_007']['type'] == 'Progress'
+                                      ? 'Element_009'
+                                      : 'Element_008';
+                              if (tooltip[transcendence]['type'] ==
+                                      'IndentStringGroup' &&
+                                  tooltip[transcendence]['value']['Element_000']
+                                          ['contentStr']['Element_005'] ==
+                                      null) {
+                                elixir = transcendence;
+                              }
+                            }
+
+                            if (userData['ArmoryEquipment'][idx]['Type'] ==
+                                    '어빌리티 스톤' &&
+                                tooltip[ablitiyStone]['type'] !=
+                                    'IndentStringGroup' &&
+                                tooltip['Element_005']['type'] ==
+                                    'IndentStringGroup') {
+                              ablitiyStone = 'Element_005';
+                            }
 
                             return noShowItem.contains(
                                     userData['ArmoryEquipment'][idx]['Type'])
                                 ? const SizedBox()
-                                : Row(
-                                    children: [
-                                      Stack(
-                                        alignment:
-                                            AlignmentDirectional.bottomEnd,
-                                        children: [
-                                          Container(
-                                            width: 50.w,
-                                            height: 50.w,
-                                            padding: EdgeInsets.all(4.w),
-                                            decoration: BoxDecoration(
-                                              color: const Color.fromARGB(
-                                                  255, 21, 24, 29),
-                                              borderRadius:
-                                                  BorderRadius.circular(8.sp),
-                                              border: Border.all(
-                                                width: 2.sp,
-                                                color: userData['ArmoryEquipment']
-                                                            [idx]['Grade'] ==
-                                                        '에스더'
-                                                    ? Colors.cyanAccent
-                                                    : userData['ArmoryEquipment']
-                                                                    [idx]
-                                                                ['Grade'] ==
-                                                            '고대'
-                                                        ? const Color.fromARGB(
-                                                            255, 186, 169, 128)
-                                                        : userData['ArmoryEquipment']
-                                                                        [idx]
-                                                                    ['Grade'] ==
-                                                                '유물'
-                                                            ? Colors.deepOrange[
-                                                                400]!
-                                                            : userData['ArmoryEquipment']
-                                                                            [idx]
-                                                                        ['Grade'] ==
-                                                                    '전설'
-                                                                ? Colors.yellow[800]!
-                                                                : Colors.purple[800]!,
-                                              ),
-                                            ),
-                                            child: Image.network(
-                                                userData['ArmoryEquipment'][idx]
-                                                    ['Icon']),
-                                          ),
-                                          if (tooltip['Element_001']['value']
-                                                  ['qualityValue'] >=
-                                              0)
-                                            Transform.translate(
-                                              offset: Offset(0, 10.w),
-                                              child: Container(
-                                                width: 50.w,
-                                                height: 20.w,
-                                                alignment: Alignment.center,
-                                                decoration: BoxDecoration(
-                                                  color: const Color.fromARGB(
-                                                      255, 21, 24, 29),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.sp),
-                                                  border: Border.all(
-                                                    color: Colors.white,
-                                                    width: 2.sp,
-                                                  ),
-                                                ),
-                                                child: Text(
-                                                  tooltip['Element_001']
-                                                              ['value']
-                                                          ['qualityValue']
-                                                      .toString(),
-                                                  style: TextStyle(
-                                                    color: tooltip['Element_001']
-                                                                    ['value'][
-                                                                'qualityValue'] ==
-                                                            100
-                                                        ? Colors.amber[800]
-                                                        : tooltip['Element_001']
-                                                                        ['value']
-                                                                    [
-                                                                    'qualityValue'] >=
-                                                                90
-                                                            ? Colors
-                                                                .purpleAccent
-                                                            : tooltip['Element_001']
-                                                                            ['value']
-                                                                        [
-                                                                        'qualityValue'] >=
-                                                                    70
-                                                                ? Colors
-                                                                    .blueAccent
-                                                                : Colors.greenAccent[
-                                                                    400],
-                                                    fontSize: 12.sp,
-                                                  ),
+                                : SizedBox(
+                                    child: Row(
+                                      children: [
+                                        Stack(
+                                          alignment:
+                                              AlignmentDirectional.bottomEnd,
+                                          children: [
+                                            Container(
+                                              width: 50.w,
+                                              height: 50.w,
+                                              padding: EdgeInsets.all(4.w),
+                                              decoration: BoxDecoration(
+                                                color: const Color.fromARGB(
+                                                    255, 21, 24, 29),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.sp),
+                                                border: Border.all(
+                                                  width: 2.sp,
+                                                  color: userData['ArmoryEquipment']
+                                                              [idx]['Grade'] ==
+                                                          '에스더'
+                                                      ? Colors.cyanAccent
+                                                      : userData['ArmoryEquipment']
+                                                                      [idx]
+                                                                  ['Grade'] ==
+                                                              '고대'
+                                                          ? const Color.fromARGB(
+                                                              255, 186, 169, 128)
+                                                          : userData['ArmoryEquipment']
+                                                                          [idx][
+                                                                      'Grade'] ==
+                                                                  '유물'
+                                                              ? Colors.deepOrange[
+                                                                  400]!
+                                                              : userData['ArmoryEquipment'][idx]
+                                                                          ['Grade'] ==
+                                                                      '전설'
+                                                                  ? Colors.yellow[800]!
+                                                                  : Colors.purple[800]!,
                                                 ),
                                               ),
-                                            ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 10.w),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            userData['ArmoryEquipment'][idx]
-                                                ['Name'],
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14.sp,
-                                            ),
-                                          ),
-
-                                          //엘릭서
-                                          if (equipArmor.contains(userData['ArmoryEquipment'][idx]['Type']) &&
-                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName'])
-                                                      ? 'Element_009'
-                                                      : 'Element_008'] !=
-                                                  null &&
-                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName']) ? 'Element_009' : 'Element_008']
-                                                          ['value']
-                                                      .runtimeType !=
-                                                  String &&
-                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName']) ? 'Element_009' : 'Element_008']
-                                                              ['value']
-                                                          ['Element_000']
-                                                      .runtimeType !=
-                                                  String &&
-                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName']) ? 'Element_009' : 'Element_008']
-                                                              ['value']
-                                                          ['Element_000']
-                                                      ['contentStr'] !=
-                                                  null)
-                                            Row(
-                                              children: [
-                                                if (tooltip[supporter.contains(userData[
-                                                                        'ArmoryProfile']
-                                                                    [
-                                                                    'CharacterClassName'])
-                                                                ? 'Element_009'
-                                                                : 'Element_008']
-                                                            [
-                                                            'value']['Element_000']
-                                                        [
-                                                        'contentStr']['Element_000'] !=
-                                                    null)
-                                                  Text(
-                                                    tooltip[supporter.contains(
-                                                                        userData['ArmoryProfile'][
-                                                                            'CharacterClassName'])
-                                                                    ? 'Element_009'
-                                                                    : 'Element_008']['value']['Element_000']['contentStr']['Element_000']
-                                                                ['contentStr']
-                                                            .replaceAllMapped(
-                                                                RegExp(r'<[^>]*>'),
-                                                                (match) {
-                                                              return '';
-                                                            })
-                                                            .substring(
-                                                              0,
-                                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName'])
-                                                                              ? 'Element_009'
-                                                                              : 'Element_008']['value']['Element_000']['contentStr']['Element_000']
-                                                                          [
-                                                                          'contentStr']
-                                                                      .replaceAllMapped(
-                                                                          RegExp(
-                                                                              r'<[^>]*>'),
-                                                                          (match) {
-                                                                    return '';
-                                                                  }).indexOf(
-                                                                          'Lv.') +
-                                                                  4,
-                                                            )
-                                                            .replaceFirstMapped(
-                                                                'Lv.',
-                                                                (match) => '')
-                                                            .replaceAllMapped(
-                                                                RegExp(r'\[.*?\]'),
-                                                                (match) {
-                                                              return '';
-                                                            }) ??
-                                                        '',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14.sp,
-                                                    ),
-                                                  ),
-                                                Text(
-                                                  ' /',
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 14.sp,
-                                                  ),
-                                                ),
-                                                if (tooltip[supporter.contains(userData[
-                                                                        'ArmoryProfile']
-                                                                    [
-                                                                    'CharacterClassName'])
-                                                                ? 'Element_009'
-                                                                : 'Element_008']
-                                                            [
-                                                            'value']['Element_000']
-                                                        [
-                                                        'contentStr']['Element_001'] !=
-                                                    null)
-                                                  Text(
-                                                    tooltip[supporter.contains(
-                                                                        userData['ArmoryProfile'][
-                                                                            'CharacterClassName'])
-                                                                    ? 'Element_009'
-                                                                    : 'Element_008']['value']['Element_000']['contentStr']['Element_001']
-                                                                ['contentStr']
-                                                            .replaceAllMapped(
-                                                                RegExp(r'<[^>]*>'),
-                                                                (match) {
-                                                              return '';
-                                                            })
-                                                            .substring(
-                                                              0,
-                                                              tooltip[supporter.contains(userData['ArmoryProfile']['CharacterClassName'])
-                                                                              ? 'Element_009'
-                                                                              : 'Element_008']['value']['Element_000']['contentStr']['Element_001']
-                                                                          [
-                                                                          'contentStr']
-                                                                      .replaceAllMapped(
-                                                                          RegExp(
-                                                                              r'<[^>]*>'),
-                                                                          (match) {
-                                                                    return '';
-                                                                  }).indexOf(
-                                                                          'Lv.') +
-                                                                  4,
-                                                            )
-                                                            .replaceFirstMapped(
-                                                                'Lv.',
-                                                                (match) => '')
-                                                            .replaceAllMapped(
-                                                                RegExp(r'\[.*?\]'),
-                                                                (match) {
-                                                              return '';
-                                                            }) ??
-                                                        '',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontSize: 14.sp,
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                          //초월
-                                          if (equipArmor.contains(
+                                              child: Image.network(
                                                   userData['ArmoryEquipment']
-                                                      [idx]['Type']) &&
-                                              tooltip['Element_007'] != null &&
-                                              tooltip['Element_007']['value']
-                                                      ['Element_000'] !=
-                                                  null)
+                                                      [idx]['Icon']),
+                                            ),
+                                            if (tooltip['Element_001']['value']
+                                                    ['qualityValue'] >=
+                                                0)
+                                              Transform.translate(
+                                                offset: Offset(0, 10.w),
+                                                child: Container(
+                                                  width: 50.w,
+                                                  height: 20.w,
+                                                  alignment: Alignment.center,
+                                                  decoration: BoxDecoration(
+                                                    color: const Color.fromARGB(
+                                                        255, 21, 24, 29),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8.sp),
+                                                    border: Border.all(
+                                                      color: Colors.white,
+                                                      width: 2.sp,
+                                                    ),
+                                                  ),
+                                                  child: Text(
+                                                    tooltip['Element_001']
+                                                                ['value']
+                                                            ['qualityValue']
+                                                        .toString(),
+                                                    style: TextStyle(
+                                                      color: tooltip['Element_001']
+                                                                      ['value'][
+                                                                  'qualityValue'] ==
+                                                              100
+                                                          ? Colors.amber[800]
+                                                          : tooltip['Element_001']
+                                                                          ['value'][
+                                                                      'qualityValue'] >=
+                                                                  90
+                                                              ? Colors
+                                                                  .purpleAccent
+                                                              : tooltip['Element_001']
+                                                                              ['value']
+                                                                          [
+                                                                          'qualityValue'] >=
+                                                                      70
+                                                                  ? Colors
+                                                                      .blueAccent
+                                                                  : Colors.greenAccent[
+                                                                      400],
+                                                      fontSize: 12.sp,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                        SizedBox(width: 10.w),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
                                             Text(
-                                              tooltip['Element_007']['value']
-                                                      ['Element_000']['topStr']
-                                                  .replaceAllMapped(
-                                                      RegExp(r'<[^>]*>'),
-                                                      (match) {
-                                                return '';
-                                              }),
+                                              userData['ArmoryEquipment'][idx]
+                                                  ['Name'],
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 14.sp,
                                               ),
                                             ),
-                                          //악세서리
-                                          if (equipAccessory.contains(
-                                                  userData['ArmoryEquipment']
-                                                      [idx]['Type']) &&
-                                              tooltip['Element_006'] != null &&
-                                              tooltip['Element_006']['value']
-                                                      .runtimeType !=
-                                                  String)
-                                            Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      tooltip['Element_006']['value']
-                                                                          [
-                                                                          'Element_000']
-                                                                      [
-                                                                      'contentStr']
-                                                                  [
+                                            //엘릭서
+                                            if (equipArmor.contains(
+                                                    userData['ArmoryEquipment']
+                                                        [idx]['Type']) &&
+                                                tooltip[elixir] != null &&
+                                                tooltip[elixir]['type'] ==
+                                                    'IndentStringGroup' &&
+                                                tooltip[elixir]['value']
+                                                        ['Element_000'] !=
+                                                    null)
+                                              Row(
+                                                children: [
+                                                  if (tooltip[elixir]['value'][
                                                                   'Element_000']
                                                               ['contentStr']
-                                                          .replaceAllMapped(
-                                                              RegExp(
-                                                                  r'<[^>]*>'),
-                                                              (match) {
-                                                        return '';
-                                                      }).replaceFirstMapped(
-                                                              ' 활성도',
-                                                              (match) => ''),
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 14.sp,
-                                                      ),
-                                                    ),
-                                                    const Text(' '),
+                                                          ['Element_000'] !=
+                                                      null)
                                                     Text(
-                                                      tooltip['Element_006']['value']
+                                                      tooltip[elixir]['value']['Element_000']
                                                                           [
-                                                                          'Element_000']
-                                                                      [
-                                                                      'contentStr']
-                                                                  [
-                                                                  'Element_001']
-                                                              ['contentStr']
-                                                          .replaceAllMapped(
-                                                              RegExp(
-                                                                  r'<[^>]*>'),
-                                                              (match) {
-                                                        return '';
-                                                      }).replaceFirstMapped(
-                                                              ' 활성도',
-                                                              (match) => ''),
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 14.sp,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Text(
-                                                  tooltip['Element_006']['value']
+                                                                          'contentStr']
                                                                       [
                                                                       'Element_000']
                                                                   ['contentStr']
-                                                              ['Element_002']
-                                                          ['contentStr']
-                                                      .replaceAllMapped(
-                                                          RegExp(r'<[^>]*>'),
-                                                          (match) {
-                                                    return '';
-                                                  }).replaceFirstMapped(' 활성도',
-                                                          (match) => ''),
-                                                  style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 14.sp,
+                                                              .replaceAllMapped(
+                                                                  RegExp(
+                                                                      r'<[^>]*>'),
+                                                                  (match) {
+                                                                return '';
+                                                              })
+                                                              .substring(
+                                                                0,
+                                                                tooltip[elixir]['value']['Element_000']['contentStr']['Element_000']['contentStr'].replaceAllMapped(
+                                                                        RegExp(
+                                                                            r'<[^>]*>'),
+                                                                        (match) {
+                                                                      return '';
+                                                                    }).indexOf(
+                                                                        'Lv.') +
+                                                                    4,
+                                                              )
+                                                              .replaceFirstMapped(
+                                                                  'Lv.',
+                                                                  (match) => '')
+                                                              .replaceAllMapped(
+                                                                  RegExp(
+                                                                      r'\[.*?\]'),
+                                                                  (match) {
+                                                                return '';
+                                                              }) ??
+                                                          '',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                  Text(
+                                                    ' /',
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14.sp,
+                                                    ),
                                                   ),
+                                                  if (tooltip[elixir]['value'][
+                                                                  'Element_000']
+                                                              ['contentStr']
+                                                          ['Element_001'] !=
+                                                      null)
+                                                    Text(
+                                                      tooltip[elixir]['value']['Element_000']
+                                                                          [
+                                                                          'contentStr']
+                                                                      [
+                                                                      'Element_001']
+                                                                  ['contentStr']
+                                                              .replaceAllMapped(
+                                                                  RegExp(
+                                                                      r'<[^>]*>'),
+                                                                  (match) {
+                                                                return '';
+                                                              })
+                                                              .substring(
+                                                                0,
+                                                                tooltip[elixir]['value']['Element_000']['contentStr']['Element_001']['contentStr'].replaceAllMapped(
+                                                                        RegExp(
+                                                                            r'<[^>]*>'),
+                                                                        (match) {
+                                                                      return '';
+                                                                    }).indexOf(
+                                                                        'Lv.') +
+                                                                    4,
+                                                              )
+                                                              .replaceFirstMapped(
+                                                                  'Lv.',
+                                                                  (match) => '')
+                                                              .replaceAllMapped(
+                                                                  RegExp(
+                                                                      r'\[.*?\]'),
+                                                                  (match) {
+                                                                return '';
+                                                              }) ??
+                                                          '',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14.sp,
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                            //초월
+                                            if (equipArmor.contains(
+                                                    userData['ArmoryEquipment']
+                                                        [idx]['Type']) &&
+                                                tooltip[transcendence] !=
+                                                    null &&
+                                                tooltip[transcendence]
+                                                        ['type'] ==
+                                                    'IndentStringGroup' &&
+                                                tooltip[transcendence]['value']
+                                                                ['Element_000']
+                                                            ['contentStr']
+                                                        ['Element_005'] !=
+                                                    null)
+                                              Text(
+                                                tooltip[transcendence]['value']
+                                                            ['Element_000']
+                                                        ['topStr']
+                                                    .replaceAllMapped(
+                                                        RegExp(r'<[^>]*>'),
+                                                        (match) {
+                                                  return '';
+                                                }),
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 14.sp,
                                                 ),
-                                              ],
-                                            )
-                                        ],
-                                      ),
-                                    ],
+                                              ),
+                                            //악세서리
+                                            if (equipAccessory.contains(
+                                                    userData['ArmoryEquipment']
+                                                        [idx]['Type']) &&
+                                                tooltip['Element_006'] !=
+                                                    null &&
+                                                tooltip['Element_006']
+                                                        ['type'] ==
+                                                    'IndentStringGroup')
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        tooltip['Element_006']['value']
+                                                                            [
+                                                                            'Element_000']
+                                                                        [
+                                                                        'contentStr']
+                                                                    [
+                                                                    'Element_000']
+                                                                ['contentStr']
+                                                            .replaceAllMapped(
+                                                                RegExp(
+                                                                    r'<[^>]*>'),
+                                                                (match) {
+                                                          return '';
+                                                        }).replaceFirstMapped(
+                                                                ' 활성도',
+                                                                (match) => ''),
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14.sp,
+                                                        ),
+                                                      ),
+                                                      const Text(' '),
+                                                      Text(
+                                                        tooltip['Element_006']['value']
+                                                                            [
+                                                                            'Element_000']
+                                                                        [
+                                                                        'contentStr']
+                                                                    [
+                                                                    'Element_001']
+                                                                ['contentStr']
+                                                            .replaceAllMapped(
+                                                                RegExp(
+                                                                    r'<[^>]*>'),
+                                                                (match) {
+                                                          return '';
+                                                        }).replaceFirstMapped(
+                                                                ' 활성도',
+                                                                (match) => ''),
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14.sp,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Text(
+                                                    tooltip['Element_006']['value']
+                                                                        [
+                                                                        'Element_000']
+                                                                    [
+                                                                    'contentStr']
+                                                                ['Element_002']
+                                                            ['contentStr']
+                                                        .replaceAllMapped(
+                                                            RegExp(r'<[^>]*>'),
+                                                            (match) {
+                                                      return '';
+                                                    }).replaceFirstMapped(
+                                                            ' 활성도',
+                                                            (match) => ''),
+                                                    style: TextStyle(
+                                                      color: Colors.red,
+                                                      fontSize: 14.sp,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            //어빌리티 스톤
+                                            if (userData['ArmoryEquipment'][idx]
+                                                        ['Type'] ==
+                                                    '어빌리티 스톤' &&
+                                                tooltip[ablitiyStone] != null &&
+                                                tooltip[ablitiyStone]['type'] ==
+                                                    'IndentStringGroup')
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        tooltip[ablitiyStone]['value']
+                                                                            [
+                                                                            'Element_000']
+                                                                        [
+                                                                        'contentStr']
+                                                                    [
+                                                                    'Element_000']
+                                                                ['contentStr']
+                                                            .replaceAllMapped(
+                                                                RegExp(
+                                                                    r'<[^>]*>'),
+                                                                (match) {
+                                                          return '';
+                                                        }).replaceFirstMapped(
+                                                                ' 활성도',
+                                                                (match) => ''),
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14.sp,
+                                                        ),
+                                                      ),
+                                                      const Text(' '),
+                                                      Text(
+                                                        tooltip[ablitiyStone]['value']
+                                                                            [
+                                                                            'Element_000']
+                                                                        [
+                                                                        'contentStr']
+                                                                    [
+                                                                    'Element_001']
+                                                                ['contentStr']
+                                                            .replaceAllMapped(
+                                                                RegExp(
+                                                                    r'<[^>]*>'),
+                                                                (match) {
+                                                          return '';
+                                                        }).replaceFirstMapped(
+                                                                ' 활성도',
+                                                                (match) => ''),
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 14.sp,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Text(
+                                                    tooltip[ablitiyStone]['value']
+                                                                        [
+                                                                        'Element_000']
+                                                                    [
+                                                                    'contentStr']
+                                                                ['Element_002']
+                                                            ['contentStr']
+                                                        .replaceAllMapped(
+                                                            RegExp(r'<[^>]*>'),
+                                                            (match) {
+                                                      return '';
+                                                    }).replaceFirstMapped(
+                                                            ' 활성도',
+                                                            (match) => ''),
+                                                    style: TextStyle(
+                                                      color: Colors.red,
+                                                      fontSize: 14.sp,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            //팔찌
+                                            if (userData['ArmoryEquipment'][idx]
+                                                        ['Type'] ==
+                                                    bracelet &&
+                                                tooltip['Element_004'] !=
+                                                    null &&
+                                                tooltip['Element_004']
+                                                        ['type'] ==
+                                                    'ItemPartBox')
+                                              Text(
+                                                tooltip['Element_004']['value']
+                                                        ['Element_001']
+                                                    .replaceAll('<BR>', ',')
+                                                    .replaceAll(' ', '')
+                                                    .replaceAll(
+                                                        RegExp(r'].*?</img>'),
+                                                        '], ')
+                                                    .replaceAll(
+                                                        RegExp(
+                                                            r"\((.*?)\)|<[^>]*>"),
+                                                        '')
+                                                    .replaceAll(',,', ',')
+                                                    .replaceAll(',', ', ')
+                                                    .replaceAll(
+                                                        RegExp(r'][가-힣]+.*'),
+                                                        ']'),
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 10.sp,
+                                                ),
+                                              )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   );
                           },
                           separatorBuilder: (ctx, idx) {
