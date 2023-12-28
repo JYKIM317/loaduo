@@ -62,7 +62,7 @@ class MyApp extends ConsumerWidget {
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,
         useMaterial3: true,
-        fontFamily: 'BMDohyeon',
+        fontFamily: 'Jamsil_M',
       ),
       home: RoutePage(),
     );

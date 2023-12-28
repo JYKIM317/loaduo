@@ -91,12 +91,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Pretendard
+    - family: Jamsil_M
       fonts:
-        - asset: assets/fonts/Pretendard-Regular.otf
-    - family: BMDohyeon
-      fonts:
-        - asset: assets/fonts/BMDOHYEON_otf.otf
+        - asset: assets/fonts/The Jamsil OTF 4 Medium.otf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
