@@ -20,16 +20,20 @@ class MyPageInfoNotifier extends StateNotifier<Map<String, dynamic>> {
 }
 
 final myPageCharacter =
-    StateNotifierProvider<MyPageCharacterNotifier, Map<String, dynamic>>((ref) {
+    StateNotifierProvider<MyPageCharacterNotifier, List<dynamic>>((ref) {
   return MyPageCharacterNotifier();
 });
 
-class MyPageCharacterNotifier extends StateNotifier<Map<String, dynamic>> {
-  MyPageCharacterNotifier() : super({});
+class MyPageCharacterNotifier extends StateNotifier<List<dynamic>> {
+  MyPageCharacterNotifier() : super([]);
 
   update({
-    required Map<String, dynamic> data,
+    required List<dynamic> data,
   }) {
     state.addAll(data);
+  }
+
+  remove() {
+    state.clear();
   }
 }

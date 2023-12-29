@@ -12,7 +12,7 @@ class MyPageViewModel {
     return userInfo;
   }
 
-  Future<List<Map<String, dynamic>>?> getUserExpedition(String uid) async {
+  Future<List<Map<String, dynamic>>> getUserExpedition(String uid) async {
     List<Map<String, dynamic>> expedition = [];
     final userDB = await MyPageModel().getUserData(uid);
     Map<String, dynamic> userData = userDB.data() ?? {};

@@ -24,6 +24,7 @@ class _MyPageState extends ConsumerState<MyPage> {
   Widget build(BuildContext context) {
     bool isMe = widget.uid == userUID;
     final info = isMe ? ref.watch(myPageInfo) : {};
+    final characters = isMe ? ref.watch(myPageCharacter) : [];
     return Padding(
       padding: EdgeInsets.only(top: 44.h),
       child: SingleChildScrollView(
@@ -218,7 +219,11 @@ class _MyPageState extends ConsumerState<MyPage> {
               height: 40.h,
             ),
             FutureBuilder(
-                future: MyPageViewModel().getUserExpedition(widget.uid),
+                future: isMe
+                    ? Future(() => characters.isEmpty
+                        ? MyPageViewModel().getUserExpedition(widget.uid)
+                        : characters)
+                    : MyPageViewModel().getUserExpedition(widget.uid),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return SizedBox(
@@ -230,6 +235,10 @@ class _MyPageState extends ConsumerState<MyPage> {
                     );
                   }
                   List<dynamic> expedition = snapshot.data;
+
+                  if (isMe && characters.isEmpty) {
+                    ref.read(myPageCharacter.notifier).update(data: expedition);
+                  }
                   return Container(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: ListView.separated(
@@ -304,6 +313,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                       ),
                     ).then((change) {
                       if (change != null && change) {
+                        ref.read(myPageCharacter.notifier).remove();
                         setState(() {});
                       }
                     });
