@@ -2,7 +2,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
+import 'package:loaduo/ViewPage/MyPage/AddMyCharacter/AddMyCharacter_view.dart';
 import 'package:loaduo/ViewPage/MyPage/MyPage_provider.dart';
 import 'MyPage_viewmodel.dart';
 import 'package:loaduo/ViewPage/InitialDataPages/InitialData/InitialDataPage_view.dart';
@@ -215,13 +217,96 @@ class _MyPageState extends ConsumerState<MyPage> {
               thickness: 2.h,
               height: 40.h,
             ),
+            FutureBuilder(
+                future: MyPageViewModel().getUserExpedition(widget.uid),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return SizedBox(
+                      height: 200.h,
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: Colors.deepOrange[400],
+                      )),
+                    );
+                  }
+                  List<dynamic> expedition = snapshot.data;
+                  return Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: expedition.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 14.h),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 21, 24, 29),
+                            borderRadius: BorderRadius.circular(8.sp),
+                          ),
+                          child: Text.rich(
+                            TextSpan(
+                                text: expedition[index]['CharacterName'],
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.sp,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text:
+                                        ' ${expedition[index]['ItemAvgLevel']}',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: '\n클래스 ',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        '${expedition[index]['CharacterClassName']}',
+                                  ),
+                                  TextSpan(
+                                    text: '  캐릭터 레벨 ',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        '${expedition[index]['CharacterLevel']}',
+                                  ),
+                                ]),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 10.h);
+                      },
+                    ),
+                  );
+                }),
             if (isMe)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: IconButton(
-                  onPressed: () {
-                    //유저 검색 후 등록하면 /characters/{characterName}/siblings 가져오는 로직
-                    // provider null일 시 fb에서 가져오기 -> 갱신 시간이 지금이랑 비교해서 1시간 이상 차이일 시 api로 갱신
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ProgressHUD(child: AddMyCharacter()),
+                      ),
+                    ).then((change) {
+                      if (change != null && change) {
+                        setState(() {});
+                      }
+                    });
                   },
                   icon: Container(
                     width: double.infinity,
@@ -233,7 +318,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                       color: Colors.deepOrange[400],
                     ),
                     child: Text(
-                      '내 캐릭터 등록하기',
+                      '내 원정대 등록하기',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24.sp,
