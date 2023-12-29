@@ -14,7 +14,8 @@ class UserPage extends ConsumerWidget {
     String bracelet = '팔찌';
 
     String? cardEffect;
-    if (userData['ArmoryCard']['Effects'].length >= 2) {
+    if (userData['ArmoryCard'] != null &&
+        userData['ArmoryCard']['Effects'].length >= 2) {
       userData['ArmoryCard']['Effects'][0]['Items'].length >=
               userData['ArmoryCard']['Effects'].last['Items'].length
           ? cardEffect =
