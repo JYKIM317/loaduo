@@ -1144,7 +1144,8 @@ class UserPage extends ConsumerWidget {
                                                     .replaceAll(',,', ',')
                                                     .replaceAll(',', ', ')
                                                     .replaceAll(
-                                                        RegExp(r'][가-힣]+.*'),
+                                                        RegExp(
+                                                            r'][가-힣]+.*|]\d+.*'),
                                                         ']')
                                                     .replaceAll(', 효과부여가능', ''),
                                                 style: TextStyle(

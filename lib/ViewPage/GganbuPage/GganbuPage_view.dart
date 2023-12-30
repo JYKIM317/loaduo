@@ -7,6 +7,13 @@ class GganbuPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container();
+    return SingleChildScrollView(
+      physics: const ClampingScrollPhysics(),
+      padding: EdgeInsets.only(top: 44.h),
+      child: Padding(
+        padding: EdgeInsets.only(top: 44.h),
+        child: SizedBox(),
+      ),
+    );
   }
 }
