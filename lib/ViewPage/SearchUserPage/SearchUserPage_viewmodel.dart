@@ -5,10 +5,16 @@ class SearchUserPageViewModel {
   Future<Map<String, dynamic>?> searchUser({required String userName}) async {
     List<dynamic> mySearchHistory =
         await SearchUserPageModel().getSearchHistoryData();
-    if (mySearchHistory.length >= 10) {
-      mySearchHistory.removeAt(0);
+    if (mySearchHistory.contains(userName)) {
+      int index = mySearchHistory.indexOf(userName);
+      mySearchHistory.removeAt(index);
+      mySearchHistory.add(userName);
+    } else {
+      if (mySearchHistory.length >= 10) {
+        mySearchHistory.removeAt(0);
+      }
+      mySearchHistory.add(userName);
     }
-    mySearchHistory.add(userName);
     await SearchUserPageModel().saveSearchHistoryData(
         searchHistoryData: mySearchHistory as List<String>);
 
