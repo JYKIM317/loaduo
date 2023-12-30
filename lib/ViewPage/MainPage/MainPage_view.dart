@@ -28,7 +28,7 @@ class MainPage extends ConsumerWidget {
           child: [
             GganbuPage(),
             ProgressHUD(child: SearchUserPage()),
-            MyPage(uid: userUID),
+            ProgressHUD(child: MyPage(uid: userUID)),
           ][currentIndex],
         ),
       ),

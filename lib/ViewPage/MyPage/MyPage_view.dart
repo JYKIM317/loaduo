@@ -9,6 +9,8 @@ import 'package:loaduo/ViewPage/MyPage/MyPage_provider.dart';
 import 'MyPage_viewmodel.dart';
 import 'package:loaduo/ViewPage/InitialDataPages/InitialData/InitialDataPage_view.dart';
 import 'package:loaduo/ViewPage/InitialDataPages/ApiData/ApiDataPage_view.dart';
+import 'package:loaduo/ViewPage/UserPage/UserPage_view.dart';
+import 'package:loaduo/ShowToastMsg.dart';
 
 class MyPage extends ConsumerStatefulWidget {
   final String uid;
@@ -22,6 +24,7 @@ class _MyPageState extends ConsumerState<MyPage> {
   String? userUID = FirebaseAuth.instance.currentUser!.uid;
   @override
   Widget build(BuildContext context) {
+    final progress = ProgressHUD.of(context);
     bool isMe = widget.uid == userUID;
     final info = isMe ? ref.watch(myPageInfo) : {};
     final characters = isMe ? ref.watch(myPageCharacter) : [];
@@ -246,51 +249,107 @@ class _MyPageState extends ConsumerState<MyPage> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: expedition.length,
                       itemBuilder: (context, index) {
-                        return Container(
-                          padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 14.h),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 21, 24, 29),
-                            borderRadius: BorderRadius.circular(8.sp),
-                          ),
-                          child: Text.rich(
-                            TextSpan(
-                                text: expedition[index]['CharacterName'],
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18.sp,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text:
-                                        ' ${expedition[index]['ItemAvgLevel']}',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.sp,
+                        return InkWell(
+                          onTap: () async {
+                            progress?.show();
+                            await MyPageViewModel()
+                                .getCharacterData(
+                                    userName: expedition[index]
+                                        ['CharacterName'])
+                                .then((result) {
+                              Future.microtask(() {
+                                progress?.dismiss();
+                              });
+                              if (result != null) {
+                                switch (result['statusCode']) {
+                                  case 200:
+                                    //요청 성공
+                                    if (result['body'] != null) {
+                                      //캐릭터 반환 성공
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => UserPage(
+                                            userData: result['body'],
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      showToast(
+                                          '${expedition[index]['CharacterName']}\n캐릭터 정보가 없습니다.');
+                                    }
+                                    break;
+                                  case 401:
+                                    showToast('API Key가 정상적이지 않습니다.');
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ApiDataPage(),
+                                      ),
+                                    );
+                                    break;
+                                  case 429:
+                                    //API 요청 횟수 제한
+                                    showToast('잠시 후 다시 시도해주세요');
+                                    break;
+                                  case 503:
+                                    //API 서비스 점검
+                                    showToast('로스트아크 API 서비스가 점검중에 있습니다.');
+                                    break;
+                                  default:
+                                    showToast('오류가 발생했습니다.');
+                                    break;
+                                }
+                              }
+                            });
+                          },
+                          child: Container(
+                            padding:
+                                EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 14.h),
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 21, 24, 29),
+                              borderRadius: BorderRadius.circular(8.sp),
+                            ),
+                            child: Text.rich(
+                              TextSpan(
+                                  text: expedition[index]['CharacterName'],
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18.sp,
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text:
+                                          ' ${expedition[index]['ItemAvgLevel']}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14.sp,
+                                      ),
                                     ),
-                                  ),
-                                  TextSpan(
-                                    text: '\n클래스 ',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 14.sp,
+                                    TextSpan(
+                                      text: '\n클래스 ',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14.sp,
+                                      ),
                                     ),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        '${expedition[index]['CharacterClassName']}',
-                                  ),
-                                  TextSpan(
-                                    text: '  캐릭터 레벨 ',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 14.sp,
+                                    TextSpan(
+                                      text:
+                                          '${expedition[index]['CharacterClassName']}',
                                     ),
-                                  ),
-                                  TextSpan(
-                                    text:
-                                        '${expedition[index]['CharacterLevel']}',
-                                  ),
-                                ]),
+                                    TextSpan(
+                                      text: '  캐릭터 레벨 ',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          '${expedition[index]['CharacterLevel']}',
+                                    ),
+                                  ]),
+                            ),
                           ),
                         );
                       },
