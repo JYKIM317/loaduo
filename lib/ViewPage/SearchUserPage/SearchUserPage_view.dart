@@ -39,7 +39,7 @@ class _SearchUserPageState extends ConsumerState<SearchUserPage> {
           Padding(
             padding: EdgeInsets.only(left: 16.w),
             child: Text(
-              '검색',
+              '캐릭터 검색',
               style: TextStyle(
                 fontSize: 24.sp,
                 color: Colors.black,
