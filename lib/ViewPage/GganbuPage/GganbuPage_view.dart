@@ -1,6 +1,10 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'FindGGanbu/FindGganbu_view.dart';
+import 'FindStatic/FindStatic_view.dart';
+import 'FindGuild/FindGuild_view.dart';
+import 'FindRaidForToday/FindRaidForToday_view.dart';
 
 class GganbuPage extends ConsumerWidget {
   const GganbuPage({super.key});
@@ -30,6 +34,12 @@ class GganbuPage extends ConsumerWidget {
               InkWell(
                 onTap: () {
                   //깐부
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FindGganbu(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 160.w,
@@ -65,6 +75,12 @@ class GganbuPage extends ConsumerWidget {
               InkWell(
                 onTap: () {
                   //고정공대
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FindStatic(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 160.w,
@@ -105,6 +121,12 @@ class GganbuPage extends ConsumerWidget {
               InkWell(
                 onTap: () {
                   //길드
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FindGuild(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 160.w,
@@ -140,6 +162,12 @@ class GganbuPage extends ConsumerWidget {
               InkWell(
                 onTap: () {
                   //오늘 레이드
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FindRaidForToday(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 160.w,
