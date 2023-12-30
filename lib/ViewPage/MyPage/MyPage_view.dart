@@ -245,6 +245,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                   child: ListView.separated(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.only(bottom: 10.h),
                     itemCount: expedition.length,
                     itemBuilder: (context, index) {
                       return InkWell(
@@ -383,7 +384,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                     color: Colors.deepOrange[400],
                   ),
                   child: Text(
-                    '내 원정대 등록하기',
+                    characters.isEmpty ? '내 원정대 등록하기' : '내 원정대 변경하기',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24.sp,
