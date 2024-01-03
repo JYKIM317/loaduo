@@ -1152,7 +1152,7 @@ class UserPage extends ConsumerWidget {
                                                   color: Colors.black,
                                                   fontSize: 10.sp,
                                                 ),
-                                              )
+                                              ),
                                           ],
                                         ),
                                       ],

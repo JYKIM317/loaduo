@@ -61,7 +61,7 @@ class GganbuPage extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        '레이드/내실\n/일일숙제',
+                        '레이드/내실\n/일일 숙제',
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 18.sp,

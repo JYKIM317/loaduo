@@ -41,6 +41,7 @@ dependencies:
   url_launcher: ^6.1.14
   fluttertoast: ^8.2.4
   flutter_progress_hud: ^2.0.2
+  bottom_drawer: ^0.0.5
 
 dev_dependencies:
   flutter_test:
