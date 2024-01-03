@@ -404,7 +404,7 @@ class _TimeDrawerState extends ConsumerState<TimeDrawer> {
   List<int> hour = [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
   List<int> minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
   String sDayHalf = 'PM', eDayHalf = 'PM';
-  int sHour = 2, sMinute = 30, eHour = 5, eMinute = 30;
+  int sHour = 7, sMinute = 30, eHour = 8, eMinute = 30;
 
   @override
   Widget build(BuildContext context) {
