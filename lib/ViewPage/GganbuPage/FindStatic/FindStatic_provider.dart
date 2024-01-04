@@ -26,19 +26,6 @@ class StaticFilterIndexNotifier extends StateNotifier<int> {
   }
 }
 
-final staticServerFilter =
-    StateNotifierProvider<StaticServerFilterNotifier, String?>((ref) {
-  return StaticServerFilterNotifier();
-});
-
-class StaticServerFilterNotifier extends StateNotifier<String?> {
-  StaticServerFilterNotifier() : super(null);
-
-  update(String? server) {
-    state = server;
-  }
-}
-
 final staticRaidFilter =
     StateNotifierProvider<StaticRaidFilterNotifier, String?>((ref) {
   return StaticRaidFilterNotifier();

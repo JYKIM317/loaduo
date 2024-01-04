@@ -4,64 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindStatic/FindStatic_provider.dart';
 import 'package:loaduo/lostark_info.dart';
 
-class ServerDrawer extends ConsumerStatefulWidget {
-  final bottomController;
-  const ServerDrawer({super.key, required this.bottomController});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _ServerDrawerState();
-}
-
-class _ServerDrawerState extends ConsumerState<ServerDrawer> {
-  @override
-  Widget build(BuildContext context) {
-    final server = ref.watch(staticServerFilter);
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      padding: EdgeInsets.fromLTRB(16.w, 24.h, 16.w, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ListView.separated(
-              shrinkWrap: true,
-              physics: const ClampingScrollPhysics(),
-              padding: EdgeInsets.only(bottom: 34.h),
-              itemCount: lostarkInfo().serverList.length,
-              itemBuilder: (BuildContext ctx, int idx) {
-                String serverName = lostarkInfo().serverList[idx];
-                return TextButton(
-                  onPressed: () {
-                    if (serverName == '전체') {
-                      ref.read(staticServerFilter.notifier).update(null);
-                    } else {
-                      ref.read(staticServerFilter.notifier).update(serverName);
-                    }
-                    widget.bottomController.close();
-                  },
-                  child: Text(
-                    serverName,
-                    style: TextStyle(
-                      color: server == serverName
-                          ? Colors.deepOrange[400]
-                          : Colors.black,
-                      fontSize: 24.sp,
-                    ),
-                  ),
-                );
-              },
-              separatorBuilder: (ctx, idx) {
-                return SizedBox(height: 10.h);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class RaidDrawer extends ConsumerStatefulWidget {
   final bottomController;
   const RaidDrawer({super.key, required this.bottomController});
