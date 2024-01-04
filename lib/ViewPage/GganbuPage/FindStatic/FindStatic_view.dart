@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:bottom_drawer/bottom_drawer.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindStatic/FindStatic_provider.dart';
 import 'FindStatic_widget.dart';
+import 'package:loaduo/lostark_info.dart';
 
 class FindStatic extends ConsumerStatefulWidget {
   const FindStatic({super.key});
@@ -139,139 +140,81 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                           Container(
                             width: double.infinity,
                             height: 210.h,
+                            clipBehavior: Clip.hardEdge,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8.sp),
                               color: const Color.fromARGB(255, 21, 24, 29),
                             ),
                             padding:
                                 EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Stack(
                               children: [
-                                Expanded(
-                                  child: Text(
-                                    '하드 카멘 고정공대 모집합니다 40+ 랏딜',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24.sp,
+                                Opacity(
+                                  opacity: 0.1,
+                                  child: Transform.translate(
+                                    offset: Offset(80.w, 20.h),
+                                    child: Transform.scale(
+                                      scale: 3,
+                                      child: Image.network(
+                                        lostarkInfo().raidNetworkImage['카멘']!,
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Container(
+                                              color: const Color.fromARGB(
+                                                  255, 21, 24, 29));
+                                        },
+                                      ),
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                Row(
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: '니나브 ',
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '하드 카멘 고정공대 모집합니다 40+ 랏딜',
                                             style: TextStyle(
                                               color: Colors.white,
-                                              fontSize: 18.sp,
+                                              fontSize: 24.sp,
                                             ),
-                                          )
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
+                                            '[6/8]',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 24.sp,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
-                                        ),
-                                        children: <TextSpan>[
+                                    Row(
+                                      children: [
+                                        Text.rich(
                                           TextSpan(
-                                            text: '카멘 [하드] ',
+                                            text: '#',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.grey,
                                               fontSize: 18.sp,
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: '카멘 [하드] ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: '내실 ',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: '일일 숙제 ',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: '평일 20시 ',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: '주말 16시 ',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                      ],
                                     ),
                                   ],
                                 ),

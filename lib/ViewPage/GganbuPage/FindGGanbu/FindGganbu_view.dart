@@ -268,139 +268,162 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                           Container(
                             width: double.infinity,
                             height: 210.h,
+                            clipBehavior: Clip.hardEdge,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8.sp),
                               color: const Color.fromARGB(255, 21, 24, 29),
                             ),
                             padding:
                                 EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Stack(
                               children: [
-                                Expanded(
-                                  child: Text(
-                                    '저랑 깐부하실 분! 본캐 1630에 1600 2개 1580 3개 있어요! ',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24.sp,
+                                Opacity(
+                                  opacity: 0.1,
+                                  child: Transform.translate(
+                                    offset: Offset(180.w, 20.h),
+                                    child: Transform.scale(
+                                      scale: 3,
+                                      child: Image.network(
+                                        'https://cdn-lostark.game.onstove.com/2021/event/210331_event/images/emoticon/emoticon_1.png',
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Container(
+                                              color: const Color.fromARGB(
+                                                  255, 21, 24, 29));
+                                        },
+                                      ),
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                Row(
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
+                                    Expanded(
+                                      child: Text(
+                                        '저랑 깐부하실 분! 본캐 1630에 1600 2개 1580 3개 있어요! ',
                                         style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
+                                          color: Colors.white,
+                                          fontSize: 24.sp,
                                         ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: '니나브 ',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          )
-                                        ],
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
-                                        ),
-                                        children: <TextSpan>[
+                                    Row(
+                                      children: [
+                                        Text.rich(
                                           TextSpan(
-                                            text: '레이드 ',
+                                            text: '#',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.grey,
                                               fontSize: 18.sp,
                                             ),
-                                          )
-                                        ],
-                                      ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: '니나브 ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            text: '#',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 18.sp,
+                                            ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: '레이드 ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            text: '#',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 18.sp,
+                                            ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: '내실 ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                        Text.rich(
+                                          TextSpan(
+                                            text: '#',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 18.sp,
+                                            ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: '일일 숙제 ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
-                                        ),
-                                        children: <TextSpan>[
+                                    Row(
+                                      children: [
+                                        Text.rich(
                                           TextSpan(
-                                            text: '내실 ',
+                                            text: '#',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.grey,
                                               fontSize: 18.sp,
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: '평일 20시 ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        children: <TextSpan>[
+                                        Text.rich(
                                           TextSpan(
-                                            text: '일일 숙제 ',
+                                            text: '#',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.grey,
                                               fontSize: 18.sp,
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: '주말 16시 ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: '평일 20시 ',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: '주말 16시 ',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -413,7 +436,8 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                             height: 210.h,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
+                              color: const Color.fromARGB(255, 21, 24, 29)
+                                  .withOpacity(0.8),
                             ),
                           ),
                           SizedBox(height: 10.h),
@@ -422,7 +446,8 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                             height: 210.h,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
+                              color: const Color.fromARGB(255, 21, 24, 29)
+                                  .withOpacity(0.8),
                             ),
                           ),
                           SizedBox(height: 10.h),
@@ -431,7 +456,8 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                             height: 210.h,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
+                              color: const Color.fromARGB(255, 21, 24, 29)
+                                  .withOpacity(0.8),
                             ),
                           ),
                         ],

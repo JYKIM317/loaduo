@@ -217,139 +217,111 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                           Container(
                             width: double.infinity,
                             height: 210.h,
+                            clipBehavior: Clip.hardEdge,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8.sp),
                               color: const Color.fromARGB(255, 21, 24, 29),
                             ),
                             padding:
                                 EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: Stack(
                               children: [
-                                Expanded(
-                                  child: Text(
-                                    '저랑 깐부하실 분! 본캐 1630에 1600 2개 1580 3개 있어요! ',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24.sp,
+                                Opacity(
+                                  opacity: 0.1,
+                                  child: Transform.translate(
+                                    offset: Offset(140.w, 30.h),
+                                    child: Transform.scale(
+                                      scale: 3,
+                                      child: Image.network(
+                                        'https://cdn-lostark.game.onstove.com/2021/event/210331_event/images/emoticon/emoticon_9.png',
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Container(
+                                              color: const Color.fromARGB(
+                                                  255, 21, 24, 29));
+                                        },
+                                      ),
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                Row(
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: '니나브 ',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          )
-                                        ],
+                                    Text(
+                                      '뚝딱이는작은섬',
+                                      style: TextStyle(
+                                        color: Colors.deepOrange[400],
+                                        fontSize: 24.sp,
                                       ),
                                     ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
+                                    Expanded(
+                                      child: Text(
+                                        '길드원구합니다! 모코코여도 괜찮아요 잘 가르쳐드릴 수 있고 길드 내 활동은 자유입니다 주간 기여도는 150만 채우면 됩니다.',
                                         style: TextStyle(
-                                          color: Colors.grey,
+                                          color: Colors.white,
                                           fontSize: 18.sp,
                                         ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: '레이드 ',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          )
-                                        ],
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
-                                        ),
-                                        children: <TextSpan>[
+                                    Row(
+                                      children: [
+                                        Text.rich(
                                           TextSpan(
-                                            text: '내실 ',
+                                            text: '#',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.grey,
                                               fontSize: 18.sp,
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: '니나브 ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        children: <TextSpan>[
+                                        Text.rich(
                                           TextSpan(
-                                            text: '일일 숙제 ',
+                                            text: '#',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.grey,
                                               fontSize: 18.sp,
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: '자유길드 ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        children: <TextSpan>[
+                                        Text.rich(
                                           TextSpan(
-                                            text: '평일 20시 ',
+                                            text: '#',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: Colors.grey,
                                               fontSize: 18.sp,
                                             ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: '#',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 18.sp,
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text: '1510 이상 ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: '주말 16시 ',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          )
-                                        ],
-                                      ),
+                                      ],
                                     ),
                                   ],
                                 ),

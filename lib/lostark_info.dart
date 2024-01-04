@@ -42,4 +42,25 @@ class lostarkInfo {
     '혼돈의 상아탑': 4,
     '에키드나': 8,
   };
+
+  Map<String, String> raidNetworkImage = {
+    '발탄':
+        'https://i.namu.wiki/i/2K3H6jdfhd6EdBP0Is9QOancMyWW70xwo6wGl20LbvZSUn4dW6UnsLyb9_BUX9R5UiRxsW2lC5RVnVMZR0Pd79T-3Or0AvzBgeLt_tSuk3zZ65vPTJ4Zjkh7r7P06iNoDT9_UO9PqXx2n8wgs9DFpQ.webp',
+    '비아키스':
+        'https://i.namu.wiki/i/Ez62q4h-IC9K3fC-CBcxhzCgBFpZFl4nmCrP18PpbW2SO5-p1yrsFzcRjBK8g08_TOj4Zg90rw4IORprW6G6q04lk5KtEV5CcwzbdeADbMWyhAvtLbD4y45D8rqwF_ylGZxnP50cqVaFIwDRnsDiVQ.webp',
+    '쿠크세이튼':
+        'https://i.namu.wiki/i/npbCwOJxJlH4wUmODKoOyWh1JiLCLWcFZdE2nhhXzmNa4BHTxYPyI2RMwomCmBAm9DVEs2StsLexaR6S-Lhth7Z-rxLQpz_jHe5VdmgLX6MlOxXiJJn78ufD5CqUAxkv_Z1vYB3sWx0ORNP4YLcrxA.webp',
+    '아브렐슈드':
+        'https://i.namu.wiki/i/6EDopCodDiCMBZeMxUtb5OkgWu6ZNG7wYW_cyWYrHoBRoe_G_L-0qbaTaw4XAROLwrTQ0aFGUHZA13j78u0fRdEG7JAorg5O5x94wJ2YOdxukgfqWyfT2uYUeDe6KVQjPpFObD-Z_L8e-05o7JCYOA.webp',
+    '일리아칸':
+        'https://i.namu.wiki/i/Eeit-rQASZa1pVlNUMI13d7sQZ2glGuTC3SMoUEbGGxWZDFzo9skzOVSyyzCDppizjkl4gPch7v11ZaxzgwiPkW_vE-hn3hF6Sk-5KGk8EhOGR_2u077Fq1z-B71I4zLl5D2znptGl2VUwiGFMgrZA.webp',
+    '카멘':
+        'https://i.namu.wiki/i/Z1cjBj0GaTZ6m85N_KndtaC4IGEn2qqsUKHwwrkvC6sHvJpgcM-2Uz9vfZXQACp6Omz83pDamQuVWmq4UByTFIxwbUGLqWAZyZhspvbVluvkwg0mC3_RZtZXJMtACLrqyw5ei1zQCptfCGe-0GDfDA.webp',
+    '카양겔':
+        'https://upload3.inven.co.kr/upload/2022/04/27/bbs/i13821724088.jpg?MW=800',
+    '혼돈의 상아탑':
+        'https://upload3.inven.co.kr/upload/2023/09/17/bbs/i17203791047.jpg?MW=800',
+    '에키드나':
+        'https://ac-p2.namu.la/20231217sac/9acc15aa89b19ae8be8cf2d5674c430fa82ba7f5e03346f86c1eadf73a36e7a2.webp?expires=1704394648&key=eRHyCg3FzeFWbt73RPHstA',
+  };
 }

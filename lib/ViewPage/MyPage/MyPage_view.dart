@@ -43,7 +43,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                   Padding(
                     padding: EdgeInsets.only(left: 16.w),
                     child: Text(
-                      '자기소개',
+                      '저는요',
                       style: TextStyle(
                         fontSize: 24.sp,
                         color: Colors.black,
