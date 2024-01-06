@@ -376,7 +376,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                 },
                 icon: Container(
                   width: double.infinity,
-                  height: 80.h,
+                  height: 70.h,
                   alignment: Alignment.center,
                   padding: EdgeInsets.fromLTRB(10.w, 8.h, 10.w, 8.h),
                   decoration: BoxDecoration(

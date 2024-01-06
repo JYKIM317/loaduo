@@ -2,8 +2,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_drawer/bottom_drawer.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loaduo/ViewPage/MyPage/MyPage_viewmodel.dart';
+import 'package:loaduo/ShowToastMsg.dart';
+import 'package:loaduo/ViewPage/GganbuPage/FindGuild/CreateGuildPost/CreateGuildPost_view.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindGuild/FindGuild_provider.dart';
 import 'FindGuild_widget.dart';
+import 'package:loaduo/lostark_info.dart';
 
 class FindGuild extends ConsumerStatefulWidget {
   const FindGuild({super.key});
@@ -42,6 +48,7 @@ class _FindGuildState extends ConsumerState<FindGuild> {
 
   @override
   Widget build(BuildContext context) {
+    final progress = ProgressHUD.of(context);
     final serverFilter = ref.watch(guildServerFilter);
     final typeFilter = ref.watch(guildTypeFilter);
     final levelFilter = ref.watch(guildLevelFilter);
@@ -49,7 +56,39 @@ class _FindGuildState extends ConsumerState<FindGuild> {
       onTap: () => _bottomDrawerController.close(),
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () async {
+            String? userUID = FirebaseAuth.instance.currentUser!.uid;
+            progress?.show();
+            await MyPageViewModel().getUserInfo(userUID).then((value) {
+              Future.microtask(() async {
+                if (value['representCharacter'] != null) {
+                  await MyPageViewModel()
+                      .getCharacterData(userName: value['representCharacter'])
+                      .then((character) {
+                    progress?.dismiss();
+                    if (character!['body'] != null &&
+                        character['statusCode'] == 200) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: ((context) => CreateGuildPost(
+                              guildName: character['body']['ArmoryProfile']
+                                      ['GuildName'] ??
+                                  '')),
+                        ),
+                      );
+                    } else {
+                      showToast(
+                          '원정대 내 최고 레벨 캐릭터 정보를 찾을 수 없거나,\n일시적인 오류로 인해 기능을 이용할 수 없습니다.');
+                    }
+                  });
+                } else {
+                  showToast('내 원정대를 등록해주세요\n[내 정보] - [내 원정대 등록하기]');
+                }
+                progress?.dismiss();
+              });
+            });
+          },
           backgroundColor: Colors.deepOrange[400],
           child: Icon(
             Icons.add,
@@ -233,7 +272,7 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                                     child: Transform.scale(
                                       scale: 3,
                                       child: Image.network(
-                                        'https://cdn-lostark.game.onstove.com/2021/event/210331_event/images/emoticon/emoticon_9.png',
+                                        lostarkInfo().networkImage['길드']!,
                                         errorBuilder:
                                             (context, error, stackTrace) {
                                           return Container(

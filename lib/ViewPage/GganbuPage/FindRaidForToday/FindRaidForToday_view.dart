@@ -2,6 +2,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_drawer/bottom_drawer.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loaduo/ViewPage/GganbuPage/MyExpedition_view.dart';
+import 'package:loaduo/ViewPage/MyPage/MyPage_viewmodel.dart';
+import 'package:loaduo/ShowToastMsg.dart';
+import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/CreateRaidForTodayPost/CreateRaidForTodayPost_view.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/FindRaidForToday_provider.dart';
 import 'FindRaidForToday_widget.dart';
 import 'package:loaduo/lostark_info.dart';
@@ -44,6 +50,7 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
 
   @override
   Widget build(BuildContext context) {
+    final progress = ProgressHUD.of(context);
     final raidFilter = ref.watch(raidForTodayRaidFilter);
     final skillFilter = ref.watch(raidForTodaySkillFilter);
     final timeSFilter = ref.watch(raidForTodaySFilter);
@@ -52,7 +59,45 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
       onTap: () => _bottomDrawerController.close(),
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () async {
+            String? userUID = FirebaseAuth.instance.currentUser!.uid;
+            progress?.show();
+            await MyPageViewModel().getUserInfo(userUID).then((value) {
+              Future.microtask(() async {
+                progress?.dismiss();
+                if (value['representCharacter'] != null) {
+                  await MyPageViewModel()
+                      .getUserExpedition(userUID)
+                      .then((expedition) async {
+                    if (expedition.isNotEmpty) {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              MyExpedition(expedition: expedition),
+                        ),
+                      ).then((character) {
+                        if (character != null) {
+                          character.addAll({'uid': userUID});
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreateRaidForTodayPost(
+                                  myCharacter: character),
+                            ),
+                          );
+                        }
+                      });
+                    } else {
+                      showToast('원정대 정보를 확인 할 수 없습니다.\n[내 정보] - [내 원정대 등록하기]');
+                    }
+                  });
+                } else {
+                  showToast('내 원정대를 등록해주세요\n[내 정보] - [내 원정대 등록하기]');
+                }
+              });
+            });
+          },
           backgroundColor: Colors.deepOrange[400],
           child: Icon(
             Icons.add,
@@ -243,8 +288,7 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                                     child: Transform.scale(
                                       scale: 3,
                                       child: Image.network(
-                                        lostarkInfo()
-                                            .raidNetworkImage['아브렐슈드']!,
+                                        lostarkInfo().networkImage['아브렐슈드']!,
                                         errorBuilder:
                                             (context, error, stackTrace) {
                                           return Container(

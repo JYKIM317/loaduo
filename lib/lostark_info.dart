@@ -43,7 +43,7 @@ class lostarkInfo {
     '에키드나': 8,
   };
 
-  Map<String, String> raidNetworkImage = {
+  Map<String, String> networkImage = {
     '발탄':
         'https://i.namu.wiki/i/2K3H6jdfhd6EdBP0Is9QOancMyWW70xwo6wGl20LbvZSUn4dW6UnsLyb9_BUX9R5UiRxsW2lC5RVnVMZR0Pd79T-3Or0AvzBgeLt_tSuk3zZ65vPTJ4Zjkh7r7P06iNoDT9_UO9PqXx2n8wgs9DFpQ.webp',
     '비아키스':
@@ -62,5 +62,9 @@ class lostarkInfo {
         'https://upload3.inven.co.kr/upload/2023/09/17/bbs/i17203791047.jpg?MW=800',
     '에키드나':
         'https://ac-p2.namu.la/20231217sac/9acc15aa89b19ae8be8cf2d5674c430fa82ba7f5e03346f86c1eadf73a36e7a2.webp?expires=1704394648&key=eRHyCg3FzeFWbt73RPHstA',
+    '깐부':
+        'https://cdn-lostark.game.onstove.com/2021/event/210331_event/images/emoticon/emoticon_1.png',
+    '길드':
+        'https://cdn-lostark.game.onstove.com/2021/event/210331_event/images/emoticon/emoticon_9.png',
   };
 }

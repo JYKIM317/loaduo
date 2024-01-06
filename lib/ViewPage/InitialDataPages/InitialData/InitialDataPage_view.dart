@@ -79,7 +79,7 @@ class InitialDataPage extends ConsumerWidget {
                   },
                   icon: Container(
                     width: double.infinity,
-                    height: 80.h,
+                    height: 70.h,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: Colors.deepOrange[400],

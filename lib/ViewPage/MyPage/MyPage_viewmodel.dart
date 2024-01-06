@@ -8,8 +8,6 @@ class MyPageViewModel {
     final userDB = await MyPageModel().getUserData(uid);
     Map<String, dynamic> userInfo = userDB.data() ?? {};
     userInfo.remove('lastLogin');
-    userInfo.remove('representCharacter');
-    userInfo.remove('representServer');
     return userInfo;
   }
 

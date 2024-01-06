@@ -5,6 +5,7 @@ import 'FindGGanbu/FindGganbu_view.dart';
 import 'FindStatic/FindStatic_view.dart';
 import 'FindGuild/FindGuild_view.dart';
 import 'FindRaidForToday/FindRaidForToday_view.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
 class GganbuPage extends ConsumerWidget {
   const GganbuPage({super.key});
@@ -37,7 +38,7 @@ class GganbuPage extends ConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FindGganbu(),
+                      builder: (context) => ProgressHUD(child: FindGganbu()),
                     ),
                   );
                 },
@@ -78,7 +79,7 @@ class GganbuPage extends ConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FindStatic(),
+                      builder: (context) => ProgressHUD(child: FindStatic()),
                     ),
                   );
                 },
@@ -124,7 +125,7 @@ class GganbuPage extends ConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FindGuild(),
+                      builder: (context) => ProgressHUD(child: FindGuild()),
                     ),
                   );
                 },
@@ -165,7 +166,8 @@ class GganbuPage extends ConsumerWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => FindRaidForToday(),
+                      builder: (context) =>
+                          ProgressHUD(child: FindRaidForToday()),
                     ),
                   );
                 },
