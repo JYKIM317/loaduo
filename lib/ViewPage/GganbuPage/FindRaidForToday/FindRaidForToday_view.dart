@@ -78,7 +78,12 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                         ),
                       ).then((character) {
                         if (character != null) {
-                          character.addAll({'uid': userUID});
+                          character.addAll({
+                            'uid': userUID,
+                            'representCharacter': value['representCharacter'],
+                            'credentialCharacter':
+                                value['credentialCharacter'] ?? '',
+                          });
                           Navigator.push(
                             context,
                             MaterialPageRoute(

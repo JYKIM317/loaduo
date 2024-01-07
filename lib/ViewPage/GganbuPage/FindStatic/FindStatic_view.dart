@@ -72,7 +72,12 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                         ),
                       ).then((character) {
                         if (character != null) {
-                          character.addAll({'uid': userUID});
+                          character.addAll({
+                            'uid': userUID,
+                            'representCharacter': value['representCharacter'],
+                            'credentialCharacter':
+                                value['credentialCharacter'] ?? '',
+                          });
                           Navigator.push(
                             context,
                             MaterialPageRoute(

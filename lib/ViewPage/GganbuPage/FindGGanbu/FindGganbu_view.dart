@@ -70,10 +70,12 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
               Future.microtask(() {
                 progress?.dismiss();
                 if (value['representCharacter'] != null) {
+                  value.addAll({'uid': userUID});
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: ((context) => CreateGganbuPost(myInfo: value)),
+                      builder: ((context) =>
+                          ProgressHUD(child: CreateGganbuPost(myInfo: value))),
                     ),
                   );
                 } else {
