@@ -149,7 +149,7 @@ class GganbuPage extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        '길드 찾기\n/길드원 구인',
+                        '길드 찾기\n/길드원 모집',
                         style: TextStyle(
                           color: Colors.grey[400],
                           fontSize: 18.sp,

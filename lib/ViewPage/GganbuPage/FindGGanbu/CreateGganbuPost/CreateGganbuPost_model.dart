@@ -5,7 +5,7 @@ class CreateGganbuPostModel {
     await FirebaseFirestore.instance
         .collection('RegisteredPost')
         .doc('FindPages')
-        .collection('GgnabuPost')
+        .collection('GganbuPost')
         .doc(data['uid'])
         .set(data);
   }

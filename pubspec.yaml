@@ -95,6 +95,9 @@ flutter:
     - family: Jamsil_M
       fonts:
         - asset: assets/fonts/The Jamsil OTF 4 Medium.otf
+    - family: CustomIcon
+      fonts:
+        - asset: assets/fonts/CustomIcon.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

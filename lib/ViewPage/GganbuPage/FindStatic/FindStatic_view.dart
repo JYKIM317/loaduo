@@ -72,17 +72,21 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                         ),
                       ).then((character) {
                         if (character != null) {
+                          bool credential = false;
+                          if (value['representCharacter'] ==
+                              value['credentialCharacter']) {
+                            credential = true;
+                          }
                           character.addAll({
                             'uid': userUID,
-                            'representCharacter': value['representCharacter'],
-                            'credentialCharacter':
-                                value['credentialCharacter'] ?? '',
+                            'credential': credential,
                           });
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  CreateStaticPost(myCharacter: character),
+                              builder: (context) => ProgressHUD(
+                                  child:
+                                      CreateStaticPost(myCharacter: character)),
                             ),
                           );
                         }
@@ -200,7 +204,7 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                             child: Stack(
                               children: [
                                 Opacity(
-                                  opacity: 0.1,
+                                  opacity: 0.2,
                                   child: Transform.translate(
                                     offset: Offset(80.w, 20.h),
                                     child: Transform.scale(

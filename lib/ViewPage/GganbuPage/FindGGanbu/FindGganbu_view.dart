@@ -307,7 +307,7 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                               child: Stack(
                                 children: [
                                   Opacity(
-                                    opacity: 0.1,
+                                    opacity: 0.2,
                                     child: Transform.translate(
                                       offset: Offset(180.w, 20.h),
                                       child: Transform.scale(

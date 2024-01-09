@@ -78,17 +78,22 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                         ),
                       ).then((character) {
                         if (character != null) {
+                          bool credential = false;
+                          if (value['representCharacter'] ==
+                              value['credentialCharacter']) {
+                            credential = true;
+                          }
                           character.addAll({
                             'uid': userUID,
-                            'representCharacter': value['representCharacter'],
-                            'credentialCharacter':
-                                value['credentialCharacter'] ?? '',
+                            'credential': credential,
                           });
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => CreateRaidForTodayPost(
-                                  myCharacter: character),
+                              builder: (context) => ProgressHUD(
+                                child: CreateRaidForTodayPost(
+                                    myCharacter: character),
+                              ),
                             ),
                           );
                         }
@@ -287,7 +292,7 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                             child: Stack(
                               children: [
                                 Opacity(
-                                  opacity: 0.1,
+                                  opacity: 0.2,
                                   child: Transform.translate(
                                     offset: Offset(80.w, 20.h),
                                     child: Transform.scale(

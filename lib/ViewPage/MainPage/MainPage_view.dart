@@ -6,6 +6,7 @@ import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:loaduo/ViewPage/MyPage/MyPage_view.dart';
 import 'package:loaduo/ViewPage/SearchUserPage/SearchUserPage_view.dart';
 import 'package:loaduo/ViewPage/GganbuPage/GganbuPage_view.dart';
+import 'package:loaduo/CustomIcon.dart';
 
 class MainPage extends ConsumerWidget {
   const MainPage({super.key});
@@ -35,8 +36,8 @@ class MainPage extends ConsumerWidget {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.featured_play_list),
-            label: '깐부 찾기',
+            icon: Icon(CustomIcon.thLarge),
+            label: '구인 구직',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),

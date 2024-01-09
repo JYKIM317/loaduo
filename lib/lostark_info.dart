@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'CustomIcon.dart';
+
 class lostarkInfo {
   List<String> serverList = [
     '전체',
@@ -20,12 +23,12 @@ class lostarkInfo {
   List<String> kazerosRaidList = ['에키드나'];
 
   Map<String, dynamic> raidDifficulty = {
-    '발탄': ['[노말]', '[하드]', '[헬]'],
-    '비아키스': ['[노말]', '[하드]', '[헬]'],
-    '쿠크세이튼': ['[노말]', '[하드]', '[헬]'],
-    '아브렐슈드': ['[노말]', '[하드]', '[헬]'],
+    '발탄': ['[노말]', '[하드]'],
+    '비아키스': ['[노말]', '[하드]'],
+    '쿠크세이튼': ['[노말]'],
+    '아브렐슈드': ['[노말]', '[하드]'],
     '일리아칸': ['[노말]', '[하드]'],
-    '카멘': ['[노말]', '[하드]', '[더 퍼스트]'],
+    '카멘': ['[노말]', '[하드]'],
     '카양겔': ['[노말]', '[하드]'],
     '혼돈의 상아탑': ['[노말]', '[하드]'],
     '에키드나': ['[노말]', '[하드]'],
@@ -43,28 +46,85 @@ class lostarkInfo {
     '에키드나': 8,
   };
 
+  Map<String, dynamic> raidLevel = {
+    '발탄 [노말]': 1415,
+    '발탄 [하드]': 1445,
+    '비아키스 [노말]': 1430,
+    '비아키스 [하드]': 1460,
+    '쿠크세이튼 [노말]': 1475,
+    '아브렐슈드 [노말]': 1490,
+    '아브렐슈드 [하드]': 1540,
+    '일리아칸 [노말]': 1580,
+    '일리아칸 [하드]': 1600,
+    '카멘 [노말]': 1610,
+    '카멘 [하드]': 1630,
+    '카양겔 [노말]': 1540,
+    '카양겔 [하드]': 1580,
+    '혼돈의 상아탑 [노말]': 1600,
+    '혼돈의 상아탑 [하드]': 1620,
+    '에키드나 [노말]': 1620,
+    '에키드나 [하드]': 1630,
+  };
+
   Map<String, String> networkImage = {
     '발탄':
-        'https://i.namu.wiki/i/2K3H6jdfhd6EdBP0Is9QOancMyWW70xwo6wGl20LbvZSUn4dW6UnsLyb9_BUX9R5UiRxsW2lC5RVnVMZR0Pd79T-3Or0AvzBgeLt_tSuk3zZ65vPTJ4Zjkh7r7P06iNoDT9_UO9PqXx2n8wgs9DFpQ.webp',
+        'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/valtan.jpg?alt=media&token=4e1164be-88f1-4329-b085-3e91ce46127f',
     '비아키스':
-        'https://i.namu.wiki/i/Ez62q4h-IC9K3fC-CBcxhzCgBFpZFl4nmCrP18PpbW2SO5-p1yrsFzcRjBK8g08_TOj4Zg90rw4IORprW6G6q04lk5KtEV5CcwzbdeADbMWyhAvtLbD4y45D8rqwF_ylGZxnP50cqVaFIwDRnsDiVQ.webp',
+        'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/vyakis.jpg?alt=media&token=e74ce304-3ff9-4fd0-b86f-f5958f5299c9',
     '쿠크세이튼':
-        'https://i.namu.wiki/i/npbCwOJxJlH4wUmODKoOyWh1JiLCLWcFZdE2nhhXzmNa4BHTxYPyI2RMwomCmBAm9DVEs2StsLexaR6S-Lhth7Z-rxLQpz_jHe5VdmgLX6MlOxXiJJn78ufD5CqUAxkv_Z1vYB3sWx0ORNP4YLcrxA.webp',
+        'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/kukasaden.jpg?alt=media&token=79adf2e1-d91e-4ff3-ad12-c9877f56ab24',
     '아브렐슈드':
-        'https://i.namu.wiki/i/6EDopCodDiCMBZeMxUtb5OkgWu6ZNG7wYW_cyWYrHoBRoe_G_L-0qbaTaw4XAROLwrTQ0aFGUHZA13j78u0fRdEG7JAorg5O5x94wJ2YOdxukgfqWyfT2uYUeDe6KVQjPpFObD-Z_L8e-05o7JCYOA.webp',
+        'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/abrelshud.jpg?alt=media&token=d46d61f4-ee1d-46f2-b2d2-00ce38001830',
     '일리아칸':
-        'https://i.namu.wiki/i/Eeit-rQASZa1pVlNUMI13d7sQZ2glGuTC3SMoUEbGGxWZDFzo9skzOVSyyzCDppizjkl4gPch7v11ZaxzgwiPkW_vE-hn3hF6Sk-5KGk8EhOGR_2u077Fq1z-B71I4zLl5D2znptGl2VUwiGFMgrZA.webp',
+        'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/illiakan.jpeg?alt=media&token=cf409f2d-8895-4dc5-a090-843bcf8f4845',
     '카멘':
-        'https://i.namu.wiki/i/Z1cjBj0GaTZ6m85N_KndtaC4IGEn2qqsUKHwwrkvC6sHvJpgcM-2Uz9vfZXQACp6Omz83pDamQuVWmq4UByTFIxwbUGLqWAZyZhspvbVluvkwg0mC3_RZtZXJMtACLrqyw5ei1zQCptfCGe-0GDfDA.webp',
+        'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/kamen.jpg?alt=media&token=c78fc254-b7cf-48b2-887f-5f855eee6a62',
     '카양겔':
-        'https://upload3.inven.co.kr/upload/2022/04/27/bbs/i13821724088.jpg?MW=800',
+        'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/kayangel.jpeg?alt=media&token=57c714b0-03d6-471c-9341-491dec70f816',
     '혼돈의 상아탑':
-        'https://upload3.inven.co.kr/upload/2023/09/17/bbs/i17203791047.jpg?MW=800',
+        'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/sangatower.jpeg?alt=media&token=89f875cf-6707-4320-b077-0d2d95b284e0',
     '에키드나':
-        'https://ac-p2.namu.la/20231217sac/9acc15aa89b19ae8be8cf2d5674c430fa82ba7f5e03346f86c1eadf73a36e7a2.webp?expires=1704394648&key=eRHyCg3FzeFWbt73RPHstA',
+        'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/ekidna.jpg?alt=media&token=ed549f2e-996a-44f1-ae3b-74bac4a8f2a0',
     '깐부':
-        'https://cdn-lostark.game.onstove.com/2021/event/210331_event/images/emoticon/emoticon_1.png',
+        'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/gganbu.png?alt=media&token=b9d6cbf3-f36f-49c8-b22a-b876d45b6a23',
     '길드':
-        'https://cdn-lostark.game.onstove.com/2021/event/210331_event/images/emoticon/emoticon_9.png',
+        'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/guild.png?alt=media&token=3f096f50-d5ad-43c1-82d4-8cd8d82a451b',
+  };
+
+  int maxLevel = 1655;
+
+  Map<String, IconData> classIcon = {
+    //전사
+    '버서커': CustomIcon.berserker,
+    '디스트로이어': CustomIcon.destroyer,
+    '워로드': CustomIcon.gunlancer,
+    '홀리나이트': CustomIcon.paladin,
+    '슬레이어': CustomIcon.slayer,
+    //무도가
+    '배틀마스터': CustomIcon.wardancer,
+    '인파이터': CustomIcon.scrapper,
+    '기공사': CustomIcon.soulfist,
+    '창술사': CustomIcon.glaivier,
+    '스트라이커': CustomIcon.striker,
+    '브레이커': CustomIcon.breaker,
+    //헌터
+    '데빌헌터': CustomIcon.deadeye,
+    '블래스터': CustomIcon.artillerist,
+    '호크아이': CustomIcon.sharpshooter,
+    '스카우터': CustomIcon.machinist,
+    '건슬링어': CustomIcon.gunslinger,
+    //마법사
+    '바드': CustomIcon.bard,
+    '서머너': CustomIcon.summoner,
+    '아르카나': CustomIcon.arcanist,
+    '소서리스': CustomIcon.sorceress,
+    //암살자
+    '블레이드': CustomIcon.deathblade,
+    '데모닉': CustomIcon.shadowhunter,
+    '리퍼': CustomIcon.reaper,
+    '소울이터': CustomIcon.souleater,
+    //스페셜리스트
+    '도화가': CustomIcon.artist,
+    '기상술사': CustomIcon.aeromancer,
   };
 }

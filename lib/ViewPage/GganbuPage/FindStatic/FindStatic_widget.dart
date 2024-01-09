@@ -137,6 +137,7 @@ class _RaidDrawerState extends ConsumerState<RaidDrawer> {
                   ),
                 ),
               ),
+            SizedBox(height: 20.h),
             //어비스 던전
             TextButton(
               onPressed: () {
@@ -230,6 +231,7 @@ class _RaidDrawerState extends ConsumerState<RaidDrawer> {
                   ),
                 ),
               ),
+            SizedBox(height: 20.h),
             //카제로스 레이드
             TextButton(
               onPressed: () {

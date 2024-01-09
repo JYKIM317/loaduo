@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindGGanbu/CreateGganbuPost/CreateGganbuPost_viewmodel.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:loaduo/CustomIcon.dart';
 
 class CreateGganbuPost extends StatefulWidget {
   final myInfo;
@@ -114,13 +115,14 @@ class _CreateGganbuPostState extends State<CreateGganbuPost> {
                                     ),
                                   ),
                                   SizedBox(width: 2.w),
-                                  if (character == credential)
-                                    Icon(
-                                      Icons.check_circle_rounded,
-                                      color:
-                                          const Color.fromARGB(255, 21, 24, 29),
-                                      size: 21.sp,
-                                    ),
+                                  Icon(
+                                    character == credential
+                                        ? CustomIcon.check
+                                        : CustomIcon.checkEmpty,
+                                    color:
+                                        const Color.fromARGB(255, 21, 24, 29),
+                                    size: 21.sp,
+                                  ),
                                 ],
                               ),
                             ],
@@ -360,8 +362,10 @@ class _CreateGganbuPostState extends State<CreateGganbuPost> {
                             onChanged: (value) {
                               detail = value;
                             },
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               border: InputBorder.none,
+                              hintText: '작성하고싶은 내용',
+                              hintStyle: TextStyle(color: Colors.grey[400]),
                             ),
                           ),
                         ),

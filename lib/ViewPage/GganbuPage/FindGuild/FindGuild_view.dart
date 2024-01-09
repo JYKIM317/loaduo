@@ -68,18 +68,26 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                     progress?.dismiss();
                     if (character!['body'] != null &&
                         character['statusCode'] == 200) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: ((context) => CreateGuildPost(
-                              guildName: character['body']['ArmoryProfile']
-                                      ['GuildName'] ??
-                                  '')),
-                        ),
-                      );
+                      if (character['body']['ArmoryProfile']['GuildName'] !=
+                          null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: ((context) => ProgressHUD(
+                                  child: CreateGuildPost(
+                                    guildName: character['body']
+                                        ['ArmoryProfile']['GuildName'],
+                                    server: value['representServer'],
+                                  ),
+                                )),
+                          ),
+                        );
+                      } else {
+                        showToast('원정대의 대표 캐릭터가 가입한 길드를 확인할 수 없습니다.');
+                      }
                     } else {
                       showToast(
-                          '원정대 내 최고 레벨 캐릭터 정보를 찾을 수 없거나,\n일시적인 오류로 인해 기능을 이용할 수 없습니다.');
+                          '원정대의 대표 캐릭터 정보를 찾을 수 없거나,\n일시적인 오류로 인해 기능을 이용할 수 없습니다.');
                     }
                   });
                 } else {
@@ -266,7 +274,7 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                             child: Stack(
                               children: [
                                 Opacity(
-                                  opacity: 0.1,
+                                  opacity: 0.2,
                                   child: Transform.translate(
                                     offset: Offset(140.w, 30.h),
                                     child: Transform.scale(

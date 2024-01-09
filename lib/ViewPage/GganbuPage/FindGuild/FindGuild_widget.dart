@@ -178,7 +178,7 @@ class _LevelDrawerState extends ConsumerState<LevelDrawer> {
           InkWell(
             onTap: () {
               if (inputLevel != null && inputLevel! >= 100) {
-                if (inputLevel! >= 0 && inputLevel! <= 1655) {
+                if (inputLevel! >= 0 && inputLevel! <= lostarkInfo().maxLevel) {
                   ref.read(guildLevelFilter.notifier).update(inputLevel);
                   FocusScope.of(context).unfocus();
                   widget.bottomController.close();
