@@ -11,6 +11,7 @@ import 'package:loaduo/ViewPage/InitialDataPages/InitialData/InitialDataPage_vie
 import 'package:loaduo/ViewPage/InitialDataPages/ApiData/ApiDataPage_view.dart';
 import 'package:loaduo/ViewPage/UserPage/UserPage_view.dart';
 import 'package:loaduo/ShowToastMsg.dart';
+import 'package:loaduo/CustomIcon.dart';
 
 class MyPage extends ConsumerStatefulWidget {
   final String uid;
@@ -137,65 +138,100 @@ class _MyPageState extends ConsumerState<MyPage> {
                 if (isMe && info.isEmpty) {
                   ref.read(myPageInfo.notifier).update(data: infoData);
                 }
+                String representCharacter =
+                    infoData['representCharacter'] ?? 'rep#';
+                String credentialCharacter =
+                    infoData['credentialCharacter'] ?? 'cre#';
 
                 return Container(
                   width: double.infinity,
                   padding:
                       EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                  child: Text.rich(
-                    TextSpan(
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          color: Colors.black,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text.rich(
+                        TextSpan(
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              color: Colors.black,
+                            ),
+                            text: '저는 ',
+                            children: <TextSpan>[
+                              TextSpan(
+                                style: TextStyle(color: Colors.deepOrange[400]),
+                                text: infoData['concern'].toString(), //concern
+                              ),
+                              const TextSpan(
+                                text: ' 깐부를 찾고 있어요\n저는 레이드를 ',
+                              ),
+                              TextSpan(
+                                style: TextStyle(color: Colors.deepOrange[400]),
+                                text: infoData['raidDistribute']
+                                    .toString(), //raidDistribute
+                              ),
+                              const TextSpan(
+                                text: '\n레이드는 주로 ',
+                              ),
+                              TextSpan(
+                                style: TextStyle(color: Colors.deepOrange[400]),
+                                text: infoData['raidSkill']
+                                    .toString(), //raidSkill
+                              ),
+                              const TextSpan(
+                                text: ' 파티를 가는 편이고\n레이드를 돌 때는 ',
+                              ),
+                              TextSpan(
+                                style: TextStyle(color: Colors.deepOrange[400]),
+                                text:
+                                    infoData['raidMood'].toString(), //raidMood
+                              ),
+                              const TextSpan(
+                                text: '\n평일은 ',
+                              ),
+                              TextSpan(
+                                style: TextStyle(color: Colors.deepOrange[400]),
+                                text: infoData['weekdayPlaytime']
+                                    .toString(), //weekdayPlaytime
+                              ),
+                              const TextSpan(
+                                text: '시, 주말은 ',
+                              ),
+                              TextSpan(
+                                style: TextStyle(color: Colors.deepOrange[400]),
+                                text: infoData['weekendPlaytime']
+                                    .toString(), //weekendPlaytime
+                              ),
+                              const TextSpan(
+                                text: '시에\n접속해있는 편이에요',
+                              ),
+                            ]),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.only(top: 30.h),
+                        child: Row(
+                          children: [
+                            Icon(
+                              representCharacter == credentialCharacter
+                                  ? CustomIcon.check
+                                  : CustomIcon.checkEmpty,
+                              size: 21.sp,
+                            ),
+                            SizedBox(width: 4.w),
+                            Text(
+                              representCharacter == credentialCharacter
+                                  ? '본캐 인증 완료'
+                                  : '본캐 인증 미완료',
+                              style: TextStyle(
+                                color: Colors.grey[700],
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                          ],
                         ),
-                        text: '저는 ',
-                        children: <TextSpan>[
-                          TextSpan(
-                            style: TextStyle(color: Colors.deepOrange[400]),
-                            text: infoData['concern'].toString(), //concern
-                          ),
-                          const TextSpan(
-                            text: ' 깐부를 찾고 있어요\n저는 레이드를 ',
-                          ),
-                          TextSpan(
-                            style: TextStyle(color: Colors.deepOrange[400]),
-                            text: infoData['raidDistribute']
-                                .toString(), //raidDistribute
-                          ),
-                          const TextSpan(
-                            text: '\n레이드는 주로 ',
-                          ),
-                          TextSpan(
-                            style: TextStyle(color: Colors.deepOrange[400]),
-                            text: infoData['raidSkill'].toString(), //raidSkill
-                          ),
-                          const TextSpan(
-                            text: ' 파티를 가는 편이고\n레이드를 돌 때는 ',
-                          ),
-                          TextSpan(
-                            style: TextStyle(color: Colors.deepOrange[400]),
-                            text: infoData['raidMood'].toString(), //raidMood
-                          ),
-                          const TextSpan(
-                            text: '\n평일은 ',
-                          ),
-                          TextSpan(
-                            style: TextStyle(color: Colors.deepOrange[400]),
-                            text: infoData['weekdayPlaytime']
-                                .toString(), //weekdayPlaytime
-                          ),
-                          const TextSpan(
-                            text: '시, 주말은 ',
-                          ),
-                          TextSpan(
-                            style: TextStyle(color: Colors.deepOrange[400]),
-                            text: infoData['weekendPlaytime']
-                                .toString(), //weekendPlaytime
-                          ),
-                          const TextSpan(
-                            text: '시에\n접속해있는 편이에요',
-                          ),
-                        ]),
+                      ),
+                    ],
                   ),
                 );
               }),
@@ -207,7 +243,7 @@ class _MyPageState extends ConsumerState<MyPage> {
           Padding(
             padding: EdgeInsets.only(left: 16.w),
             child: Text(
-              '캐릭터',
+              '원정대',
               style: TextStyle(
                 fontSize: 24.sp,
                 color: Colors.black,
@@ -392,7 +428,27 @@ class _MyPageState extends ConsumerState<MyPage> {
                   ),
                 ),
               ),
-            )
+            ),
+          Container(
+            height: 20.h,
+            margin: EdgeInsets.symmetric(vertical: 20.h),
+            color: Colors.grey[200],
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 16.w),
+            child: Text(
+              '참가중인 공격대',
+              style: TextStyle(
+                fontSize: 24.sp,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Divider(
+            color: Colors.grey[300],
+            thickness: 2.h,
+            height: 40.h,
+          ),
         ],
       ),
     );
