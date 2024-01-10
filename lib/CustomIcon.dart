@@ -37,8 +37,6 @@ class CustomIcon {
       IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData bard =
       IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData sorceress =
-      IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData summoner =
       IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData breaker =
@@ -57,6 +55,8 @@ class CustomIcon {
       IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData shadowhunter =
       IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData sorceress =
+      IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData berserker =
       IconData(0xe810, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData destroyer =

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class CreateRaidForTodayPostModel {
   Future<void> uploadData({
@@ -27,12 +28,24 @@ class CreateRaidForTodayPostModel {
     required String uid,
     required String address,
   }) async {
-    //raidfortodaypost 가져와서 add하고 list로 바꿔서 넣기
+    List<dynamic> addressList = [];
+    try {
+      final db = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(uid)
+          .collection('MyPosts')
+          .doc('RaidForTodayPost')
+          .get();
+      addressList = await db.get('address');
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    addressList.add(address);
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(uid)
         .collection('MyPosts')
         .doc('RaidForTodayPost')
-        .set({'address': address});
+        .set({'address': addressList});
   }
 }
