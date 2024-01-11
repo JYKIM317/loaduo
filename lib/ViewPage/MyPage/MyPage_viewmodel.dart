@@ -60,7 +60,6 @@ class MyPageViewModel {
 
   Future<Map<String, dynamic>> getUserPost(String uid) async {
     Map<String, dynamic> userPost = await MyPageModel().getUserPostData(uid);
-    print(userPost);
     return userPost;
   }
 }
