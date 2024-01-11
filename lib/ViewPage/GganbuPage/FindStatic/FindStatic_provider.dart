@@ -1,18 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final staticListDataLength =
-    StateNotifierProvider<StaticDataListNotifier, int>((ref) {
-  return StaticDataListNotifier();
-});
-
-class StaticDataListNotifier extends StateNotifier<int> {
-  StaticDataListNotifier() : super(0);
-
-  update(int count) {
-    state = count;
-  }
-}
-
 final staticFilterIndex =
     StateNotifierProvider<StaticFilterIndexNotifier, int>((ref) {
   return StaticFilterIndexNotifier();

@@ -7,6 +7,11 @@ import 'FindGuild/FindGuild_view.dart';
 import 'FindRaidForToday/FindRaidForToday_view.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 
+import 'FindGGanbu/FindGganbu_provider.dart';
+import 'FindGuild/FindGuild_provider.dart';
+import 'FindRaidForToday/FindRaidForToday_provider.dart';
+import 'FindStatic/FindStatic_provider.dart';
+
 class GganbuPage extends ConsumerWidget {
   const GganbuPage({super.key});
 
@@ -34,6 +39,12 @@ class GganbuPage extends ConsumerWidget {
             children: [
               InkWell(
                 onTap: () {
+                  ref.read(gganbuServerFilter.notifier).update(null);
+                  ref.read(gganbuTypeFilter.notifier).clear();
+                  ref.read(gganbuWeekDaySFilter.notifier).update(null);
+                  ref.read(gganbuWeekDayEFilter.notifier).update(null);
+                  ref.read(gganbuWeekEndSFilter.notifier).update(null);
+                  ref.read(gganbuWeekEndEFilter.notifier).update(null);
                   //깐부
                   Navigator.push(
                     context,
@@ -75,6 +86,7 @@ class GganbuPage extends ConsumerWidget {
               SizedBox(width: 10.w),
               InkWell(
                 onTap: () {
+                  ref.read(staticRaidFilter.notifier).update(null);
                   //고정공대
                   Navigator.push(
                     context,
@@ -121,6 +133,9 @@ class GganbuPage extends ConsumerWidget {
             children: [
               InkWell(
                 onTap: () {
+                  ref.read(guildServerFilter.notifier).update(null);
+                  ref.read(guildTypeFilter.notifier).update(null);
+                  ref.read(guildLevelFilter.notifier).update(null);
                   //길드
                   Navigator.push(
                     context,
@@ -162,6 +177,10 @@ class GganbuPage extends ConsumerWidget {
               SizedBox(width: 10.w),
               InkWell(
                 onTap: () {
+                  ref.read(raidForTodayRaidFilter.notifier).update(null);
+                  ref.read(raidForTodaySkillFilter.notifier).update(null);
+                  ref.read(raidForTodaySFilter.notifier).update(null);
+                  ref.read(raidForTodayEFilter.notifier).update(null);
                   //오늘 레이드
                   Navigator.push(
                     context,

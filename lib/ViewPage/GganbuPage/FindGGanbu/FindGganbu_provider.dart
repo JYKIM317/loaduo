@@ -1,18 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final gganbuListDataLength =
-    StateNotifierProvider<GganbuDataListNotifier, int>((ref) {
-  return GganbuDataListNotifier();
-});
-
-class GganbuDataListNotifier extends StateNotifier<int> {
-  GganbuDataListNotifier() : super(0);
-
-  update(int count) {
-    state = count;
-  }
-}
-
 final gganbuFilterIndex =
     StateNotifierProvider<GganbuFilterIndexNotifier, int>((ref) {
   return GganbuFilterIndexNotifier();

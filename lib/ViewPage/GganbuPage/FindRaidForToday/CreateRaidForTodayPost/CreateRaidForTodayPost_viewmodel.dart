@@ -12,18 +12,21 @@ class CreateRaidForTodayPostViewModel {
     required Map<String, dynamic> myCharacter,
   }) async {
     DateTime now = DateTime.now();
+    String address =
+        '${raidLeader}_${now.year}.${now.month}.${now.day}_${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
     Map<String, dynamic> postInfo = {
       'raidLeader': raidLeader,
       'raid': raid,
       'raidName': raidName,
+      'raidPlayer': 1,
       'raidMaxPlayer': raidMaxPlayer,
       'skill': skill,
       'startTime': startTime,
       'detail': detail,
       'postTime': now,
+      'address': address,
     };
-    String address =
-        '${raidLeader}_${now.year}.${now.month}.${now.day}_${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
     await CreateRaidForTodayPostModel().uploadData(
       data: postInfo,
       character: myCharacter,

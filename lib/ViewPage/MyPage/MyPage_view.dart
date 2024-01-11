@@ -406,6 +406,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                   ).then((change) {
                     if (change != null && change) {
                       ref.read(myPageCharacter.notifier).remove();
+                      info.clear();
                       setState(() {});
                     }
                   });

@@ -1,18 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final raidForTodayListDataLength =
-    StateNotifierProvider<RaidForTodayDataListNotifier, int>((ref) {
-  return RaidForTodayDataListNotifier();
-});
-
-class RaidForTodayDataListNotifier extends StateNotifier<int> {
-  RaidForTodayDataListNotifier() : super(0);
-
-  update(int count) {
-    state = count;
-  }
-}
-
 final raidForTodayFilterIndex =
     StateNotifierProvider<RaidForTodayFilterIndexNotifier, int>((ref) {
   return RaidForTodayFilterIndexNotifier();

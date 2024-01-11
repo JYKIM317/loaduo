@@ -1,18 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final guildListDataLength =
-    StateNotifierProvider<GuildDataListNotifier, int>((ref) {
-  return GuildDataListNotifier();
-});
-
-class GuildDataListNotifier extends StateNotifier<int> {
-  GuildDataListNotifier() : super(0);
-
-  update(int count) {
-    state = count;
-  }
-}
-
 final guildFilterIndex =
     StateNotifierProvider<GuildFilterIndexNotifier, int>((ref) {
   return GuildFilterIndexNotifier();

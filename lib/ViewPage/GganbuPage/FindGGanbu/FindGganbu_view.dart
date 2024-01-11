@@ -10,6 +10,7 @@ import 'package:loaduo/ViewPage/GganbuPage/FindGGanbu/CreateGganbuPost/CreateGga
 import 'package:loaduo/ViewPage/GganbuPage/FindGGanbu/FindGganbu_provider.dart';
 import 'FindGganbu_widget.dart';
 import 'package:loaduo/lostark_info.dart';
+import 'FindGganbu_viewmodel.dart';
 
 class FindGganbu extends ConsumerStatefulWidget {
   const FindGganbu({super.key});
@@ -48,15 +49,117 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
     );
   }
 
+  int postCount = 30;
+  late Future gganbuLoadData;
+  var serverFilter;
+  var typeFilter;
+  var weekdaySFilter;
+  var weekdayEFilter;
+  var weekendSFilter;
+  var weekendEFilter;
+
+  @override
+  void initState() {
+    gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
+      count: postCount,
+      serverFilter: serverFilter,
+      typeFilter: typeFilter,
+      weekdayS: weekdaySFilter,
+      weekdayE: weekdayEFilter,
+      weekendS: weekendSFilter,
+      weekendE: weekendEFilter,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final progress = ProgressHUD.of(context);
-    final serverFilter = ref.watch(gganbuServerFilter);
-    final typeFilter = ref.watch(gganbuTypeFilter);
-    final weekdaySFilter = ref.watch(gganbuWeekDaySFilter);
-    final weekdayEFilter = ref.watch(gganbuWeekDayEFilter);
-    final weekendSFilter = ref.watch(gganbuWeekEndSFilter);
-    final weekendEFilter = ref.watch(gganbuWeekEndEFilter);
+    serverFilter = ref.watch(gganbuServerFilter);
+    typeFilter = ref.watch(gganbuTypeFilter);
+    weekdaySFilter = ref.watch(gganbuWeekDaySFilter);
+    weekdayEFilter = ref.watch(gganbuWeekDayEFilter);
+    weekendSFilter = ref.watch(gganbuWeekEndSFilter);
+    weekendEFilter = ref.watch(gganbuWeekEndEFilter);
+    ref.listen(gganbuServerFilter, (previousState, newState) {
+      postCount = 30;
+      serverFilter = newState;
+      gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
+        count: postCount,
+        serverFilter: serverFilter,
+        typeFilter: typeFilter,
+        weekdayS: weekdaySFilter,
+        weekdayE: weekdayEFilter,
+        weekendS: weekendSFilter,
+        weekendE: weekendEFilter,
+      );
+    });
+    ref.listen(gganbuTypeFilter, (previousState, newState) {
+      postCount = 30;
+      typeFilter = newState;
+      gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
+        count: postCount,
+        serverFilter: serverFilter,
+        typeFilter: typeFilter,
+        weekdayS: weekdaySFilter,
+        weekdayE: weekdayEFilter,
+        weekendS: weekendSFilter,
+        weekendE: weekendEFilter,
+      );
+    });
+    ref.listen(gganbuWeekDaySFilter, (previousState, newState) {
+      postCount = 30;
+      weekdaySFilter = newState;
+      gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
+        count: postCount,
+        serverFilter: serverFilter,
+        typeFilter: typeFilter,
+        weekdayS: weekdaySFilter,
+        weekdayE: weekdayEFilter,
+        weekendS: weekendSFilter,
+        weekendE: weekendEFilter,
+      );
+    });
+    ref.listen(gganbuWeekDayEFilter, (previousState, newState) {
+      postCount = 30;
+      weekdayEFilter = newState;
+      gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
+        count: postCount,
+        serverFilter: serverFilter,
+        typeFilter: typeFilter,
+        weekdayS: weekdaySFilter,
+        weekdayE: weekdayEFilter,
+        weekendS: weekendSFilter,
+        weekendE: weekendEFilter,
+      );
+    });
+    ref.listen(gganbuWeekEndSFilter, (previousState, newState) {
+      postCount = 30;
+      weekendSFilter = newState;
+      gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
+        count: postCount,
+        serverFilter: serverFilter,
+        typeFilter: typeFilter,
+        weekdayS: weekdaySFilter,
+        weekdayE: weekdayEFilter,
+        weekendS: weekendSFilter,
+        weekendE: weekendEFilter,
+      );
+    });
+    ref.listen(gganbuWeekEndEFilter, (previousState, newState) {
+      postCount = 30;
+      weekendEFilter = newState;
+      gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
+        count: postCount,
+        serverFilter: serverFilter,
+        typeFilter: typeFilter,
+        weekdayS: weekdaySFilter,
+        weekdayE: weekdayEFilter,
+        weekendS: weekendSFilter,
+        weekendE: weekendEFilter,
+      );
+    });
+
     return GestureDetector(
       onTap: () {
         _bottomDrawerController.close();
@@ -289,210 +392,217 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                       padding: EdgeInsets.symmetric(
                           horizontal: 16.w, vertical: 10.h),
                       physics: const ClampingScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: Container(
-                              width: double.infinity,
-                              height: 210.h,
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.sp),
-                                color: const Color.fromARGB(255, 21, 24, 29),
-                              ),
-                              padding:
-                                  EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
-                              child: Stack(
-                                children: [
-                                  Opacity(
-                                    opacity: 0.2,
-                                    child: Transform.translate(
-                                      offset: Offset(180.w, 20.h),
-                                      child: Transform.scale(
-                                        scale: 3,
-                                        child: Image.network(
-                                          lostarkInfo().networkImage['깐부']!,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            return Container(
-                                                color: const Color.fromARGB(
-                                                    255, 21, 24, 29));
-                                          },
+                      child: FutureBuilder(
+                          future: gganbuLoadData,
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return SizedBox(
+                                height: 246.h,
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  color: Colors.deepOrange[400],
+                                )),
+                              );
+                            }
+                            List<Map<String, dynamic>> postList =
+                                snapshot.data ?? [];
+                            return ListView.separated(
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                              itemCount: postList.length,
+                              itemBuilder: (BuildContext ctx, int idx) {
+                                Map<String, dynamic> post = postList[idx];
+                                return InkWell(
+                                  onTap: () {
+                                    //자세히 보기
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 210.h,
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.sp),
+                                      color:
+                                          const Color.fromARGB(255, 21, 24, 29),
+                                    ),
+                                    padding: EdgeInsets.fromLTRB(
+                                        16.w, 20.h, 16.w, 20.h),
+                                    child: Stack(
+                                      children: [
+                                        Opacity(
+                                          opacity: 0.2,
+                                          child: Transform.translate(
+                                            offset: Offset(180.w, 20.h),
+                                            child: Transform.scale(
+                                              scale: 3,
+                                              child: Image.network(
+                                                lostarkInfo()
+                                                    .networkImage['깐부']!,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return Container(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 21, 24, 29));
+                                                },
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                post['detail'],
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 24.sp,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: '#',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text:
+                                                            '${post['representServer']} ',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18.sp,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                if (post['concern'].length >= 1)
+                                                  Text.rich(
+                                                    TextSpan(
+                                                      text: '#',
+                                                      style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 18.sp,
+                                                      ),
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                          text:
+                                                              '${post['concern'][0]} ',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18.sp,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                if (post['concern'].length >= 2)
+                                                  Text.rich(
+                                                    TextSpan(
+                                                      text: '#',
+                                                      style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 18.sp,
+                                                      ),
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                          text:
+                                                              '${post['concern'][1]} ',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18.sp,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                if (post['concern'].length >= 3)
+                                                  Text.rich(
+                                                    TextSpan(
+                                                      text: '#',
+                                                      style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontSize: 18.sp,
+                                                      ),
+                                                      children: <TextSpan>[
+                                                        TextSpan(
+                                                          text:
+                                                              '${post['concern'][2]} ',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 18.sp,
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: '#',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text:
+                                                            '평일 ${post['weekdayPlaytime']}시 ',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18.sp,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: '#',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text:
+                                                            '주말 ${post['weekendPlaytime']}시 ',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18.sp,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          '저랑 깐부하실 분! 본캐 1630에 1600 2개 1580 3개 있어요! ',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 24.sp,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text.rich(
-                                            TextSpan(
-                                              text: '#',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 18.sp,
-                                              ),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: '니나브 ',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18.sp,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: '#',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 18.sp,
-                                              ),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: '레이드 ',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18.sp,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: '#',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 18.sp,
-                                              ),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: '내실 ',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18.sp,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: '#',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 18.sp,
-                                              ),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: '일일 숙제 ',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18.sp,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text.rich(
-                                            TextSpan(
-                                              text: '#',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 18.sp,
-                                              ),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: '평일 20시 ',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18.sp,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Text.rich(
-                                            TextSpan(
-                                              text: '#',
-                                              style: TextStyle(
-                                                color: Colors.grey,
-                                                fontSize: 18.sp,
-                                              ),
-                                              children: <TextSpan>[
-                                                TextSpan(
-                                                  text: '주말 16시 ',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 18.sp,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29)
-                                  .withOpacity(0.8),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29)
-                                  .withOpacity(0.8),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29)
-                                  .withOpacity(0.8),
-                            ),
-                          ),
-                        ],
-                      ),
+                                );
+                              },
+                              separatorBuilder: (ctx, idx) {
+                                return SizedBox(height: 10.h);
+                              },
+                            );
+                          }),
                     ),
                   ),
                 ],

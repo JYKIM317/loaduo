@@ -10,6 +10,7 @@ import 'package:loaduo/ViewPage/GganbuPage/FindGuild/CreateGuildPost/CreateGuild
 import 'package:loaduo/ViewPage/GganbuPage/FindGuild/FindGuild_provider.dart';
 import 'FindGuild_widget.dart';
 import 'package:loaduo/lostark_info.dart';
+import 'FindGuild_viewmodel.dart';
 
 class FindGuild extends ConsumerStatefulWidget {
   const FindGuild({super.key});
@@ -46,12 +47,60 @@ class _FindGuildState extends ConsumerState<FindGuild> {
     );
   }
 
+  int postCount = 30;
+  late Future guildLoadData;
+  var serverFilter;
+  var typeFilter;
+  var levelFilter;
+
+  @override
+  void initState() {
+    guildLoadData = FindGuildViewModel().getGuildPostList(
+      count: postCount,
+      server: serverFilter,
+      type: typeFilter,
+      level: levelFilter,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final progress = ProgressHUD.of(context);
-    final serverFilter = ref.watch(guildServerFilter);
-    final typeFilter = ref.watch(guildTypeFilter);
-    final levelFilter = ref.watch(guildLevelFilter);
+    serverFilter = ref.watch(guildServerFilter);
+    typeFilter = ref.watch(guildTypeFilter);
+    levelFilter = ref.watch(guildLevelFilter);
+    ref.listen(guildServerFilter, (previousState, newState) {
+      postCount = 30;
+      serverFilter = newState;
+      guildLoadData = FindGuildViewModel().getGuildPostList(
+        count: postCount,
+        server: serverFilter,
+        type: typeFilter,
+        level: levelFilter,
+      );
+    });
+    ref.listen(guildTypeFilter, (previousState, newState) {
+      postCount = 30;
+      typeFilter = newState;
+      guildLoadData = FindGuildViewModel().getGuildPostList(
+        count: postCount,
+        server: serverFilter,
+        type: typeFilter,
+        level: levelFilter,
+      );
+    });
+    ref.listen(guildLevelFilter, (previousState, newState) {
+      postCount = 30;
+      levelFilter = newState;
+      guildLoadData = FindGuildViewModel().getGuildPostList(
+        count: postCount,
+        server: serverFilter,
+        type: typeFilter,
+        level: levelFilter,
+      );
+    });
+
     return GestureDetector(
       onTap: () => _bottomDrawerController.close(),
       child: Scaffold(
@@ -258,152 +307,161 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                       padding: EdgeInsets.symmetric(
                           horizontal: 16.w, vertical: 10.h),
                       physics: const ClampingScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
-                            ),
-                            padding:
-                                EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
-                            child: Stack(
-                              children: [
-                                Opacity(
-                                  opacity: 0.2,
-                                  child: Transform.translate(
-                                    offset: Offset(140.w, 30.h),
-                                    child: Transform.scale(
-                                      scale: 3,
-                                      child: Image.network(
-                                        lostarkInfo().networkImage['길드']!,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Container(
-                                              color: const Color.fromARGB(
-                                                  255, 21, 24, 29));
-                                        },
-                                      ),
+                      child: FutureBuilder(
+                          future: guildLoadData,
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return SizedBox(
+                                height: 246.h,
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  color: Colors.deepOrange[400],
+                                )),
+                              );
+                            }
+                            List<Map<String, dynamic>> postList =
+                                snapshot.data ?? [];
+                            return ListView.separated(
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                              itemCount: postList.length,
+                              itemBuilder: (BuildContext ctx, int idx) {
+                                Map<String, dynamic> post = postList[idx];
+                                return InkWell(
+                                  onTap: () {
+                                    //자세히 보기
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 210.h,
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.sp),
+                                      color:
+                                          const Color.fromARGB(255, 21, 24, 29),
                                     ),
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '뚝딱이는작은섬',
-                                      style: TextStyle(
-                                        color: Colors.deepOrange[400],
-                                        fontSize: 24.sp,
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        '길드원구합니다! 모코코여도 괜찮아요 잘 가르쳐드릴 수 있고 길드 내 활동은 자유입니다 주간 기여도는 150만 채우면 됩니다.',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18.sp,
-                                        ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    Row(
+                                    padding: EdgeInsets.fromLTRB(
+                                        16.w, 20.h, 16.w, 20.h),
+                                    child: Stack(
                                       children: [
-                                        Text.rich(
-                                          TextSpan(
-                                            text: '#',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 18.sp,
+                                        Opacity(
+                                          opacity: 0.2,
+                                          child: Transform.translate(
+                                            offset: Offset(140.w, 30.h),
+                                            child: Transform.scale(
+                                              scale: 3,
+                                              child: Image.network(
+                                                lostarkInfo()
+                                                    .networkImage['길드']!,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return Container(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 21, 24, 29));
+                                                },
+                                              ),
                                             ),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text: '니나브 ',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18.sp,
-                                                ),
-                                              )
-                                            ],
                                           ),
                                         ),
-                                        Text.rich(
-                                          TextSpan(
-                                            text: '#',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 18.sp,
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              post['guildName'],
+                                              style: TextStyle(
+                                                color: Colors.deepOrange[400],
+                                                fontSize: 24.sp,
+                                              ),
                                             ),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text: '자유길드 ',
+                                            Expanded(
+                                              child: Text(
+                                                post['detail'],
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18.sp,
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Text.rich(
-                                          TextSpan(
-                                            text: '#',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 18.sp,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
                                             ),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text: '1510 이상 ',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18.sp,
+                                            Row(
+                                              children: [
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: '#',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text:
+                                                            '${post['server']} ',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18.sp,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
-                                              )
-                                            ],
-                                          ),
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: '#',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text:
+                                                            '${post['guildType']} ',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18.sp,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: '#',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text: post['level'] != 0
+                                                            ? '${post['level']} 이상 '
+                                                            : '레벨 제한 없음',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18.sp,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
-                            ),
-                          ),
-                        ],
-                      ),
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (ctx, idx) {
+                                return SizedBox(height: 10.h);
+                              },
+                            );
+                          }),
                     ),
                   ),
                 ],

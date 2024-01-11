@@ -11,6 +11,7 @@ import 'package:loaduo/ViewPage/GganbuPage/FindStatic/CreateStaticPost/CreateSta
 import 'package:loaduo/ViewPage/GganbuPage/FindStatic/FindStatic_provider.dart';
 import 'FindStatic_widget.dart';
 import 'package:loaduo/lostark_info.dart';
+import 'FindStatic_viewmodel.dart';
 
 class FindStatic extends ConsumerStatefulWidget {
   const FindStatic({super.key});
@@ -45,10 +46,32 @@ class _FindStaticState extends ConsumerState<FindStatic> {
     );
   }
 
+  int postCount = 30;
+  late Future staticLoadData;
+  var raidFilter;
+
+  @override
+  void initState() {
+    staticLoadData = FindStaticViewModel().getStaticPostList(
+      count: postCount,
+      raid: raidFilter,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final progress = ProgressHUD.of(context);
-    final raidFilter = ref.watch(staticRaidFilter);
+    raidFilter = ref.watch(staticRaidFilter);
+    ref.listen(staticRaidFilter, (previousState, newState) {
+      postCount = 30;
+      raidFilter = newState;
+      staticLoadData = FindStaticViewModel().getStaticPostList(
+        count: postCount,
+        raid: raidFilter,
+      );
+    });
+
     return GestureDetector(
       onTap: () => _bottomDrawerController.close(),
       child: Scaffold(
@@ -188,122 +211,128 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                       padding: EdgeInsets.symmetric(
                           horizontal: 16.w, vertical: 10.h),
                       physics: const ClampingScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
-                            ),
-                            padding:
-                                EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
-                            child: Stack(
-                              children: [
-                                Opacity(
-                                  opacity: 0.2,
-                                  child: Transform.translate(
-                                    offset: Offset(80.w, 20.h),
-                                    child: Transform.scale(
-                                      scale: 3,
-                                      child: Image.network(
-                                        lostarkInfo().networkImage['카멘']!,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Container(
-                                              color: const Color.fromARGB(
-                                                  255, 21, 24, 29));
-                                        },
-                                      ),
+                      child: FutureBuilder(
+                          future: staticLoadData,
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return SizedBox(
+                                height: 246.h,
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  color: Colors.deepOrange[400],
+                                )),
+                              );
+                            }
+                            List<Map<String, dynamic>> postList =
+                                snapshot.data ?? [];
+                            return ListView.separated(
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                              itemCount: postList.length,
+                              itemBuilder: (BuildContext ctx, int idx) {
+                                Map<String, dynamic> post = postList[idx];
+                                return InkWell(
+                                  onTap: () {
+                                    //자세히 보기
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 210.h,
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.sp),
+                                      color:
+                                          const Color.fromARGB(255, 21, 24, 29),
                                     ),
-                                  ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '하드 카멘 고정공대 모집합니다 40+ 랏딜',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24.sp,
-                                            ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            '[6/8]',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24.sp,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Row(
+                                    padding: EdgeInsets.fromLTRB(
+                                        16.w, 20.h, 16.w, 20.h),
+                                    child: Stack(
                                       children: [
-                                        Text.rich(
-                                          TextSpan(
-                                            text: '#',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 18.sp,
+                                        Opacity(
+                                          opacity: 0.2,
+                                          child: Transform.translate(
+                                            offset: Offset(80.w, 20.h),
+                                            child: Transform.scale(
+                                              scale: 3,
+                                              child: Image.network(
+                                                lostarkInfo().networkImage[
+                                                    post['raidName']]!,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return Container(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 21, 24, 29));
+                                                },
+                                              ),
                                             ),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text: '카멘 [하드] ',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18.sp,
-                                                ),
-                                              )
-                                            ],
                                           ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    post['detail'],
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 24.sp,
+                                                    ),
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  Text(
+                                                    '[${post['raidPlayer']}/${post['raidMaxPlayer']}]',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 24.sp,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: '#',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text: post['raid'],
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18.sp,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
-                            ),
-                          ),
-                        ],
-                      ),
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (ctx, idx) {
+                                return SizedBox(height: 10.h);
+                              },
+                            );
+                          }),
                     ),
                   ),
                 ],

@@ -9,10 +9,12 @@ class CreateGuildPostViewModel {
     required int? level,
     required String detail,
   }) async {
+    level ??= 0;
     DateTime now = DateTime.now();
     Map<String, dynamic> postInfo = {
       'uid': uid,
       'server': server,
+      'guildName': guildName,
       'guildType': guildType,
       'level': level,
       'detail': detail,

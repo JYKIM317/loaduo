@@ -11,6 +11,7 @@ import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/CreateRaidForTodayPo
 import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/FindRaidForToday_provider.dart';
 import 'FindRaidForToday_widget.dart';
 import 'package:loaduo/lostark_info.dart';
+import 'FindRaidForToday_viewmodel.dart';
 
 class FindRaidForToday extends ConsumerStatefulWidget {
   const FindRaidForToday({super.key});
@@ -48,13 +49,81 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
     );
   }
 
+  int postCount = 30;
+  late Future raidForTodayLoadData;
+  var raidFilter;
+  var skillFilter;
+  var timeSFilter;
+  var timeEFilter;
+
+  @override
+  void initState() {
+    raidForTodayLoadData = FindRaidForTodayViewModel().getRaidForTodayPostList(
+      count: postCount,
+      raid: raidFilter,
+      skill: skillFilter,
+      timeS: timeSFilter,
+      timeE: timeEFilter,
+    );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final progress = ProgressHUD.of(context);
-    final raidFilter = ref.watch(raidForTodayRaidFilter);
-    final skillFilter = ref.watch(raidForTodaySkillFilter);
-    final timeSFilter = ref.watch(raidForTodaySFilter);
-    final timeEFilter = ref.watch(raidForTodayEFilter);
+    raidFilter = ref.watch(raidForTodayRaidFilter);
+    skillFilter = ref.watch(raidForTodaySkillFilter);
+    timeSFilter = ref.watch(raidForTodaySFilter);
+    timeEFilter = ref.watch(raidForTodayEFilter);
+    ref.listen(raidForTodayRaidFilter, (previousState, newState) {
+      postCount = 30;
+      raidFilter = newState;
+      raidForTodayLoadData =
+          FindRaidForTodayViewModel().getRaidForTodayPostList(
+        count: postCount,
+        raid: raidFilter,
+        skill: skillFilter,
+        timeS: timeSFilter,
+        timeE: timeEFilter,
+      );
+    });
+    ref.listen(raidForTodaySkillFilter, (previousState, newState) {
+      postCount = 30;
+      skillFilter = newState;
+      raidForTodayLoadData =
+          FindRaidForTodayViewModel().getRaidForTodayPostList(
+        count: postCount,
+        raid: raidFilter,
+        skill: skillFilter,
+        timeS: timeSFilter,
+        timeE: timeEFilter,
+      );
+    });
+    ref.listen(raidForTodaySFilter, (previousState, newState) {
+      postCount = 30;
+      timeSFilter = newState;
+      raidForTodayLoadData =
+          FindRaidForTodayViewModel().getRaidForTodayPostList(
+        count: postCount,
+        raid: raidFilter,
+        skill: skillFilter,
+        timeS: timeSFilter,
+        timeE: timeEFilter,
+      );
+    });
+    ref.listen(raidForTodayEFilter, (previousState, newState) {
+      postCount = 30;
+      timeEFilter = newState;
+      raidForTodayLoadData =
+          FindRaidForTodayViewModel().getRaidForTodayPostList(
+        count: postCount,
+        raid: raidFilter,
+        skill: skillFilter,
+        timeS: timeSFilter,
+        timeE: timeEFilter,
+      );
+    });
+
     return GestureDetector(
       onTap: () => _bottomDrawerController.close(),
       child: Scaffold(
@@ -276,165 +345,172 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                       padding: EdgeInsets.symmetric(
                           horizontal: 16.w, vertical: 10.h),
                       physics: const ClampingScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29),
-                            ),
-                            padding:
-                                EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
-                            child: Stack(
-                              children: [
-                                Opacity(
-                                  opacity: 0.2,
-                                  child: Transform.translate(
-                                    offset: Offset(80.w, 20.h),
-                                    child: Transform.scale(
-                                      scale: 3,
-                                      child: Image.network(
-                                        lostarkInfo().networkImage['아브렐슈드']!,
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Container(
-                                              color: const Color.fromARGB(
-                                                  255, 21, 24, 29));
-                                        },
-                                      ),
+                      child: FutureBuilder(
+                          future: raidForTodayLoadData,
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return SizedBox(
+                                height: 246.h,
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  color: Colors.deepOrange[400],
+                                )),
+                              );
+                            }
+                            List<Map<String, dynamic>> postList =
+                                snapshot.data ?? [];
+                            return ListView.separated(
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                              itemCount: postList.length,
+                              itemBuilder: (BuildContext ctx, int idx) {
+                                Map<String, dynamic> post = postList[idx];
+                                DateTime startTime = post['startTime'].toDate();
+                                return InkWell(
+                                  onTap: () {
+                                    //자세히 보기
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 210.h,
+                                    clipBehavior: Clip.hardEdge,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(8.sp),
+                                      color:
+                                          const Color.fromARGB(255, 21, 24, 29),
+                                    ),
+                                    padding: EdgeInsets.fromLTRB(
+                                        16.w, 20.h, 16.w, 20.h),
+                                    child: Stack(
+                                      children: [
+                                        Opacity(
+                                          opacity: 0.2,
+                                          child: Transform.translate(
+                                            offset: Offset(80.w, 20.h),
+                                            child: Transform.scale(
+                                              scale: 3,
+                                              child: Image.network(
+                                                lostarkInfo().networkImage[
+                                                    post['raidName']]!,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return Container(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255, 21, 24, 29));
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    post['detail'],
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 24.sp,
+                                                    ),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  Text(
+                                                    '[${post['raidPlayer']}/${post['raidMaxPlayer']}]',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 24.sp,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: '#',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text:
+                                                            '${post['raid']} ',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18.sp,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: '#',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text:
+                                                            '${post['skill']} ',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18.sp,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                Text.rich(
+                                                  TextSpan(
+                                                    text: '#',
+                                                    style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                    children: <TextSpan>[
+                                                      TextSpan(
+                                                        text:
+                                                            '${startTime.hour}시 ${startTime.minute}분 ',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 18.sp,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '하드 1-3 숙련 랏폿',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24.sp,
-                                            ),
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          Text(
-                                            '[6/8]',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24.sp,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text.rich(
-                                          TextSpan(
-                                            text: '#',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 18.sp,
-                                            ),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text: '아브렐슈드 [하드] ',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18.sp,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text.rich(
-                                          TextSpan(
-                                            text: '#',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 18.sp,
-                                            ),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text: '숙련 ',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18.sp,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Text.rich(
-                                          TextSpan(
-                                            text: '#',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 18.sp,
-                                            ),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text: '20시 35분 ',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18.sp,
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29)
-                                  .withOpacity(0.8),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29)
-                                  .withOpacity(0.8),
-                            ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Container(
-                            width: double.infinity,
-                            height: 210.h,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.sp),
-                              color: const Color.fromARGB(255, 21, 24, 29)
-                                  .withOpacity(0.8),
-                            ),
-                          ),
-                        ],
-                      ),
+                                );
+                              },
+                              separatorBuilder: (ctx, idx) {
+                                return SizedBox(height: 10.h);
+                              },
+                            );
+                          }),
                     ),
                   ),
                 ],
