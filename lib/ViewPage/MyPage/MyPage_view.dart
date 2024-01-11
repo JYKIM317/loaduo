@@ -12,6 +12,7 @@ import 'package:loaduo/ViewPage/InitialDataPages/ApiData/ApiDataPage_view.dart';
 import 'package:loaduo/ViewPage/UserPage/UserPage_view.dart';
 import 'package:loaduo/ShowToastMsg.dart';
 import 'package:loaduo/CustomIcon.dart';
+import 'package:loaduo/lostark_info.dart';
 
 class MyPage extends ConsumerStatefulWidget {
   final String uid;
@@ -23,6 +24,14 @@ class MyPage extends ConsumerStatefulWidget {
 
 class _MyPageState extends ConsumerState<MyPage> {
   String? userUID = FirebaseAuth.instance.currentUser!.uid;
+  late Future postData;
+
+  @override
+  void initState() {
+    postData = MyPageViewModel().getUserPost(widget.uid);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final progress = ProgressHUD.of(context);
@@ -430,25 +439,730 @@ class _MyPageState extends ConsumerState<MyPage> {
                 ),
               ),
             ),
-          Container(
-            height: 20.h,
-            margin: EdgeInsets.symmetric(vertical: 20.h),
-            color: Colors.grey[200],
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 16.w),
-            child: Text(
-              '참가중인 공격대',
-              style: TextStyle(
-                fontSize: 24.sp,
-                color: Colors.black,
-              ),
-            ),
-          ),
-          Divider(
-            color: Colors.grey[300],
-            thickness: 2.h,
-            height: 40.h,
+          FutureBuilder(
+            future: postData,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Column(
+                  children: [
+                    Container(
+                      height: 20.h,
+                      margin: EdgeInsets.symmetric(vertical: 20.h),
+                      color: Colors.grey[200],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 16.w),
+                      child: Text(
+                        '참가중인 공격대',
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey[300],
+                      thickness: 2.h,
+                      height: 40.h,
+                    ),
+                    Container(
+                      height: 20.h,
+                      margin: EdgeInsets.symmetric(vertical: 20.h),
+                      color: Colors.grey[200],
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 16.w),
+                      child: Text(
+                        '작성한 포스트',
+                        style: TextStyle(
+                          fontSize: 24.sp,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      color: Colors.grey[300],
+                      thickness: 2.h,
+                      height: 40.h,
+                    ),
+                  ],
+                );
+              }
+
+              Map<String, dynamic> postData = snapshot.data ?? {};
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 20.h,
+                    margin: EdgeInsets.symmetric(vertical: 20.h),
+                    color: Colors.grey[200],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16.w),
+                    child: Text(
+                      '참가중인 공격대',
+                      style: TextStyle(
+                        fontSize: 24.sp,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.grey[300],
+                    thickness: 2.h,
+                    height: 40.h,
+                  ),
+                  if (postData['RaidForTodayPost'] != null)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: postData['RaidForTodayPost'].length,
+                        itemBuilder: (BuildContext ctx, int idx) {
+                          Map<String, dynamic> post =
+                              postData['RaidForTodayPost'][idx];
+                          DateTime startTime = post['startTime'].toDate();
+                          return InkWell(
+                            onTap: () {
+                              //자세히 보기
+                            },
+                            child: Stack(
+                              alignment: Alignment.topRight,
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: 210.h,
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.sp),
+                                    color:
+                                        const Color.fromARGB(255, 21, 24, 29),
+                                  ),
+                                  padding: EdgeInsets.fromLTRB(
+                                      16.w, 20.h, 16.w, 20.h),
+                                  child: Stack(
+                                    children: [
+                                      Opacity(
+                                        opacity: 0.2,
+                                        child: Transform.translate(
+                                          offset: Offset(80.w, 20.h),
+                                          child: Transform.scale(
+                                            scale: 3,
+                                            child: Image.network(
+                                              lostarkInfo().networkImage[
+                                                  post['raidName']]!,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                return Container(
+                                                    color: const Color.fromARGB(
+                                                        255, 21, 24, 29));
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  post['detail'],
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 24.sp,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                Text(
+                                                  '[${post['raidPlayer']}/${post['raidMaxPlayer']}]',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 24.sp,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: '#',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 18.sp,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: '${post['raid']} ',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18.sp,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: '#',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 18.sp,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: '${post['skill']} ',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18.sp,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: '#',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 18.sp,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          '${startTime.hour}시 ${startTime.minute}분 ',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18.sp,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: 50.w,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.w, vertical: 8.h),
+                                  margin: EdgeInsets.only(right: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.deepOrange[400],
+                                    borderRadius: BorderRadius.vertical(
+                                      bottom: Radius.circular(8.sp),
+                                    ),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    '오늘',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (ctx, idx) {
+                          return SizedBox(height: 10.h);
+                        },
+                      ),
+                    ),
+                  if (postData['StaticPost'] != null)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: ListView.separated(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: postData['StaticPost'].length,
+                        itemBuilder: (BuildContext ctx, int idx) {
+                          Map<String, dynamic> post =
+                              postData['StaticPost'][idx];
+                          return InkWell(
+                            onTap: () {
+                              //자세히 보기
+                            },
+                            child: Stack(
+                              alignment: Alignment.topRight,
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  height: 210.h,
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8.sp),
+                                    color:
+                                        const Color.fromARGB(255, 21, 24, 29),
+                                  ),
+                                  padding: EdgeInsets.fromLTRB(
+                                      16.w, 20.h, 16.w, 20.h),
+                                  child: Stack(
+                                    children: [
+                                      Opacity(
+                                        opacity: 0.2,
+                                        child: Transform.translate(
+                                          offset: Offset(80.w, 20.h),
+                                          child: Transform.scale(
+                                            scale: 3,
+                                            child: Image.network(
+                                              lostarkInfo().networkImage[
+                                                  post['raidName']]!,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                return Container(
+                                                    color: const Color.fromARGB(
+                                                        255, 21, 24, 29));
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  post['detail'],
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 24.sp,
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                Text(
+                                                  '[${post['raidPlayer']}/${post['raidMaxPlayer']}]',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 24.sp,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text.rich(
+                                                TextSpan(
+                                                  text: '#',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 18.sp,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text: post['raid'],
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18.sp,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  width: 50.w,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8.w, vertical: 8.h),
+                                  margin: EdgeInsets.only(right: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: Colors.deepPurple[400],
+                                    borderRadius: BorderRadius.vertical(
+                                      bottom: Radius.circular(8.sp),
+                                    ),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    '고정',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (ctx, idx) {
+                          return SizedBox(height: 10.h);
+                        },
+                      ),
+                    ),
+                  Container(
+                    height: 20.h,
+                    margin: EdgeInsets.symmetric(vertical: 20.h),
+                    color: Colors.grey[200],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 16.w),
+                    child: Text(
+                      '작성한 포스트',
+                      style: TextStyle(
+                        fontSize: 24.sp,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  Divider(
+                    color: Colors.grey[300],
+                    thickness: 2.h,
+                    height: 40.h,
+                  ),
+                  if (postData['GganbuPost'] != null)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: InkWell(
+                        onTap: () {
+                          //자세히 보기
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 210.h,
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.sp),
+                            color: const Color.fromARGB(255, 21, 24, 29),
+                          ),
+                          padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
+                          child: Stack(
+                            children: [
+                              Opacity(
+                                opacity: 0.2,
+                                child: Transform.translate(
+                                  offset: Offset(180.w, 20.h),
+                                  child: Transform.scale(
+                                    scale: 3,
+                                    child: Image.network(
+                                      lostarkInfo().networkImage['깐부']!,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Container(
+                                            color: const Color.fromARGB(
+                                                255, 21, 24, 29));
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      postData['GganbuPost']['detail'],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 24.sp,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text.rich(
+                                        TextSpan(
+                                          text: '#',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 18.sp,
+                                          ),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text:
+                                                  '${postData['GganbuPost']['representServer']} ',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18.sp,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      if (postData['GganbuPost']['concern']
+                                              .length >=
+                                          1)
+                                        Text.rich(
+                                          TextSpan(
+                                            text: '#',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 18.sp,
+                                            ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text:
+                                                    '${postData['GganbuPost']['concern'][0]} ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      if (postData['GganbuPost']['concern']
+                                              .length >=
+                                          2)
+                                        Text.rich(
+                                          TextSpan(
+                                            text: '#',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 18.sp,
+                                            ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text:
+                                                    '${postData['GganbuPost']['concern'][1]} ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      if (postData['GganbuPost']['concern']
+                                              .length >=
+                                          3)
+                                        Text.rich(
+                                          TextSpan(
+                                            text: '#',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 18.sp,
+                                            ),
+                                            children: <TextSpan>[
+                                              TextSpan(
+                                                text:
+                                                    '${postData['GganbuPost']['concern'][2]} ',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18.sp,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text.rich(
+                                        TextSpan(
+                                          text: '#',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 18.sp,
+                                          ),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text:
+                                                  '평일 ${postData['GganbuPost']['weekdayPlaytime']}시 ',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18.sp,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Text.rich(
+                                        TextSpan(
+                                          text: '#',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 18.sp,
+                                          ),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text:
+                                                  '주말 ${postData['GganbuPost']['weekendPlaytime']}시 ',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18.sp,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  SizedBox(height: 10.h),
+                  if (postData['GuildPost'] != null)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: InkWell(
+                        onTap: () {
+                          //자세히 보기
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 210.h,
+                          clipBehavior: Clip.hardEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.sp),
+                            color: const Color.fromARGB(255, 21, 24, 29),
+                          ),
+                          padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 20.h),
+                          child: Stack(
+                            children: [
+                              Opacity(
+                                opacity: 0.2,
+                                child: Transform.translate(
+                                  offset: Offset(140.w, 30.h),
+                                  child: Transform.scale(
+                                    scale: 3,
+                                    child: Image.network(
+                                      lostarkInfo().networkImage['길드']!,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Container(
+                                            color: const Color.fromARGB(
+                                                255, 21, 24, 29));
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    postData['GuildPost']['guildName'],
+                                    style: TextStyle(
+                                      color: Colors.deepOrange[400],
+                                      fontSize: 24.sp,
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      postData['GuildPost']['detail'],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.sp,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text.rich(
+                                        TextSpan(
+                                          text: '#',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 18.sp,
+                                          ),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text:
+                                                  '${postData['GuildPost']['server']} ',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18.sp,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Text.rich(
+                                        TextSpan(
+                                          text: '#',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 18.sp,
+                                          ),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text:
+                                                  '${postData['GuildPost']['guildType']} ',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18.sp,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      Text.rich(
+                                        TextSpan(
+                                          text: '#',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 18.sp,
+                                          ),
+                                          children: <TextSpan>[
+                                            TextSpan(
+                                              text: postData['GuildPost']
+                                                          ['level'] !=
+                                                      0
+                                                  ? '${postData['GuildPost']['level']} 이상 '
+                                                  : '레벨 제한 없음',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18.sp,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
         ],
       ),
