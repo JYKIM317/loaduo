@@ -443,48 +443,56 @@ class _MyPageState extends ConsumerState<MyPage> {
             future: postData,
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Column(
+                return Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Container(
-                      height: 20.h,
-                      margin: EdgeInsets.symmetric(vertical: 20.h),
-                      color: Colors.grey[200],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 16.w),
-                      child: Text(
-                        '참가중인 공격대',
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          color: Colors.black,
+                    Column(
+                      children: [
+                        Container(
+                          height: 20.h,
+                          margin: EdgeInsets.symmetric(vertical: 20.h),
+                          color: Colors.grey[200],
                         ),
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.grey[300],
-                      thickness: 2.h,
-                      height: 40.h,
-                    ),
-                    Container(
-                      height: 20.h,
-                      margin: EdgeInsets.symmetric(vertical: 20.h),
-                      color: Colors.grey[200],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 16.w),
-                      child: Text(
-                        '작성한 포스트',
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          color: Colors.black,
+                        Padding(
+                          padding: EdgeInsets.only(left: 16.w),
+                          child: Text(
+                            '참가중인 공격대',
+                            style: TextStyle(
+                              fontSize: 24.sp,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
-                      ),
+                        Divider(
+                          color: Colors.grey[300],
+                          thickness: 2.h,
+                          height: 40.h,
+                        ),
+                        Container(
+                          height: 20.h,
+                          margin: EdgeInsets.symmetric(vertical: 20.h),
+                          color: Colors.grey[200],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 16.w),
+                          child: Text(
+                            '작성한 포스트',
+                            style: TextStyle(
+                              fontSize: 24.sp,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.grey[300],
+                          thickness: 2.h,
+                          height: 40.h,
+                        ),
+                      ],
                     ),
-                    Divider(
-                      color: Colors.grey[300],
-                      thickness: 2.h,
-                      height: 40.h,
-                    ),
+                    CircularProgressIndicator(
+                      color: Colors.deepOrange[400],
+                    )
                   ],
                 );
               }
