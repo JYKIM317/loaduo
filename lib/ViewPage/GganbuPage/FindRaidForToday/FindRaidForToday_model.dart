@@ -7,6 +7,7 @@ class FindRaidForTodayModel {
     required String? skill,
     required DateTime? timeS,
     required DateTime? timeE,
+    required DocumentSnapshot? lastDoc,
   }) async {
     Query postList = FirebaseFirestore.instance
         .collection('RegisteredPost')
@@ -25,8 +26,15 @@ class FindRaidForTodayModel {
           .orderBy('startTime');
     }
 
-    QuerySnapshot filteredPostList =
-        await postList.orderBy('postTime', descending: true).limit(count).get();
+    if (lastDoc == null) {
+      postList = postList.orderBy('postTime', descending: true);
+    } else {
+      postList = postList
+          .orderBy('postTime', descending: true)
+          .startAfterDocument(lastDoc);
+    }
+
+    QuerySnapshot filteredPostList = await postList.limit(count).get();
 
     return filteredPostList;
   }

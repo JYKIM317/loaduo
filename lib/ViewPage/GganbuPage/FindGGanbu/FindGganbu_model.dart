@@ -9,6 +9,7 @@ class FindGganbuModel {
     required int? weekdayE,
     required int? weekendS,
     required int? weekendE,
+    required DocumentSnapshot? lastDoc,
   }) async {
     Query postList = FirebaseFirestore.instance
         .collection('RegisteredPost')
@@ -47,8 +48,15 @@ class FindGganbuModel {
       count += 30;
     }
 
-    QuerySnapshot filteredPostList =
-        await postList.orderBy('postTime', descending: true).limit(count).get();
+    if (lastDoc == null) {
+      postList = postList.orderBy('postTime', descending: true);
+    } else {
+      postList = postList
+          .orderBy('postTime', descending: true)
+          .startAfterDocument(lastDoc);
+    }
+
+    QuerySnapshot filteredPostList = await postList.limit(count).get();
 
     return filteredPostList;
   }

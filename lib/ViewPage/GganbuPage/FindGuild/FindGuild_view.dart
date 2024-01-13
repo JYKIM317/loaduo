@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,38 @@ class _FindGuildState extends ConsumerState<FindGuild> {
   var typeFilter;
   var levelFilter;
 
+  DocumentSnapshot? lastDoc;
+  List<Map<String, dynamic>>? docList;
+  bool isLoad = false;
+  ScrollController scrollController = ScrollController();
+  double? lastScrollOffset;
+  onScroll() async {
+    bool reachMaxExtent =
+        scrollController.offset >= scrollController.position.maxScrollExtent;
+    bool outOfRange = !scrollController.position.outOfRange &&
+        scrollController.position.pixels != 0;
+    bool existInitalData = lastDoc != null;
+
+    if (reachMaxExtent && outOfRange && existInitalData && isLoad == false) {
+      isLoad = true;
+      lastScrollOffset = scrollController.position.maxScrollExtent;
+
+      guildLoadData = FindGuildViewModel().getGuildPostList(
+        count: postCount,
+        server: serverFilter,
+        type: typeFilter,
+        level: levelFilter,
+        lastDoc: lastDoc,
+        initialList: docList,
+      );
+      Future.delayed(const Duration(milliseconds: 500)).then((_) {
+        setState(() {});
+      });
+
+      isLoad = false;
+    }
+  }
+
   @override
   void initState() {
     guildLoadData = FindGuildViewModel().getGuildPostList(
@@ -60,8 +93,18 @@ class _FindGuildState extends ConsumerState<FindGuild> {
       server: serverFilter,
       type: typeFilter,
       level: levelFilter,
+      lastDoc: lastDoc,
     );
+    scrollController.addListener(() {
+      onScroll();
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -71,33 +114,39 @@ class _FindGuildState extends ConsumerState<FindGuild> {
     typeFilter = ref.watch(guildTypeFilter);
     levelFilter = ref.watch(guildLevelFilter);
     ref.listen(guildServerFilter, (previousState, newState) {
-      postCount = 30;
       serverFilter = newState;
+      lastDoc = null;
+      docList = null;
       guildLoadData = FindGuildViewModel().getGuildPostList(
         count: postCount,
         server: serverFilter,
         type: typeFilter,
         level: levelFilter,
+        lastDoc: lastDoc,
       );
     });
     ref.listen(guildTypeFilter, (previousState, newState) {
-      postCount = 30;
       typeFilter = newState;
+      lastDoc = null;
+      docList = null;
       guildLoadData = FindGuildViewModel().getGuildPostList(
         count: postCount,
         server: serverFilter,
         type: typeFilter,
         level: levelFilter,
+        lastDoc: lastDoc,
       );
     });
     ref.listen(guildLevelFilter, (previousState, newState) {
-      postCount = 30;
       levelFilter = newState;
+      lastDoc = null;
+      docList = null;
       guildLoadData = FindGuildViewModel().getGuildPostList(
         count: postCount,
         server: serverFilter,
         type: typeFilter,
         level: levelFilter,
+        lastDoc: lastDoc,
       );
     });
 
@@ -307,12 +356,14 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                       padding: EdgeInsets.symmetric(
                           horizontal: 16.w, vertical: 10.h),
                       physics: const ClampingScrollPhysics(),
+                      controller: scrollController,
                       child: FutureBuilder(
                           future: guildLoadData,
                           builder:
                               (BuildContext context, AsyncSnapshot snapshot) {
                             if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                                    ConnectionState.waiting &&
+                                docList == null) {
                               return SizedBox(
                                 height: 246.h,
                                 child: Center(
@@ -322,7 +373,11 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                               );
                             }
                             List<Map<String, dynamic>> postList =
-                                snapshot.data ?? [];
+                                snapshot.data['postList'] ?? [];
+                            if (snapshot.data['lastDoc'] != null) {
+                              lastDoc = snapshot.data['lastDoc'];
+                              docList = postList;
+                            }
                             return ListView.separated(
                               shrinkWrap: true,
                               physics: const ClampingScrollPhysics(),

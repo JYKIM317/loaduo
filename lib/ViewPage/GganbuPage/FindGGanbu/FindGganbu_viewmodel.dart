@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'FindGganbu_model.dart';
 
 class FindGganbuViewModel {
-  Future<List<Map<String, dynamic>>> getGganbuPostList({
+  Future<Map> getGganbuPostList({
     required int count,
     required String? serverFilter,
     required List<dynamic>? typeFilter,
@@ -10,8 +10,11 @@ class FindGganbuViewModel {
     required int? weekdayE,
     required int? weekendS,
     required int? weekendE,
+    required DocumentSnapshot? lastDoc,
+    List<Map<String, dynamic>>? initialList,
   }) async {
-    List<Map<String, dynamic>> gganbuPostList = [];
+    Map postLoadData = {};
+    List<Map<String, dynamic>> gganbuPostList = initialList ?? [];
     await FindGganbuModel()
         .getDataList(
       count: count,
@@ -21,12 +24,16 @@ class FindGganbuViewModel {
       weekdayE: weekdayE,
       weekendS: weekendS,
       weekendE: weekendE,
+      lastDoc: lastDoc,
     )
         .then((querySnapshot) {
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         Map<String, dynamic>? gganbuPost =
             documentSnapshot.data() as Map<String, dynamic>?;
         if (gganbuPost != null) {
+          if (documentSnapshot.id == querySnapshot.docs.last.id) {
+            postLoadData.addAll({'lastDoc': documentSnapshot});
+          }
           if (weekdayS != null &&
               weekdayE != null &&
               weekendS != null &&
@@ -40,7 +47,8 @@ class FindGganbuViewModel {
           }
         }
       }
+      postLoadData.addAll({'postList': gganbuPostList});
     });
-    return gganbuPostList;
+    return postLoadData;
   }
 }

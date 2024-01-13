@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +57,40 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
   var timeSFilter;
   var timeEFilter;
 
+  DocumentSnapshot? lastDoc;
+  List<Map<String, dynamic>>? docList;
+  bool isLoad = false;
+  ScrollController scrollController = ScrollController();
+  double? lastScrollOffset;
+  onScroll() async {
+    bool reachMaxExtent =
+        scrollController.offset >= scrollController.position.maxScrollExtent;
+    bool outOfRange = !scrollController.position.outOfRange &&
+        scrollController.position.pixels != 0;
+    bool existInitalData = lastDoc != null;
+
+    if (reachMaxExtent && outOfRange && existInitalData && isLoad == false) {
+      isLoad = true;
+      lastScrollOffset = scrollController.position.maxScrollExtent;
+
+      raidForTodayLoadData =
+          FindRaidForTodayViewModel().getRaidForTodayPostList(
+        count: postCount,
+        raid: raidFilter,
+        skill: skillFilter,
+        timeS: timeSFilter,
+        timeE: timeEFilter,
+        lastDoc: lastDoc,
+        initialList: docList,
+      );
+      Future.delayed(const Duration(milliseconds: 500)).then((_) {
+        setState(() {});
+      });
+
+      isLoad = false;
+    }
+  }
+
   @override
   void initState() {
     raidForTodayLoadData = FindRaidForTodayViewModel().getRaidForTodayPostList(
@@ -64,8 +99,18 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
       skill: skillFilter,
       timeS: timeSFilter,
       timeE: timeEFilter,
+      lastDoc: lastDoc,
     );
+    scrollController.addListener(() {
+      onScroll();
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -76,8 +121,9 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
     timeSFilter = ref.watch(raidForTodaySFilter);
     timeEFilter = ref.watch(raidForTodayEFilter);
     ref.listen(raidForTodayRaidFilter, (previousState, newState) {
-      postCount = 30;
       raidFilter = newState;
+      lastDoc = null;
+      docList = null;
       raidForTodayLoadData =
           FindRaidForTodayViewModel().getRaidForTodayPostList(
         count: postCount,
@@ -85,11 +131,13 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
         skill: skillFilter,
         timeS: timeSFilter,
         timeE: timeEFilter,
+        lastDoc: lastDoc,
       );
     });
     ref.listen(raidForTodaySkillFilter, (previousState, newState) {
-      postCount = 30;
       skillFilter = newState;
+      lastDoc = null;
+      docList = null;
       raidForTodayLoadData =
           FindRaidForTodayViewModel().getRaidForTodayPostList(
         count: postCount,
@@ -97,11 +145,13 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
         skill: skillFilter,
         timeS: timeSFilter,
         timeE: timeEFilter,
+        lastDoc: lastDoc,
       );
     });
     ref.listen(raidForTodaySFilter, (previousState, newState) {
-      postCount = 30;
       timeSFilter = newState;
+      lastDoc = null;
+      docList = null;
       raidForTodayLoadData =
           FindRaidForTodayViewModel().getRaidForTodayPostList(
         count: postCount,
@@ -109,11 +159,13 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
         skill: skillFilter,
         timeS: timeSFilter,
         timeE: timeEFilter,
+        lastDoc: lastDoc,
       );
     });
     ref.listen(raidForTodayEFilter, (previousState, newState) {
-      postCount = 30;
       timeEFilter = newState;
+      lastDoc = null;
+      docList = null;
       raidForTodayLoadData =
           FindRaidForTodayViewModel().getRaidForTodayPostList(
         count: postCount,
@@ -121,6 +173,7 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
         skill: skillFilter,
         timeS: timeSFilter,
         timeE: timeEFilter,
+        lastDoc: lastDoc,
       );
     });
 
@@ -345,12 +398,14 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                       padding: EdgeInsets.symmetric(
                           horizontal: 16.w, vertical: 10.h),
                       physics: const ClampingScrollPhysics(),
+                      controller: scrollController,
                       child: FutureBuilder(
                           future: raidForTodayLoadData,
                           builder:
                               (BuildContext context, AsyncSnapshot snapshot) {
                             if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                                    ConnectionState.waiting &&
+                                docList == null) {
                               return SizedBox(
                                 height: 246.h,
                                 child: Center(
@@ -360,7 +415,11 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                               );
                             }
                             List<Map<String, dynamic>> postList =
-                                snapshot.data ?? [];
+                                snapshot.data['postList'] ?? [];
+                            if (snapshot.data['lastDoc'] != null) {
+                              lastDoc = snapshot.data['lastDoc'];
+                              docList = postList;
+                            }
                             return ListView.separated(
                               shrinkWrap: true,
                               physics: const ClampingScrollPhysics(),

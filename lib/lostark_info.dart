@@ -91,7 +91,7 @@ class lostarkInfo {
         'https://firebasestorage.googleapis.com/v0/b/loaduo.appspot.com/o/guild.png?alt=media&token=3f096f50-d5ad-43c1-82d4-8cd8d82a451b',
   };
 
-  int maxLevel = 1655;
+  int maxLevel = 1675;
 
   Map<String, IconData> classIcon = {
     //전사

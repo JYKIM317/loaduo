@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,41 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
   var weekendSFilter;
   var weekendEFilter;
 
+  DocumentSnapshot? lastDoc;
+  List<Map<String, dynamic>>? docList;
+  bool isLoad = false;
+  ScrollController scrollController = ScrollController();
+  double? lastScrollOffset;
+  onScroll() async {
+    bool reachMaxExtent =
+        scrollController.offset >= scrollController.position.maxScrollExtent;
+    bool outOfRange = !scrollController.position.outOfRange &&
+        scrollController.position.pixels != 0;
+    bool existInitalData = lastDoc != null;
+
+    if (reachMaxExtent && outOfRange && existInitalData && isLoad == false) {
+      isLoad = true;
+      lastScrollOffset = scrollController.position.maxScrollExtent;
+
+      gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
+        count: postCount,
+        serverFilter: serverFilter,
+        typeFilter: typeFilter,
+        weekdayS: weekdaySFilter,
+        weekdayE: weekdayEFilter,
+        weekendS: weekendSFilter,
+        weekendE: weekendEFilter,
+        lastDoc: lastDoc,
+        initialList: docList,
+      );
+      Future.delayed(const Duration(milliseconds: 500)).then((_) {
+        setState(() {});
+      });
+
+      isLoad = false;
+    }
+  }
+
   @override
   void initState() {
     gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
@@ -68,8 +104,18 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
       weekdayE: weekdayEFilter,
       weekendS: weekendSFilter,
       weekendE: weekendEFilter,
+      lastDoc: lastDoc,
     );
+    scrollController.addListener(() {
+      onScroll();
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -82,8 +128,9 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
     weekendSFilter = ref.watch(gganbuWeekEndSFilter);
     weekendEFilter = ref.watch(gganbuWeekEndEFilter);
     ref.listen(gganbuServerFilter, (previousState, newState) {
-      postCount = 30;
       serverFilter = newState;
+      lastDoc = null;
+      docList = null;
       gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
         count: postCount,
         serverFilter: serverFilter,
@@ -92,11 +139,13 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
         weekdayE: weekdayEFilter,
         weekendS: weekendSFilter,
         weekendE: weekendEFilter,
+        lastDoc: lastDoc,
       );
     });
     ref.listen(gganbuTypeFilter, (previousState, newState) {
-      postCount = 30;
       typeFilter = newState;
+      lastDoc = null;
+      docList = null;
       gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
         count: postCount,
         serverFilter: serverFilter,
@@ -105,11 +154,13 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
         weekdayE: weekdayEFilter,
         weekendS: weekendSFilter,
         weekendE: weekendEFilter,
+        lastDoc: lastDoc,
       );
     });
     ref.listen(gganbuWeekDaySFilter, (previousState, newState) {
-      postCount = 30;
       weekdaySFilter = newState;
+      lastDoc = null;
+      docList = null;
       gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
         count: postCount,
         serverFilter: serverFilter,
@@ -118,11 +169,13 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
         weekdayE: weekdayEFilter,
         weekendS: weekendSFilter,
         weekendE: weekendEFilter,
+        lastDoc: lastDoc,
       );
     });
     ref.listen(gganbuWeekDayEFilter, (previousState, newState) {
-      postCount = 30;
       weekdayEFilter = newState;
+      lastDoc = null;
+      docList = null;
       gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
         count: postCount,
         serverFilter: serverFilter,
@@ -131,11 +184,13 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
         weekdayE: weekdayEFilter,
         weekendS: weekendSFilter,
         weekendE: weekendEFilter,
+        lastDoc: lastDoc,
       );
     });
     ref.listen(gganbuWeekEndSFilter, (previousState, newState) {
-      postCount = 30;
       weekendSFilter = newState;
+      lastDoc = null;
+      docList = null;
       gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
         count: postCount,
         serverFilter: serverFilter,
@@ -144,11 +199,13 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
         weekdayE: weekdayEFilter,
         weekendS: weekendSFilter,
         weekendE: weekendEFilter,
+        lastDoc: lastDoc,
       );
     });
     ref.listen(gganbuWeekEndEFilter, (previousState, newState) {
-      postCount = 30;
       weekendEFilter = newState;
+      lastDoc = null;
+      docList = null;
       gganbuLoadData = FindGganbuViewModel().getGganbuPostList(
         count: postCount,
         serverFilter: serverFilter,
@@ -157,6 +214,7 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
         weekdayE: weekdayEFilter,
         weekendS: weekendSFilter,
         weekendE: weekendEFilter,
+        lastDoc: lastDoc,
       );
     });
 
@@ -392,12 +450,14 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                       padding: EdgeInsets.symmetric(
                           horizontal: 16.w, vertical: 10.h),
                       physics: const ClampingScrollPhysics(),
+                      controller: scrollController,
                       child: FutureBuilder(
                           future: gganbuLoadData,
                           builder:
                               (BuildContext context, AsyncSnapshot snapshot) {
                             if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
+                                    ConnectionState.waiting &&
+                                docList == null) {
                               return SizedBox(
                                 height: 246.h,
                                 child: Center(
@@ -407,7 +467,11 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                               );
                             }
                             List<Map<String, dynamic>> postList =
-                                snapshot.data ?? [];
+                                snapshot.data['postList'] ?? [];
+                            if (snapshot.data['lastDoc'] != null) {
+                              lastDoc = snapshot.data['lastDoc'];
+                              docList = postList;
+                            }
                             return ListView.separated(
                               shrinkWrap: true,
                               physics: const ClampingScrollPhysics(),

@@ -4,6 +4,7 @@ class FindStaticModel {
   Future<QuerySnapshot> getDataList({
     required int count,
     required String? raid,
+    required DocumentSnapshot? lastDoc,
   }) async {
     Query postList = FirebaseFirestore.instance
         .collection('RegisteredPost')
@@ -13,8 +14,15 @@ class FindStaticModel {
       postList = postList.where('raid', isEqualTo: raid);
     }
 
-    QuerySnapshot filteredPostList =
-        await postList.orderBy('postTime', descending: true).limit(count).get();
+    if (lastDoc == null) {
+      postList = postList.orderBy('postTime', descending: true);
+    } else {
+      postList = postList
+          .orderBy('postTime', descending: true)
+          .startAfterDocument(lastDoc);
+    }
+
+    QuerySnapshot filteredPostList = await postList.limit(count).get();
 
     return filteredPostList;
   }
