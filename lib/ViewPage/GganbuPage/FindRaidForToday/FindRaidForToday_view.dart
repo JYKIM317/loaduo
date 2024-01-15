@@ -13,6 +13,7 @@ import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/FindRaidForToday_pro
 import 'FindRaidForToday_widget.dart';
 import 'package:loaduo/lostark_info.dart';
 import 'FindRaidForToday_viewmodel.dart';
+import 'RaidForTodayPostView/RaidForTodayPostView_view.dart';
 
 class FindRaidForToday extends ConsumerStatefulWidget {
   const FindRaidForToday({super.key});
@@ -430,6 +431,16 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                                 return InkWell(
                                   onTap: () {
                                     //자세히 보기
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProgressHUD(
+                                          child: RaidForTodayPostView(
+                                            post: post,
+                                          ),
+                                        ),
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     width: double.infinity,

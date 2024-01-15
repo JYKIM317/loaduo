@@ -21,7 +21,13 @@ class MyPageViewModel {
     if (server != null && character != null) {
       var response = await AddMyCharacterModel()
           .getUserSiblingsDataAPI(userName: character);
-      int statusCode = response.statusCode;
+      int statusCode;
+      if (response != null) {
+        statusCode = response.statusCode;
+      } else {
+        statusCode = 401;
+      }
+
       if (statusCode == 200) {
         var body = jsonDecode(response.body);
         if (body != null) {
@@ -46,7 +52,13 @@ class MyPageViewModel {
       {required String userName}) async {
     var response =
         await SearchUserPageModel().getUserDataAPI(userName: userName);
-    int statusCode = response.statusCode;
+    int statusCode;
+    if (response != null) {
+      statusCode = response.statusCode;
+    } else {
+      statusCode = 401;
+    }
+
     var body;
     if (statusCode == 200) {
       body = jsonDecode(response.body);

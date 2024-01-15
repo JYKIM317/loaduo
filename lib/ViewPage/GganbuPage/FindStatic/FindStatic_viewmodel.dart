@@ -9,7 +9,7 @@ class FindStaticViewModel {
     List<Map<String, dynamic>>? initialList,
   }) async {
     Map postLoadData = {};
-    List<Map<String, dynamic>> staticPostList = [];
+    List<Map<String, dynamic>> staticPostList = initialList ?? [];
     await FindStaticModel()
         .getDataList(
       count: count,

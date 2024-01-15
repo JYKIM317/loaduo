@@ -872,7 +872,7 @@ class _CreateRaidForTodayPostState extends State<CreateRaidForTodayPost> {
                             ),
                             SizedBox(height: 30.h),
                             Text(
-                              '내용',
+                              '제목',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 21.sp,
@@ -891,14 +891,14 @@ class _CreateRaidForTodayPostState extends State<CreateRaidForTodayPost> {
                               ),
                               child: TextField(
                                 controller: detailController,
-                                minLines: 5,
-                                maxLines: null,
+                                minLines: 2,
+                                maxLines: 2,
                                 onChanged: (value) {
                                   detail = value;
                                 },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: '작성하고싶은 내용',
+                                  hintText: '레이드 모집 제목 입력하기',
                                   hintStyle: TextStyle(color: Colors.grey[400]),
                                 ),
                               ),

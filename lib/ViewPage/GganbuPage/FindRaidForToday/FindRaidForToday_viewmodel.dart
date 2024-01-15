@@ -12,7 +12,7 @@ class FindRaidForTodayViewModel {
     List<Map<String, dynamic>>? initialList,
   }) async {
     Map postLoadData = {};
-    List<Map<String, dynamic>> raidForTodayPostList = [];
+    List<Map<String, dynamic>> raidForTodayPostList = initialList ?? [];
     await FindRaidForTodayModel()
         .getDataList(
       count: count,

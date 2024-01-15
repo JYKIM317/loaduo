@@ -5,7 +5,13 @@ class AddMyCharacterViewModel {
   Future<Map<String, dynamic>?> searchUser({required String userName}) async {
     var response =
         await AddMyCharacterModel().getUserSiblingsDataAPI(userName: userName);
-    int statusCode = response.statusCode;
+    int statusCode;
+    if (response != null) {
+      statusCode = response.statusCode;
+    } else {
+      statusCode = 401;
+    }
+
     List<Map<String, dynamic>> lupeon = [],
         silian = [],
         aman = [],

@@ -11,7 +11,7 @@ class FindGuildViewModel {
     List<Map<String, dynamic>>? initialList,
   }) async {
     Map postLoadData = {};
-    List<Map<String, dynamic>> guildPostList = [];
+    List<Map<String, dynamic>> guildPostList = initialList ?? [];
     await FindGuildModel()
         .getDataList(
       count: count,

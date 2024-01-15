@@ -37,6 +37,8 @@ class CustomIcon {
       IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData bard =
       IconData(0xe803, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData deathblade =
+      IconData(0xe804, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData summoner =
       IconData(0xe805, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData breaker =
@@ -51,10 +53,12 @@ class CustomIcon {
       IconData(0xe80a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData wardancer =
       IconData(0xe80b, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData deathblade =
+  static const IconData artillerist =
       IconData(0xe80c, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData shadowhunter =
       IconData(0xe80d, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData sharpshooter =
+      IconData(0xe80e, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData sorceress =
       IconData(0xe80f, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData berserker =
@@ -67,16 +71,12 @@ class CustomIcon {
       IconData(0xe813, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData slayer =
       IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData artillerist =
-      IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData deadeye =
       IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData gunslinger =
       IconData(0xe817, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData machinist =
       IconData(0xe818, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData sharpshooter =
-      IconData(0xe819, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData reaper =
       IconData(0xe81a, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData souleater =

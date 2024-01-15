@@ -13,6 +13,10 @@ import 'package:loaduo/ViewPage/UserPage/UserPage_view.dart';
 import 'package:loaduo/ShowToastMsg.dart';
 import 'package:loaduo/CustomIcon.dart';
 import 'package:loaduo/lostark_info.dart';
+import 'package:loaduo/ViewPage/GganbuPage/FindGGanbu/GganbuPostView/GganbuPostView_view.dart';
+import 'package:loaduo/ViewPage/GganbuPage/FindGuild/GuildPostView/GuildPostView_view.dart';
+import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/RaidForTodayPostView/RaidForTodayPostView_view.dart';
+import 'package:loaduo/ViewPage/GganbuPage/FindStatic/StaticPostView/StaticPostView_view.dart';
 
 class MyPage extends ConsumerStatefulWidget {
   final String uid;
@@ -535,6 +539,14 @@ class _MyPageState extends ConsumerState<MyPage> {
                           return InkWell(
                             onTap: () {
                               //자세히 보기
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProgressHUD(
+                                    child: RaidForTodayPostView(post: post),
+                                  ),
+                                ),
+                              );
                             },
                             child: Stack(
                               alignment: Alignment.topRight,
@@ -710,6 +722,14 @@ class _MyPageState extends ConsumerState<MyPage> {
                           return InkWell(
                             onTap: () {
                               //자세히 보기
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ProgressHUD(
+                                    child: StaticPostView(post: post),
+                                  ),
+                                ),
+                              );
                             },
                             child: Stack(
                               alignment: Alignment.topRight,
@@ -857,6 +877,15 @@ class _MyPageState extends ConsumerState<MyPage> {
                       child: InkWell(
                         onTap: () {
                           //자세히 보기
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProgressHUD(
+                                child: GganbuPostView(
+                                    post: postData['GganbuPost']),
+                              ),
+                            ),
+                          );
                         },
                         child: Container(
                           width: double.infinity,
@@ -1046,6 +1075,15 @@ class _MyPageState extends ConsumerState<MyPage> {
                       child: InkWell(
                         onTap: () {
                           //자세히 보기
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ProgressHUD(
+                                child:
+                                    GuildPostView(post: postData['GuildPost']),
+                              ),
+                            ),
+                          );
                         },
                         child: Container(
                           width: double.infinity,

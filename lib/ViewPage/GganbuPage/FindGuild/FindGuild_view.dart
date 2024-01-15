@@ -12,6 +12,7 @@ import 'package:loaduo/ViewPage/GganbuPage/FindGuild/FindGuild_provider.dart';
 import 'FindGuild_widget.dart';
 import 'package:loaduo/lostark_info.dart';
 import 'FindGuild_viewmodel.dart';
+import 'GuildPostView/GuildPostView_view.dart';
 
 class FindGuild extends ConsumerStatefulWidget {
   const FindGuild({super.key});
@@ -387,6 +388,16 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                                 return InkWell(
                                   onTap: () {
                                     //자세히 보기
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProgressHUD(
+                                          child: GuildPostView(
+                                            post: post,
+                                          ),
+                                        ),
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     width: double.infinity,

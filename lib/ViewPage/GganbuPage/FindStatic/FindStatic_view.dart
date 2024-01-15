@@ -13,6 +13,7 @@ import 'package:loaduo/ViewPage/GganbuPage/FindStatic/FindStatic_provider.dart';
 import 'FindStatic_widget.dart';
 import 'package:loaduo/lostark_info.dart';
 import 'FindStatic_viewmodel.dart';
+import 'StaticPostView/StaticPostView_view.dart';
 
 class FindStatic extends ConsumerStatefulWidget {
   const FindStatic({super.key});
@@ -285,6 +286,16 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                                 return InkWell(
                                   onTap: () {
                                     //자세히 보기
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProgressHUD(
+                                          child: StaticPostView(
+                                            post: post,
+                                          ),
+                                        ),
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     width: double.infinity,

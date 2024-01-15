@@ -20,7 +20,14 @@ class SearchUserPageViewModel {
 
     var response =
         await SearchUserPageModel().getUserDataAPI(userName: userName);
-    int statusCode = response.statusCode;
+
+    int statusCode;
+    if (response != null) {
+      statusCode = response.statusCode;
+    } else {
+      statusCode = 401;
+    }
+
     var body;
     if (statusCode == 200) {
       body = jsonDecode(response.body);

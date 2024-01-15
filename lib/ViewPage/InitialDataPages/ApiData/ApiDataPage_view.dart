@@ -94,6 +94,9 @@ class _ApiDataPageState extends ConsumerState<ApiDataPage> {
                         if (apiText != null) {
                           ref.read(apikey.notifier).update(apiText!);
                           await ApiDataViewModel().saveAPI(apiText!);
+                          Future.microtask(() {
+                            Navigator.pop(context);
+                          });
                         } else {
                           showToast('API Key를 입력해주세요');
                         }

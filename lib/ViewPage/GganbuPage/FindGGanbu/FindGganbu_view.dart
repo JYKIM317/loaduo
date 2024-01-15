@@ -12,6 +12,7 @@ import 'package:loaduo/ViewPage/GganbuPage/FindGGanbu/FindGganbu_provider.dart';
 import 'FindGganbu_widget.dart';
 import 'package:loaduo/lostark_info.dart';
 import 'FindGganbu_viewmodel.dart';
+import 'GganbuPostView/GganbuPostView_view.dart';
 
 class FindGganbu extends ConsumerStatefulWidget {
   const FindGganbu({super.key});
@@ -481,6 +482,16 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                                 return InkWell(
                                   onTap: () {
                                     //자세히 보기
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProgressHUD(
+                                          child: GganbuPostView(
+                                            post: post,
+                                          ),
+                                        ),
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     width: double.infinity,
