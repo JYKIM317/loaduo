@@ -54,7 +54,7 @@ class _RaidForTodayPostViewState extends State<RaidForTodayPostView> {
                     ),
                   ),
                   Text(
-                    '#${post['skill']}  #${startTime.hour}시 ${startTime.minute}분',
+                    '#오늘 레이드  #${post['skill']}  #${startTime.hour}시 ${startTime.minute}분',
                     style: TextStyle(
                       color: Colors.grey,
                       fontSize: 18.sp,
@@ -190,6 +190,7 @@ class _RaidForTodayPostViewState extends State<RaidForTodayPostView> {
               JoinUser(
                 address: post['address'],
                 leader: post['raidLeader'],
+                raid: post['raid'],
                 progress: progress,
               ),
               RequestUser(
@@ -203,7 +204,7 @@ class _RaidForTodayPostViewState extends State<RaidForTodayPostView> {
             ][pageIndex]),
             SizedBox(
               height: 34.h,
-            )
+            ),
           ],
         ),
       ),

@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class RaidForTodayPostModel {
+class StaticPostModel {
   Future<QuerySnapshot> joinChracterData({required String address}) async {
     QuerySnapshot joinCharacterList = await FirebaseFirestore.instance
         .collection('RegisteredPost')
         .doc('FindPages')
-        .collection('RaidForTodayPost')
+        .collection('StaticPost')
         .doc(address)
         .collection('JoinCharacter')
         .get();
@@ -21,7 +21,7 @@ class RaidForTodayPostModel {
     await FirebaseFirestore.instance
         .collection('RegisteredPost')
         .doc('FindPages')
-        .collection('RaidForTodayPost')
+        .collection('StaticPost')
         .doc(address)
         .collection('RequestCharacter')
         .doc(uid)
@@ -35,7 +35,7 @@ class RaidForTodayPostModel {
     await FirebaseFirestore.instance
         .collection('RegisteredPost')
         .doc('FindPages')
-        .collection('RaidForTodayPost')
+        .collection('StaticPost')
         .doc(address)
         .collection('JoinCharacter')
         .doc(characterData['uid'])
@@ -44,14 +44,14 @@ class RaidForTodayPostModel {
       await FirebaseFirestore.instance
           .collection('RegisteredPost')
           .doc('FindPages')
-          .collection('RaidForTodayPost')
+          .collection('StaticPost')
           .doc(address)
           .update({'raidPlayer': FieldValue.increment(1)}).then((_) async {
         await FirebaseFirestore.instance
             .collection('Users')
             .doc(characterData['uid'])
             .collection('MyPosts')
-            .doc('RaidForTodayPost')
+            .doc('StaticPost')
             .get()
             .then((posts) async {
           List<dynamic> post = posts['address'] ?? [];
@@ -60,7 +60,7 @@ class RaidForTodayPostModel {
               .collection('Users')
               .doc(characterData['uid'])
               .collection('MyPosts')
-              .doc('RaidForTodayPost')
+              .doc('StaticPost')
               .update({'address': post});
         });
       });
@@ -74,7 +74,7 @@ class RaidForTodayPostModel {
     await FirebaseFirestore.instance
         .collection('RegisteredPost')
         .doc('FindPages')
-        .collection('RaidForTodayPost')
+        .collection('StaticPost')
         .doc(address)
         .collection('RequestCharacter')
         .doc(uid)
@@ -89,7 +89,7 @@ class RaidForTodayPostModel {
     await FirebaseFirestore.instance
         .collection('RegisteredPost')
         .doc('FindPages')
-        .collection('RaidForTodayPost')
+        .collection('StaticPost')
         .doc(address)
         .get()
         .then((doc) {
@@ -106,7 +106,7 @@ class RaidForTodayPostModel {
     await FirebaseFirestore.instance
         .collection('RegisteredPost')
         .doc('FindPages')
-        .collection('RaidForTodayPost')
+        .collection('StaticPost')
         .doc(address)
         .collection('JoinCharacter')
         .doc(uid)
@@ -115,14 +115,14 @@ class RaidForTodayPostModel {
       await FirebaseFirestore.instance
           .collection('RegisteredPost')
           .doc('FindPages')
-          .collection('RaidForTodayPost')
+          .collection('StaticPost')
           .doc(address)
           .update({'raidPlayer': FieldValue.increment(-1)}).then((_) async {
         await FirebaseFirestore.instance
             .collection('Users')
             .doc(uid)
             .collection('MyPosts')
-            .doc('RaidForTodayPost')
+            .doc('StaticPost')
             .get()
             .then((posts) async {
           List<dynamic> post = posts['address'];
@@ -131,7 +131,7 @@ class RaidForTodayPostModel {
               .collection('Users')
               .doc(uid)
               .collection('MyPosts')
-              .doc('RaidForTodayPost')
+              .doc('StaticPost')
               .update({'address': post});
         });
       });
@@ -146,7 +146,7 @@ class RaidForTodayPostModel {
     await FirebaseFirestore.instance
         .collection('RegisteredPost')
         .doc('FindPages')
-        .collection('RaidForTodayPost')
+        .collection('StaticPost')
         .doc(address)
         .collection('JoinCharacter')
         .get()
@@ -162,7 +162,7 @@ class RaidForTodayPostModel {
         await FirebaseFirestore.instance
             .collection('RegisteredPost')
             .doc('FindPages')
-            .collection('RaidForTodayPost')
+            .collection('StaticPost')
             .doc(address)
             .update({'raidLeader': leftUserUid});
       } else {
@@ -170,7 +170,7 @@ class RaidForTodayPostModel {
         await FirebaseFirestore.instance
             .collection('RegisteredPost')
             .doc('FindPages')
-            .collection('RaidForTodayPost')
+            .collection('StaticPost')
             .doc(address)
             .delete();
       }
@@ -181,7 +181,7 @@ class RaidForTodayPostModel {
     final postData = await FirebaseFirestore.instance
         .collection('RegisteredPost')
         .doc('FindPages')
-        .collection('RaidForTodayPost')
+        .collection('StaticPost')
         .doc(address)
         .get();
 
@@ -195,7 +195,7 @@ class RaidForTodayPostModel {
     await FirebaseFirestore.instance
         .collection('RegisteredPost')
         .doc('FindPages')
-        .collection('RaidForTodayPost')
+        .collection('StaticPost')
         .doc(address)
         .update(postData);
   }

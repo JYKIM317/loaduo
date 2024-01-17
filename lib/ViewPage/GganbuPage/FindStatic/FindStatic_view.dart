@@ -14,6 +14,7 @@ import 'FindStatic_widget.dart';
 import 'package:loaduo/lostark_info.dart';
 import 'FindStatic_viewmodel.dart';
 import 'StaticPostView/StaticPostView_view.dart';
+import 'StaticPostView/StaticPostView_viewmodel.dart';
 
 class FindStatic extends ConsumerStatefulWidget {
   const FindStatic({super.key});
@@ -284,18 +285,43 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                               itemBuilder: (BuildContext ctx, int idx) {
                                 Map<String, dynamic> post = postList[idx];
                                 return InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     //자세히 보기
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ProgressHUD(
-                                          child: StaticPostView(
-                                            post: post,
+                                    progress?.show();
+                                    await StaticPostViewModel()
+                                        .getPostData(address: post['address'])
+                                        .then((newestPost) async {
+                                      progress?.dismiss();
+                                      if (newestPost.isNotEmpty) {
+                                        await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ProgressHUD(
+                                              child: StaticPostView(
+                                                post: newestPost,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    );
+                                        ).then((value) {
+                                          bool leave = value ?? false;
+                                          if (leave) {
+                                            setState(() {
+                                              lastDoc = null;
+                                              docList = null;
+                                              staticLoadData =
+                                                  FindStaticViewModel()
+                                                      .getStaticPostList(
+                                                count: postCount,
+                                                raid: raidFilter,
+                                                lastDoc: lastDoc,
+                                              );
+                                            });
+                                          }
+                                        });
+                                      } else {
+                                        showToast('존재하지 않는 방입니다.');
+                                      }
+                                    });
                                   },
                                   child: Container(
                                     width: double.infinity,

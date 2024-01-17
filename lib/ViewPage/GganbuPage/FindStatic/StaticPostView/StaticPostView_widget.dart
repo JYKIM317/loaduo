@@ -2,7 +2,7 @@ import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'RaidForTodayPostView_viewmodel.dart';
+import 'StaticPostView_viewmodel.dart';
 import 'package:loaduo/lostark_info.dart';
 import 'package:loaduo/CustomIcon.dart';
 import 'package:loaduo/ShowToastMsg.dart';
@@ -15,7 +15,7 @@ import 'package:loaduo/ViewPage/SearchUserPage/SearchUserPage_viewmodel.dart';
 import 'package:loaduo/ViewPage/InitialDataPages/ApiData/ApiDataPage_view.dart';
 
 class JoinUser extends StatelessWidget {
-  final String address, leader, raid;
+  final String address, leader, raid, detail;
   final progress;
   const JoinUser({
     super.key,
@@ -23,6 +23,7 @@ class JoinUser extends StatelessWidget {
     required this.leader,
     required this.progress,
     required this.raid,
+    required this.detail,
   });
 
   @override
@@ -36,284 +37,323 @@ class JoinUser extends StatelessWidget {
         children: [
           Expanded(
             child: SizedBox(
-              child: FutureBuilder(
-                future: RaidForTodayPostViewModel()
-                    .getJoinCharacterList(address: address),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return SizedBox(
-                      height: 246.h,
-                      child: Center(
-                          child: CircularProgressIndicator(
-                        color: Colors.deepOrange[400],
-                      )),
-                    );
-                  }
-                  List<Map<String, dynamic>> joinCharacterList =
-                      snapshot.data ?? [];
-                  return ListView.separated(
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 10.h),
-                    itemCount: joinCharacterList.length,
-                    itemBuilder: (BuildContext ctx, int idx) {
-                      Map<String, dynamic> character = joinCharacterList[idx];
-                      return InkWell(
-                        onTap: () {
-                          //캐릭터 페이지 or 원정대 페이지
-                          showDialog(
-                            barrierDismissible: true,
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.sp),
-                                ),
-                                backgroundColor: Colors.white,
-                                alignment: Alignment.center,
-                                content: Container(
-                                  padding: EdgeInsets.symmetric(vertical: 10.h),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      InkWell(
-                                        onTap: () async {
-                                          progress?.show();
-                                          await SearchUserPageViewModel()
-                                              .searchUser(
-                                                  userName: character[
-                                                      'CharacterName'])
-                                              .then((result) {
-                                            progress?.dismiss();
-                                            Navigator.pop(context);
-                                            if (result != null) {
-                                              switch (result['statusCode']) {
-                                                case 200:
-                                                  //요청 성공
-                                                  if (result['body'] != null) {
-                                                    //캐릭터 반환 성공
-
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            UserPage(
-                                                          userData:
-                                                              result['body'],
-                                                        ),
-                                                      ),
-                                                    );
-                                                  } else {
-                                                    showToast(
-                                                        '${character['CharacterName']}\n캐릭터 정보가 없습니다.');
+              child: SingleChildScrollView(
+                physics: const ClampingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 32.h),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        detail,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.sp,
+                        ),
+                      ),
+                    ),
+                    FutureBuilder(
+                      future: StaticPostViewModel()
+                          .getJoinCharacterList(address: address),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return SizedBox(
+                            height: 246.h,
+                            child: Center(
+                                child: CircularProgressIndicator(
+                              color: Colors.deepOrange[400],
+                            )),
+                          );
+                        }
+                        List<Map<String, dynamic>> joinCharacterList =
+                            snapshot.data ?? [];
+                        return ListView.separated(
+                          shrinkWrap: true,
+                          physics: const ClampingScrollPhysics(),
+                          padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 10.h),
+                          itemCount: joinCharacterList.length,
+                          itemBuilder: (BuildContext ctx, int idx) {
+                            Map<String, dynamic> character =
+                                joinCharacterList[idx];
+                            return InkWell(
+                              onTap: () {
+                                //캐릭터 페이지 or 원정대 페이지
+                                showDialog(
+                                  barrierDismissible: true,
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(16.sp),
+                                      ),
+                                      backgroundColor: Colors.white,
+                                      alignment: Alignment.center,
+                                      content: Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 10.h),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            InkWell(
+                                              onTap: () async {
+                                                progress?.show();
+                                                await SearchUserPageViewModel()
+                                                    .searchUser(
+                                                        userName: character[
+                                                            'CharacterName'])
+                                                    .then((result) {
+                                                  progress?.dismiss();
+                                                  Navigator.pop(context);
+                                                  if (result != null) {
+                                                    switch (
+                                                        result['statusCode']) {
+                                                      case 200:
+                                                        //요청 성공
+                                                        if (result['body'] !=
+                                                            null) {
+                                                          //캐릭터 반환 성공
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      UserPage(
+                                                                userData:
+                                                                    result[
+                                                                        'body'],
+                                                              ),
+                                                            ),
+                                                          );
+                                                        } else {
+                                                          showToast(
+                                                              '${character['CharacterName']}\n캐릭터 정보가 없습니다.');
+                                                        }
+                                                        break;
+                                                      case 401:
+                                                        showToast(
+                                                            'API Key가 정상적이지 않습니다.');
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                ApiDataPage(),
+                                                          ),
+                                                        );
+                                                        break;
+                                                      case 429:
+                                                        //API 요청 횟수 제한
+                                                        showToast(
+                                                            '잠시 후 다시 시도해주세요');
+                                                        break;
+                                                      case 503:
+                                                        //API 서비스 점검
+                                                        showToast(
+                                                            '로스트아크 API 서비스가 점검중에 있습니다.');
+                                                        break;
+                                                      default:
+                                                        showToast(
+                                                            '오류가 발생했습니다.');
+                                                        break;
+                                                    }
                                                   }
-                                                  break;
-                                                case 401:
-                                                  showToast(
-                                                      'API Key가 정상적이지 않습니다.');
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ApiDataPage(),
-                                                    ),
-                                                  );
-                                                  break;
-                                                case 429:
-                                                  //API 요청 횟수 제한
-                                                  showToast('잠시 후 다시 시도해주세요');
-                                                  break;
-                                                case 503:
-                                                  //API 서비스 점검
-                                                  showToast(
-                                                      '로스트아크 API 서비스가 점검중에 있습니다.');
-                                                  break;
-                                                default:
-                                                  showToast('오류가 발생했습니다.');
-                                                  break;
-                                              }
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 100.h,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                                255, 21, 24, 29),
-                                            borderRadius:
-                                                BorderRadius.circular(8.sp),
-                                          ),
-                                          child: Text(
-                                            '캐릭터 정보',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10.h,
-                                      ),
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (conetxt) => Material(
-                                                child: ProgressHUD(
-                                                  child: MyPage(
-                                                    uid: character['uid'],
+                                                });
+                                              },
+                                              child: Container(
+                                                width: double.infinity,
+                                                height: 100.h,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: const Color.fromARGB(
+                                                      255, 21, 24, 29),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.sp),
+                                                ),
+                                                child: Text(
+                                                  '캐릭터 정보',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18.sp,
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          );
-                                        },
-                                        child: Container(
-                                          width: double.infinity,
-                                          height: 100.h,
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            color: const Color.fromARGB(
-                                                255, 21, 24, 29),
-                                            borderRadius:
-                                                BorderRadius.circular(8.sp),
-                                          ),
-                                          child: Text(
-                                            '원정대 정보',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
+                                            SizedBox(
+                                              height: 10.h,
                                             ),
-                                          ),
+                                            InkWell(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (conetxt) =>
+                                                        Material(
+                                                      child: ProgressHUD(
+                                                        child: MyPage(
+                                                          uid: character['uid'],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                width: double.infinity,
+                                                height: 100.h,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                  color: const Color.fromARGB(
+                                                      255, 21, 24, 29),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.sp),
+                                                ),
+                                                child: Text(
+                                                  '원정대 정보',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 18.sp,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    );
+                                  },
+                                );
+                              },
+                              child: Container(
+                                width: double.infinity,
+                                padding:
+                                    EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 8.h),
+                                decoration: BoxDecoration(
+                                  color: const Color.fromARGB(255, 21, 24, 29),
+                                  borderRadius: BorderRadius.circular(8.sp),
                                 ),
-                              );
-                            },
-                          );
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 8.h),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 21, 24, 29),
-                            borderRadius: BorderRadius.circular(8.sp),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              if (character['uid'] == leader)
-                                Icon(
-                                  CustomIcon.crown,
-                                  size: 14.sp,
-                                  color: Colors.amber,
-                                ),
-                              if (character['uid'] == leader)
-                                SizedBox(width: 12.w),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    lostarkInfo().classIcon[
-                                        character['CharacterClassName']],
-                                    color: Colors.white,
-                                    size: 34.sp,
-                                  ),
-                                  SizedBox(height: 2.h),
-                                  Text(
-                                    'Lv.${character['CharacterLevel'].toString()}',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 14.sp,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(width: 8.w),
-                              Expanded(
-                                child: SizedBox(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text.rich(
-                                        TextSpan(
-                                            text: '아이템 레벨  ',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 14.sp,
-                                            ),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text:
-                                                    '${character['ItemAvgLevel']}',
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              )
-                                            ]),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    if (character['uid'] == leader)
+                                      Icon(
+                                        CustomIcon.crown,
+                                        size: 14.sp,
+                                        color: Colors.amber,
                                       ),
-                                      Text.rich(
-                                        TextSpan(
-                                            text: '서버  ',
-                                            style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 12.sp,
-                                            ),
-                                            children: <TextSpan>[
-                                              TextSpan(
-                                                text:
-                                                    '${character['ServerName']}',
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
-                                              )
-                                            ]),
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            character['CharacterName'],
-                                            style: TextStyle(
-                                              color: character['uid'] == userUID
-                                                  ? Colors.amber
-                                                  : Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          ),
-                                          SizedBox(width: 4.w),
-                                          Icon(
-                                            character['credential']
-                                                ? CustomIcon.check
-                                                : CustomIcon.checkEmpty,
-                                            size: 18.sp,
+                                    if (character['uid'] == leader)
+                                      SizedBox(width: 12.w),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          lostarkInfo().classIcon[
+                                              character['CharacterClassName']],
+                                          color: Colors.white,
+                                          size: 34.sp,
+                                        ),
+                                        SizedBox(height: 2.h),
+                                        Text(
+                                          'Lv.${character['CharacterLevel'].toString()}',
+                                          style: TextStyle(
                                             color: Colors.white,
+                                            fontSize: 14.sp,
                                           ),
-                                        ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Expanded(
+                                      child: SizedBox(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text.rich(
+                                              TextSpan(
+                                                  text: '아이템 레벨  ',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 14.sp,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          '${character['ItemAvgLevel']}',
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    )
+                                                  ]),
+                                            ),
+                                            Text.rich(
+                                              TextSpan(
+                                                  text: '서버  ',
+                                                  style: TextStyle(
+                                                    color: Colors.grey,
+                                                    fontSize: 12.sp,
+                                                  ),
+                                                  children: <TextSpan>[
+                                                    TextSpan(
+                                                      text:
+                                                          '${character['ServerName']}',
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    )
+                                                  ]),
+                                            ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  character['CharacterName'],
+                                                  style: TextStyle(
+                                                    color: character['uid'] ==
+                                                            userUID
+                                                        ? Colors.amber
+                                                        : Colors.white,
+                                                    fontSize: 18.sp,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 4.w),
+                                                Icon(
+                                                  character['credential']
+                                                      ? CustomIcon.check
+                                                      : CustomIcon.checkEmpty,
+                                                  size: 18.sp,
+                                                  color: Colors.white,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (ctx, idx) {
-                      return SizedBox(height: (idx + 1) % 4 != 0 ? 6.h : 12.h);
-                    },
-                  );
-                },
+                            );
+                          },
+                          separatorBuilder: (ctx, idx) {
+                            return SizedBox(
+                                height: (idx + 1) % 4 != 0 ? 6.h : 12.h);
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -323,7 +363,7 @@ class JoinUser extends StatelessWidget {
               stream: FirebaseFirestore.instance
                   .collection('RegisteredPost')
                   .doc('FindPages')
-                  .collection('RaidForTodayPost')
+                  .collection('StaticPost')
                   .doc(address)
                   .collection('JoinCharacter')
                   .snapshots(),
@@ -381,7 +421,7 @@ class JoinUser extends StatelessWidget {
                                     InkWell(
                                       onTap: () async {
                                         progress?.show();
-                                        await RaidForTodayPostViewModel()
+                                        await StaticPostViewModel()
                                             .leaveParty(
                                           address: address,
                                           uid: userUID,
@@ -486,7 +526,7 @@ class JoinUser extends StatelessWidget {
                     stream: FirebaseFirestore.instance
                         .collection('RegisteredPost')
                         .doc('FindPages')
-                        .collection('RaidForTodayPost')
+                        .collection('StaticPost')
                         .doc(address)
                         .collection('RequestCharacter')
                         .snapshots(),
@@ -518,7 +558,7 @@ class JoinUser extends StatelessWidget {
                         return InkWell(
                           onTap: () async {
                             progress?.show();
-                            await RaidForTodayPostViewModel()
+                            await StaticPostViewModel()
                                 .removeRequest(
                               address: address,
                               uid: userUID,
@@ -582,7 +622,7 @@ class JoinUser extends StatelessWidget {
                                           });
                                           if (myLevel >=
                                               lostarkInfo().raidLevel[raid]) {
-                                            await RaidForTodayPostViewModel()
+                                            await StaticPostViewModel()
                                                 .joinRequest(
                                               address: address,
                                               uid: userUID,
@@ -658,7 +698,7 @@ class RequestUser extends StatelessWidget {
         stream: FirebaseFirestore.instance
             .collection('RegisteredPost')
             .doc('FindPages')
-            .collection('RaidForTodayPost')
+            .collection('StaticPost')
             .doc(address)
             .collection('RequestCharacter')
             .snapshots(),
@@ -912,14 +952,14 @@ class RequestUser extends StatelessWidget {
                       IconButton(
                         onPressed: () async {
                           progress?.show();
-                          await RaidForTodayPostViewModel()
+                          await StaticPostViewModel()
                               .acceptRequest(
                             address: address,
                             character: requestCharacterList[idx],
                           )
                               .then((result) async {
                             if (result) {
-                              await RaidForTodayPostViewModel()
+                              await StaticPostViewModel()
                                   .removeRequest(
                                 address: address,
                                 uid: character['uid'],
@@ -941,7 +981,7 @@ class RequestUser extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () async {
-                          await RaidForTodayPostViewModel()
+                          await StaticPostViewModel()
                               .removeRequest(
                             address: address,
                             uid: character['uid'],
@@ -992,8 +1032,7 @@ class _PostSettingState extends State<PostSetting> {
         height: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 40.h),
         child: FutureBuilder(
-          future:
-              RaidForTodayPostViewModel().getPostData(address: widget.address),
+          future: StaticPostViewModel().getPostData(address: widget.address),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return SizedBox(
@@ -1034,7 +1073,7 @@ class _PostSettingState extends State<PostSetting> {
                     DateTime now = DateTime.now();
                     if (postTime
                         .isBefore(now.subtract(const Duration(minutes: 1)))) {
-                      await RaidForTodayPostViewModel()
+                      await StaticPostViewModel()
                           .updatePostTime(
                         address: widget.address,
                         postTime: now,

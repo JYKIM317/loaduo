@@ -14,6 +14,7 @@ import 'FindRaidForToday_widget.dart';
 import 'package:loaduo/lostark_info.dart';
 import 'FindRaidForToday_viewmodel.dart';
 import 'RaidForTodayPostView/RaidForTodayPostView_view.dart';
+import 'RaidForTodayPostView/RaidForTodayPostView_viewmodel.dart';
 
 class FindRaidForToday extends ConsumerStatefulWidget {
   const FindRaidForToday({super.key});
@@ -429,18 +430,46 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                                 Map<String, dynamic> post = postList[idx];
                                 DateTime startTime = post['startTime'].toDate();
                                 return InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     //자세히 보기
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ProgressHUD(
-                                          child: RaidForTodayPostView(
-                                            post: post,
+                                    progress?.show();
+                                    await RaidForTodayPostViewModel()
+                                        .getPostData(address: post['address'])
+                                        .then((newestPost) async {
+                                      progress?.dismiss();
+                                      if (newestPost.isNotEmpty) {
+                                        await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ProgressHUD(
+                                              child: RaidForTodayPostView(
+                                                post: newestPost,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    );
+                                        ).then((value) {
+                                          bool leave = value ?? false;
+                                          if (leave) {
+                                            setState(() {
+                                              lastDoc = null;
+                                              docList = null;
+                                              raidForTodayLoadData =
+                                                  FindRaidForTodayViewModel()
+                                                      .getRaidForTodayPostList(
+                                                count: postCount,
+                                                raid: raidFilter,
+                                                skill: skillFilter,
+                                                timeS: timeSFilter,
+                                                timeE: timeEFilter,
+                                                lastDoc: lastDoc,
+                                              );
+                                            });
+                                          }
+                                        });
+                                      } else {
+                                        showToast('존재하지 않는 방입니다.');
+                                      }
+                                    });
                                   },
                                   child: Container(
                                     width: double.infinity,

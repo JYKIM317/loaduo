@@ -17,6 +17,8 @@ import 'package:loaduo/ViewPage/GganbuPage/FindGGanbu/GganbuPostView/GganbuPostV
 import 'package:loaduo/ViewPage/GganbuPage/FindGuild/GuildPostView/GuildPostView_view.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/RaidForTodayPostView/RaidForTodayPostView_view.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindStatic/StaticPostView/StaticPostView_view.dart';
+import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/RaidForTodayPostView/RaidForTodayPostView_viewmodel.dart';
+import 'package:loaduo/ViewPage/GganbuPage/FindStatic/StaticPostView/StaticPostView_viewmodel.dart';
 
 class MyPage extends ConsumerStatefulWidget {
   final String uid;
@@ -501,7 +503,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                 );
               }
 
-              Map<String, dynamic> postData = snapshot.data ?? {};
+              Map<String, dynamic> postList = snapshot.data ?? {};
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -525,28 +527,47 @@ class _MyPageState extends ConsumerState<MyPage> {
                     thickness: 2.h,
                     height: 40.h,
                   ),
-                  if (postData['RaidForTodayPost'] != null)
+                  if (postList['RaidForTodayPost'] != null)
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: ListView.separated(
                         shrinkWrap: true,
                         physics: const ClampingScrollPhysics(),
-                        itemCount: postData['RaidForTodayPost'].length,
+                        itemCount: postList['RaidForTodayPost'].length,
                         itemBuilder: (BuildContext ctx, int idx) {
                           Map<String, dynamic> post =
-                              postData['RaidForTodayPost'][idx];
+                              postList['RaidForTodayPost'][idx];
                           DateTime startTime = post['startTime'].toDate();
                           return InkWell(
-                            onTap: () {
+                            onTap: () async {
                               //자세히 보기
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProgressHUD(
-                                    child: RaidForTodayPostView(post: post),
-                                  ),
-                                ),
-                              );
+                              progress?.show();
+                              await RaidForTodayPostViewModel()
+                                  .getPostData(address: post['address'])
+                                  .then((newestPost) async {
+                                progress?.dismiss();
+                                if (newestPost.isNotEmpty) {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProgressHUD(
+                                        child: RaidForTodayPostView(
+                                            post: newestPost),
+                                      ),
+                                    ),
+                                  ).then((value) {
+                                    bool leave = value ?? false;
+                                    if (leave) {
+                                      setState(() {
+                                        postData = MyPageViewModel()
+                                            .getUserPost(widget.uid);
+                                      });
+                                    }
+                                  });
+                                } else {
+                                  showToast('존재하지 않는 방입니다.');
+                                }
+                              });
                             },
                             child: Stack(
                               alignment: Alignment.topRight,
@@ -709,27 +730,45 @@ class _MyPageState extends ConsumerState<MyPage> {
                         },
                       ),
                     ),
-                  if (postData['StaticPost'] != null)
+                  if (postList['StaticPost'] != null)
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: ListView.separated(
                         shrinkWrap: true,
                         physics: const ClampingScrollPhysics(),
-                        itemCount: postData['StaticPost'].length,
+                        itemCount: postList['StaticPost'].length,
                         itemBuilder: (BuildContext ctx, int idx) {
                           Map<String, dynamic> post =
-                              postData['StaticPost'][idx];
+                              postList['StaticPost'][idx];
                           return InkWell(
-                            onTap: () {
+                            onTap: () async {
                               //자세히 보기
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ProgressHUD(
-                                    child: StaticPostView(post: post),
-                                  ),
-                                ),
-                              );
+                              progress?.show();
+                              await StaticPostViewModel()
+                                  .getPostData(address: post['address'])
+                                  .then((newestPost) async {
+                                progress?.dismiss();
+                                if (newestPost.isNotEmpty) {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProgressHUD(
+                                        child: StaticPostView(post: newestPost),
+                                      ),
+                                    ),
+                                  ).then((value) {
+                                    bool leave = value ?? false;
+                                    if (leave) {
+                                      setState(() {
+                                        postData = MyPageViewModel()
+                                            .getUserPost(widget.uid);
+                                      });
+                                    }
+                                  });
+                                } else {
+                                  showToast('존재하지 않는 방입니다.');
+                                }
+                              });
                             },
                             child: Stack(
                               alignment: Alignment.topRight,
@@ -871,7 +910,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                     thickness: 2.h,
                     height: 40.h,
                   ),
-                  if (postData['GganbuPost'] != null)
+                  if (postList['GganbuPost'] != null)
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: InkWell(
@@ -882,7 +921,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                             MaterialPageRoute(
                               builder: (context) => ProgressHUD(
                                 child: GganbuPostView(
-                                    post: postData['GganbuPost']),
+                                    post: postList['GganbuPost']),
                               ),
                             ),
                           );
@@ -921,7 +960,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      postData['GganbuPost']['detail'],
+                                      postList['GganbuPost']['detail'],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 24.sp,
@@ -942,7 +981,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                           children: <TextSpan>[
                                             TextSpan(
                                               text:
-                                                  '${postData['GganbuPost']['representServer']} ',
+                                                  '${postList['GganbuPost']['representServer']} ',
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 18.sp,
@@ -951,7 +990,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                           ],
                                         ),
                                       ),
-                                      if (postData['GganbuPost']['concern']
+                                      if (postList['GganbuPost']['concern']
                                               .length >=
                                           1)
                                         Text.rich(
@@ -964,7 +1003,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                             children: <TextSpan>[
                                               TextSpan(
                                                 text:
-                                                    '${postData['GganbuPost']['concern'][0]} ',
+                                                    '${postList['GganbuPost']['concern'][0]} ',
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18.sp,
@@ -973,7 +1012,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                             ],
                                           ),
                                         ),
-                                      if (postData['GganbuPost']['concern']
+                                      if (postList['GganbuPost']['concern']
                                               .length >=
                                           2)
                                         Text.rich(
@@ -986,7 +1025,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                             children: <TextSpan>[
                                               TextSpan(
                                                 text:
-                                                    '${postData['GganbuPost']['concern'][1]} ',
+                                                    '${postList['GganbuPost']['concern'][1]} ',
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18.sp,
@@ -995,7 +1034,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                             ],
                                           ),
                                         ),
-                                      if (postData['GganbuPost']['concern']
+                                      if (postList['GganbuPost']['concern']
                                               .length >=
                                           3)
                                         Text.rich(
@@ -1008,7 +1047,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                             children: <TextSpan>[
                                               TextSpan(
                                                 text:
-                                                    '${postData['GganbuPost']['concern'][2]} ',
+                                                    '${postList['GganbuPost']['concern'][2]} ',
                                                 style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18.sp,
@@ -1031,7 +1070,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                           children: <TextSpan>[
                                             TextSpan(
                                               text:
-                                                  '평일 ${postData['GganbuPost']['weekdayPlaytime']}시 ',
+                                                  '평일 ${postList['GganbuPost']['weekdayPlaytime']}시 ',
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 18.sp,
@@ -1050,7 +1089,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                           children: <TextSpan>[
                                             TextSpan(
                                               text:
-                                                  '주말 ${postData['GganbuPost']['weekendPlaytime']}시 ',
+                                                  '주말 ${postList['GganbuPost']['weekendPlaytime']}시 ',
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 18.sp,
@@ -1069,7 +1108,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                       ),
                     ),
                   SizedBox(height: 10.h),
-                  if (postData['GuildPost'] != null)
+                  if (postList['GuildPost'] != null)
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: InkWell(
@@ -1080,7 +1119,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                             MaterialPageRoute(
                               builder: (context) => ProgressHUD(
                                 child:
-                                    GuildPostView(post: postData['GuildPost']),
+                                    GuildPostView(post: postList['GuildPost']),
                               ),
                             ),
                           );
@@ -1118,7 +1157,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    postData['GuildPost']['guildName'],
+                                    postList['GuildPost']['guildName'],
                                     style: TextStyle(
                                       color: Colors.deepOrange[400],
                                       fontSize: 24.sp,
@@ -1126,7 +1165,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      postData['GuildPost']['detail'],
+                                      postList['GuildPost']['detail'],
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 18.sp,
@@ -1147,7 +1186,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                           children: <TextSpan>[
                                             TextSpan(
                                               text:
-                                                  '${postData['GuildPost']['server']} ',
+                                                  '${postList['GuildPost']['server']} ',
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 18.sp,
@@ -1166,7 +1205,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                           children: <TextSpan>[
                                             TextSpan(
                                               text:
-                                                  '${postData['GuildPost']['guildType']} ',
+                                                  '${postList['GuildPost']['guildType']} ',
                                               style: TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 18.sp,
@@ -1184,10 +1223,10 @@ class _MyPageState extends ConsumerState<MyPage> {
                                           ),
                                           children: <TextSpan>[
                                             TextSpan(
-                                              text: postData['GuildPost']
+                                              text: postList['GuildPost']
                                                           ['level'] !=
                                                       0
-                                                  ? '${postData['GuildPost']['level']} 이상 '
+                                                  ? '${postList['GuildPost']['level']} 이상 '
                                                   : '레벨 제한 없음',
                                               style: TextStyle(
                                                 color: Colors.white,
@@ -1210,6 +1249,7 @@ class _MyPageState extends ConsumerState<MyPage> {
               );
             },
           ),
+          SizedBox(height: 34.h),
         ],
       ),
     );
