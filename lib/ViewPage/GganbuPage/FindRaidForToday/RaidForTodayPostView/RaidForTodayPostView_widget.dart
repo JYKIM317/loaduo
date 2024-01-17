@@ -1006,6 +1006,7 @@ class _PostSettingState extends State<PostSetting> {
             }
             Map<String, dynamic> post = snapshot.data;
             DateTime postTime = post['postTime'].toDate();
+            DateTime startTime = post['startTime'].toDate();
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1030,24 +1031,27 @@ class _PostSettingState extends State<PostSetting> {
                 SizedBox(height: 40.h),
                 InkWell(
                   onTap: () async {
-                    widget.progress?.show();
                     DateTime now = DateTime.now();
-                    if (postTime
-                        .isBefore(now.subtract(const Duration(minutes: 1)))) {
-                      await RaidForTodayPostViewModel()
-                          .updatePostTime(
-                        address: widget.address,
-                        postTime: now,
-                      )
-                          .then((_) {
-                        Future.microtask(() {
-                          widget.progress?.dismiss();
-                          setState(() {});
+                    if (now.isBefore(startTime)) {
+                      if (postTime
+                          .isBefore(now.subtract(const Duration(minutes: 1)))) {
+                        widget.progress?.show();
+                        await RaidForTodayPostViewModel()
+                            .updatePostTime(
+                          address: widget.address,
+                          postTime: now,
+                        )
+                            .then((_) {
+                          Future.microtask(() {
+                            widget.progress?.dismiss();
+                            setState(() {});
+                          });
                         });
-                      });
+                      } else {
+                        showToast('아직 끌어 올릴 수 없습니다.');
+                      }
                     } else {
-                      widget.progress?.dismiss();
-                      showToast('아직 끌어 올릴 수 없습니다.');
+                      showToast('레이드의 시작 시간이 지나서\n더 이상 끌어올릴 수 없습니다.');
                     }
                   },
                   child: Container(
