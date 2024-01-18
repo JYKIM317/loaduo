@@ -7,13 +7,63 @@ import 'package:loaduo/ViewPage/MyPage/MyPage_view.dart';
 import 'package:loaduo/ViewPage/SearchUserPage/SearchUserPage_view.dart';
 import 'package:loaduo/ViewPage/GganbuPage/GganbuPage_view.dart';
 import 'package:loaduo/CustomIcon.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class MainPage extends ConsumerWidget {
+class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    String? userUID = FirebaseAuth.instance.currentUser!.uid;
+  ConsumerState<ConsumerStatefulWidget> createState() => _MainPageState();
+}
+
+class _MainPageState extends ConsumerState<MainPage> {
+  String? userUID = FirebaseAuth.instance.currentUser!.uid;
+
+  @override
+  void initState() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      RemoteNotification? notification = message.notification;
+
+      var androidNotiDetails = const AndroidNotificationDetails(
+        'high_importance_channel',
+        'High Importance Notifications',
+        channelDescription: 'This channel is used for important notifications.',
+        importance: Importance.high,
+      );
+      var iOSNotiDetails = const DarwinNotificationDetails();
+      var details = NotificationDetails(
+        android: androidNotiDetails,
+        iOS: iOSNotiDetails,
+      );
+
+      if (notification != null) {
+        FlutterLocalNotificationsPlugin().show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          details,
+        );
+      }
+
+      FirebaseMessaging.onMessageOpenedApp.listen((message) {
+        print(message);
+      });
+
+      FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) async {
+        await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(userUID)
+            .update({'fcmToken': fcmToken});
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    userUID = FirebaseAuth.instance.currentUser!.uid;
     final currentIndex = ref.watch(mainpageIndex);
     onBottomTapped(int index) {
       ref.read(mainpageIndex.notifier).update(index);
@@ -29,7 +79,7 @@ class MainPage extends ConsumerWidget {
           child: [
             GganbuPage(),
             ProgressHUD(child: SearchUserPage()),
-            ProgressHUD(child: MyPage(uid: userUID)),
+            ProgressHUD(child: MyPage(uid: userUID!)),
           ][currentIndex],
         ),
       ),

@@ -7,6 +7,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'ViewPage/InitialDataPages/ApiData/ApiDataPage_view.dart';
 import 'ViewPage/InitialDataPages/InitialData/InitialDataPage_view.dart';
@@ -15,19 +17,80 @@ import 'ViewPage/MainPage/MainPage_view.dart';
 String? _apikey;
 bool? _initialdata;
 
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print('Handling a background message ${message.messageId}');
+}
+
+late AndroidNotificationChannel channel;
+late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+void initializeNotification() async {
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  channel = const AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    description:
+        'This channel is used for important notifications.', // description
+    importance: Importance.high,
+  );
+
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  var initialzationSettingsIOS = const DarwinInitializationSettings(
+    requestSoundPermission: true,
+    requestBadgePermission: true,
+    requestAlertPermission: true,
+  );
+  var initialzationSettingsAndroid =
+      const AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  var initializationSettings = InitializationSettings(
+    android: initialzationSettingsAndroid,
+    iOS: initialzationSettingsIOS,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: false,
+  );
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   //Firebase auth login
   await FirebaseAuth.instance.signInAnonymously();
   _apikey = prefs.getString('apikey') ?? 'null';
   _initialdata = prefs.getBool('initialdata') ?? false;
   String? userUID = FirebaseAuth.instance.currentUser!.uid;
+
+  initializeNotification();
+  await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: false,
+  );
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+
   try {
     await FirebaseFirestore.instance.collection('Users').doc(userUID).update({
       'lastLogin': DateTime.now(),
+      'fcmToken': fcmToken,
     });
   } catch (e) {
     const String noDocError =
@@ -35,6 +98,7 @@ void main() async {
     if (e.toString() == noDocError) {
       await FirebaseFirestore.instance.collection('Users').doc(userUID).set({
         'lastLogin': DateTime.now(),
+        'fcmToken': fcmToken,
       });
     }
   }
