@@ -495,7 +495,7 @@ class _CreateGuildPostState extends State<CreateGuildPost> {
                                 },
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: '길드 설명 및 작성하고싶은 내용',
+                                  hintText: '혈석 비율, 기여도 등\n길드 설명 및 작성하고싶은 내용',
                                   hintStyle: TextStyle(color: Colors.grey[400]),
                                 ),
                               ),
@@ -524,7 +524,7 @@ class _CreateGuildPostState extends State<CreateGuildPost> {
                         )
                             .then((_) {
                           progress?.dismiss();
-                          Navigator.pop(context);
+                          Navigator.pop(context, true);
                         });
                       },
                       child: Container(

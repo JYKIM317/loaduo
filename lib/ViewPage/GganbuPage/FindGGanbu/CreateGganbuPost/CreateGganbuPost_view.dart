@@ -397,7 +397,7 @@ class _CreateGganbuPostState extends State<CreateGganbuPost> {
                     )
                         .then((_) {
                       progress?.dismiss();
-                      Navigator.pop(context);
+                      Navigator.pop(context, true);
                     });
                   },
                   child: Container(

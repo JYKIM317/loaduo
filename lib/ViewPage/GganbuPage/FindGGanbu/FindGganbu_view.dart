@@ -229,17 +229,36 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
             String? userUID = FirebaseAuth.instance.currentUser!.uid;
             progress?.show();
             await MyPageViewModel().getUserInfo(userUID).then((value) {
-              Future.microtask(() {
+              Future.microtask(() async {
                 progress?.dismiss();
                 if (value['representCharacter'] != null) {
                   value.addAll({'uid': userUID});
-                  Navigator.push(
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: ((context) =>
                           ProgressHUD(child: CreateGganbuPost(myInfo: value))),
                     ),
-                  );
+                  ).then((value) {
+                    bool create = value ?? false;
+                    if (create) {
+                      setState(() {
+                        lastDoc = null;
+                        docList = null;
+                        gganbuLoadData =
+                            FindGganbuViewModel().getGganbuPostList(
+                          count: postCount,
+                          serverFilter: serverFilter,
+                          typeFilter: typeFilter,
+                          weekdayS: weekdaySFilter,
+                          weekdayE: weekdayEFilter,
+                          weekendS: weekendSFilter,
+                          weekendE: weekendEFilter,
+                          lastDoc: lastDoc,
+                        );
+                      });
+                    }
+                  });
                 } else {
                   showToast('내 원정대를 등록해주세요\n[내 정보] - [내 원정대 등록하기]');
                 }

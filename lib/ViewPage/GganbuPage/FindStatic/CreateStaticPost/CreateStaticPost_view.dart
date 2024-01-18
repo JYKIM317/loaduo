@@ -546,7 +546,7 @@ class _CreateStaticPostState extends State<CreateStaticPost> {
                             )
                                 .then((_) {
                               progress?.dismiss();
-                              Navigator.pop(context);
+                              Navigator.pop(context, true);
                             });
                           } else {
                             showToast('선택하신 캐릭터의 레벨이\n레이드 입장 레벨보다 낮습니다.');

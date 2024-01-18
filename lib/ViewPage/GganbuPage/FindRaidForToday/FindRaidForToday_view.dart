@@ -200,7 +200,7 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                           builder: (context) =>
                               MyExpedition(expedition: expedition),
                         ),
-                      ).then((character) {
+                      ).then((character) async {
                         if (character != null) {
                           bool credential = false;
                           if (value['representCharacter'] ==
@@ -211,7 +211,7 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                             'uid': userUID,
                             'credential': credential,
                           });
-                          Navigator.push(
+                          await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ProgressHUD(
@@ -219,7 +219,25 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                                     myCharacter: character),
                               ),
                             ),
-                          );
+                          ).then((value) {
+                            bool create = value ?? false;
+                            if (create) {
+                              setState(() {
+                                lastDoc = null;
+                                docList = null;
+                                raidForTodayLoadData =
+                                    FindRaidForTodayViewModel()
+                                        .getRaidForTodayPostList(
+                                  count: postCount,
+                                  raid: raidFilter,
+                                  skill: skillFilter,
+                                  timeS: timeSFilter,
+                                  timeE: timeEFilter,
+                                  lastDoc: lastDoc,
+                                );
+                              });
+                            }
+                          });
                         }
                       });
                     } else {

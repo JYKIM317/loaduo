@@ -163,13 +163,13 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                 if (value['representCharacter'] != null) {
                   await MyPageViewModel()
                       .getCharacterData(userName: value['representCharacter'])
-                      .then((character) {
+                      .then((character) async {
                     progress?.dismiss();
                     if (character!['body'] != null &&
                         character['statusCode'] == 200) {
                       if (character['body']['ArmoryProfile']['GuildName'] !=
                           null) {
-                        Navigator.push(
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: ((context) => ProgressHUD(
@@ -180,7 +180,23 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                                   ),
                                 )),
                           ),
-                        );
+                        ).then((value) {
+                          bool create = value ?? false;
+                          if (create) {
+                            setState(() {
+                              lastDoc = null;
+                              docList = null;
+                              guildLoadData =
+                                  FindGuildViewModel().getGuildPostList(
+                                count: postCount,
+                                server: serverFilter,
+                                type: typeFilter,
+                                level: levelFilter,
+                                lastDoc: lastDoc,
+                              );
+                            });
+                          }
+                        });
                       } else {
                         showToast('원정대의 대표 캐릭터가 가입한 길드를 확인할 수 없습니다.');
                       }
@@ -386,9 +402,9 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                               itemBuilder: (BuildContext ctx, int idx) {
                                 Map<String, dynamic> post = postList[idx];
                                 return InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     //자세히 보기
-                                    Navigator.push(
+                                    await Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => ProgressHUD(
@@ -397,7 +413,23 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                                           ),
                                         ),
                                       ),
-                                    );
+                                    ).then((value) {
+                                      bool leave = value ?? false;
+                                      if (leave) {
+                                        setState(() {
+                                          lastDoc = null;
+                                          docList = null;
+                                          guildLoadData = FindGuildViewModel()
+                                              .getGuildPostList(
+                                            count: postCount,
+                                            server: serverFilter,
+                                            type: typeFilter,
+                                            level: levelFilter,
+                                            lastDoc: lastDoc,
+                                          );
+                                        });
+                                      }
+                                    });
                                   },
                                   child: Container(
                                     width: double.infinity,

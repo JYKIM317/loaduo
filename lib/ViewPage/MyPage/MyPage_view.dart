@@ -914,9 +914,9 @@ class _MyPageState extends ConsumerState<MyPage> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           //자세히 보기
-                          Navigator.push(
+                          await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ProgressHUD(
@@ -924,7 +924,16 @@ class _MyPageState extends ConsumerState<MyPage> {
                                     post: postList['GganbuPost']),
                               ),
                             ),
-                          );
+                          ).then((value) {
+                            bool leave = value ?? false;
+                            if (leave) {
+                              setState(() {
+                                postData =
+                                    MyPageViewModel().getUserPost(widget.uid);
+                              });
+                            }
+                          });
+                          ;
                         },
                         child: Container(
                           width: double.infinity,
@@ -1112,9 +1121,9 @@ class _MyPageState extends ConsumerState<MyPage> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: InkWell(
-                        onTap: () {
+                        onTap: () async {
                           //자세히 보기
-                          Navigator.push(
+                          await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ProgressHUD(
@@ -1122,7 +1131,15 @@ class _MyPageState extends ConsumerState<MyPage> {
                                     GuildPostView(post: postList['GuildPost']),
                               ),
                             ),
-                          );
+                          ).then((value) {
+                            bool leave = value ?? false;
+                            if (leave) {
+                              setState(() {
+                                postData =
+                                    MyPageViewModel().getUserPost(widget.uid);
+                              });
+                            }
+                          });
                         },
                         child: Container(
                           width: double.infinity,

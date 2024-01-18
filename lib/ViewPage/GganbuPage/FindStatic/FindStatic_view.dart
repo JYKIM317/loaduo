@@ -138,7 +138,7 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                           builder: (context) =>
                               MyExpedition(expedition: expedition),
                         ),
-                      ).then((character) {
+                      ).then((character) async {
                         if (character != null) {
                           bool credential = false;
                           if (value['representCharacter'] ==
@@ -149,14 +149,28 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                             'uid': userUID,
                             'credential': credential,
                           });
-                          Navigator.push(
+                          await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => ProgressHUD(
                                   child:
                                       CreateStaticPost(myCharacter: character)),
                             ),
-                          );
+                          ).then((value) {
+                            bool create = value ?? false;
+                            if (create) {
+                              setState(() {
+                                lastDoc = null;
+                                docList = null;
+                                staticLoadData =
+                                    FindStaticViewModel().getStaticPostList(
+                                  count: postCount,
+                                  raid: raidFilter,
+                                  lastDoc: lastDoc,
+                                );
+                              });
+                            }
+                          });
                         }
                       });
                     } else {
