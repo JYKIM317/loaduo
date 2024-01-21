@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class StaticPostModel {
   Future<QuerySnapshot> joinChracterData({required String address}) async {
@@ -164,7 +166,20 @@ class StaticPostModel {
             .doc('FindPages')
             .collection('StaticPost')
             .doc(address)
-            .update({'raidLeader': leftUserUid});
+            .update({'raidLeader': leftUserUid}).then((_) async {
+          try {
+            await http.post(
+              Uri.parse(
+                  'https://asia-northeast3-loaduo.cloudfunctions.net/pushFcm/leader'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+              },
+              body: jsonEncode({'call': leftUserUid}),
+            );
+          } catch (e) {
+            print(e);
+          }
+        });
       } else {
         //남은 유저 없음
         await FirebaseFirestore.instance

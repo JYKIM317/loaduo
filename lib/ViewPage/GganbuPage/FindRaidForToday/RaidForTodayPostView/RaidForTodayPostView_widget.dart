@@ -586,6 +586,7 @@ class JoinUser extends StatelessWidget {
                                                 .joinRequest(
                                               address: address,
                                               uid: userUID,
+                                              leader: leader,
                                               data: selectCharacter,
                                             )
                                                 .then((_) {
