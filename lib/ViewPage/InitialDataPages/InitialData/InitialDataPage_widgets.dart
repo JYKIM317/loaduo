@@ -37,37 +37,26 @@ class Purpose extends ConsumerWidget {
               alignment: Alignment.center,
               padding: EdgeInsets.only(left: 10.w, right: 10.w),
               decoration: BoxDecoration(
-                color: bossState ? Colors.white : Colors.deepOrange[200],
+                color: bossState
+                    ? const Color.fromARGB(255, 21, 24, 29)
+                    : Colors.grey,
                 borderRadius: BorderRadius.circular(8.sp),
-                border: bossState
-                    ? Border.all(
-                        color: Colors.deepOrange[400]!,
-                        width: 2,
-                      )
-                    : null,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        '레이드 같이 빼기',
-                        style: TextStyle(
-                          color:
-                              bossState ? Colors.deepOrange[400] : Colors.white,
-                          fontSize: 18.sp,
-                        ),
-                      ),
+                boxShadow: [
+                  if (bossState)
+                    const BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 4,
                     ),
-                  ),
-                  Icon(
-                    bossState ? Icons.check : null,
-                    size: 28.sp,
-                    color: Colors.deepOrange[400],
-                  ),
                 ],
+              ),
+              child: Center(
+                child: Text(
+                  '레이드 빼기',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.sp,
+                  ),
+                ),
               ),
             ),
           ),
@@ -83,38 +72,26 @@ class Purpose extends ConsumerWidget {
               alignment: Alignment.center,
               padding: EdgeInsets.only(left: 10.w, right: 10.w),
               decoration: BoxDecoration(
-                color: adventureState ? Colors.white : Colors.deepOrange[100],
+                color: adventureState
+                    ? const Color.fromARGB(255, 21, 24, 29)
+                    : Colors.grey,
                 borderRadius: BorderRadius.circular(8.sp),
-                border: adventureState
-                    ? Border.all(
-                        color: Colors.deepOrange[400]!,
-                        width: 2,
-                      )
-                    : null,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        '내실 같이 빼기',
-                        style: TextStyle(
-                          color: adventureState
-                              ? Colors.deepOrange[400]
-                              : Colors.white,
-                          fontSize: 18.sp,
-                        ),
-                      ),
+                boxShadow: [
+                  if (adventureState)
+                    const BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 4,
                     ),
-                  ),
-                  Icon(
-                    adventureState ? Icons.check : null,
-                    size: 28.sp,
-                    color: Colors.deepOrange[400],
-                  ),
                 ],
+              ),
+              child: Center(
+                child: Text(
+                  '내실 빼기',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.sp,
+                  ),
+                ),
               ),
             ),
           ),
@@ -130,38 +107,26 @@ class Purpose extends ConsumerWidget {
               alignment: Alignment.center,
               padding: EdgeInsets.only(left: 10.w, right: 10.w),
               decoration: BoxDecoration(
-                color: homeworkState ? Colors.white : Colors.deepOrange[200],
+                color: homeworkState
+                    ? const Color.fromARGB(255, 21, 24, 29)
+                    : Colors.grey,
                 borderRadius: BorderRadius.circular(8.sp),
-                border: homeworkState
-                    ? Border.all(
-                        color: Colors.deepOrange[400]!,
-                        width: 2,
-                      )
-                    : null,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        '일일 숙제 같이 빼기',
-                        style: TextStyle(
-                          color: homeworkState
-                              ? Colors.deepOrange[400]
-                              : Colors.white,
-                          fontSize: 18.sp,
-                        ),
-                      ),
+                boxShadow: [
+                  if (homeworkState)
+                    const BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 4,
                     ),
-                  ),
-                  Icon(
-                    homeworkState ? Icons.check : null,
-                    size: 28.sp,
-                    color: Colors.deepOrange[400],
-                  ),
                 ],
+              ),
+              child: Center(
+                child: Text(
+                  '일일 숙제 빼기',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.sp,
+                  ),
+                ),
               ),
             ),
           ),
@@ -205,33 +170,24 @@ class PlayStyle extends ConsumerWidget {
                   alignment: Alignment.center,
                   padding: EdgeInsets.only(left: 10.w, right: 10.w),
                   decoration: BoxDecoration(
-                    color: mood == 0 ? Colors.white : Colors.deepOrange[200],
+                    color: mood == 0
+                        ? const Color.fromARGB(255, 21, 24, 29)
+                        : Colors.grey,
                     borderRadius: BorderRadius.circular(8.sp),
-                    border: mood == 0
-                        ? Border.all(
-                            color: Colors.deepOrange[400]!,
-                            width: 2,
-                          )
-                        : null,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        '예민하지 않아요',
-                        style: TextStyle(
-                          color:
-                              mood == 0 ? Colors.deepOrange[400] : Colors.white,
-                          fontSize: 18.sp,
+                    boxShadow: [
+                      if (mood == 0)
+                        const BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 4,
                         ),
-                      ),
-                      Icon(
-                        mood == 0 ? Icons.check : null,
-                        size: 28.sp,
-                        color: Colors.deepOrange[400],
-                      ),
                     ],
+                  ),
+                  child: Text(
+                    '예민하지 않아요',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.sp,
+                    ),
                   ),
                 ),
               ),
@@ -245,33 +201,24 @@ class PlayStyle extends ConsumerWidget {
                   alignment: Alignment.center,
                   padding: EdgeInsets.only(left: 10.w, right: 10.w),
                   decoration: BoxDecoration(
-                    color: mood == 1 ? Colors.white : Colors.deepOrange[200],
+                    color: mood == 1
+                        ? const Color.fromARGB(255, 21, 24, 29)
+                        : Colors.grey,
                     borderRadius: BorderRadius.circular(8.sp),
-                    border: mood == 1
-                        ? Border.all(
-                            color: Colors.deepOrange[400]!,
-                            width: 2,
-                          )
-                        : null,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        '예민해요',
-                        style: TextStyle(
-                          color:
-                              mood == 1 ? Colors.deepOrange[400] : Colors.white,
-                          fontSize: 18.sp,
+                    boxShadow: [
+                      if (mood == 1)
+                        const BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 4,
                         ),
-                      ),
-                      Icon(
-                        mood == 1 ? Icons.check : null,
-                        size: 28.sp,
-                        color: Colors.deepOrange[400],
-                      ),
                     ],
+                  ),
+                  child: Text(
+                    '예민해요',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.sp,
+                    ),
                   ),
                 ),
               ),
@@ -290,35 +237,24 @@ class PlayStyle extends ConsumerWidget {
                   alignment: Alignment.center,
                   padding: EdgeInsets.only(left: 10.w, right: 10.w),
                   decoration: BoxDecoration(
-                    color:
-                        distribute == 0 ? Colors.white : Colors.deepOrange[100],
+                    color: distribute == 0
+                        ? const Color.fromARGB(255, 21, 24, 29)
+                        : Colors.grey,
                     borderRadius: BorderRadius.circular(8.sp),
-                    border: distribute == 0
-                        ? Border.all(
-                            color: Colors.deepOrange[400]!,
-                            width: 2,
-                          )
-                        : null,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        '천천히 빼요',
-                        style: TextStyle(
-                          color: distribute == 0
-                              ? Colors.deepOrange[400]
-                              : Colors.white,
-                          fontSize: 18.sp,
+                    boxShadow: [
+                      if (distribute == 0)
+                        const BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 4,
                         ),
-                      ),
-                      Icon(
-                        distribute == 0 ? Icons.check : null,
-                        size: 28.sp,
-                        color: Colors.deepOrange[400],
-                      ),
                     ],
+                  ),
+                  child: Text(
+                    '천천히 빼요',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.sp,
+                    ),
                   ),
                 ),
               ),
@@ -332,35 +268,24 @@ class PlayStyle extends ConsumerWidget {
                   alignment: Alignment.center,
                   padding: EdgeInsets.only(left: 10.w, right: 10.w),
                   decoration: BoxDecoration(
-                    color:
-                        distribute == 1 ? Colors.white : Colors.deepOrange[100],
+                    color: distribute == 1
+                        ? const Color.fromARGB(255, 21, 24, 29)
+                        : Colors.grey,
                     borderRadius: BorderRadius.circular(8.sp),
-                    border: distribute == 1
-                        ? Border.all(
-                            color: Colors.deepOrange[400]!,
-                            width: 2,
-                          )
-                        : null,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        '몰아서 빼요',
-                        style: TextStyle(
-                          color: distribute == 1
-                              ? Colors.deepOrange[400]
-                              : Colors.white,
-                          fontSize: 18.sp,
+                    boxShadow: [
+                      if (distribute == 1)
+                        const BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 4,
                         ),
-                      ),
-                      Icon(
-                        distribute == 1 ? Icons.check : null,
-                        size: 28.sp,
-                        color: Colors.deepOrange[400],
-                      ),
                     ],
+                  ),
+                  child: Text(
+                    '몰아서 빼요',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.sp,
+                    ),
                   ),
                 ),
               ),
@@ -382,34 +307,24 @@ class PlayStyle extends ConsumerWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.only(left: 10.w, right: 10.w),
                     decoration: BoxDecoration(
-                      color: skill == 0 ? Colors.white : Colors.deepOrange[200],
+                      color: skill == 0
+                          ? const Color.fromARGB(255, 21, 24, 29)
+                          : Colors.grey,
                       borderRadius: BorderRadius.circular(8.sp),
-                      border: skill == 0
-                          ? Border.all(
-                              color: Colors.deepOrange[400]!,
-                              width: 2,
-                            )
-                          : null,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '숙련',
-                          style: TextStyle(
-                            color: skill == 0
-                                ? Colors.deepOrange[400]
-                                : Colors.white,
-                            fontSize: 18.sp,
+                      boxShadow: [
+                        if (skill == 0)
+                          const BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 4,
                           ),
-                        ),
-                        Icon(
-                          skill == 0 ? Icons.check : null,
-                          size: 28.sp,
-                          color: Colors.deepOrange[400],
-                        ),
                       ],
+                    ),
+                    child: Text(
+                      '숙련',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                      ),
                     ),
                   ),
                 ),
@@ -423,34 +338,24 @@ class PlayStyle extends ConsumerWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.only(left: 10.w, right: 10.w),
                     decoration: BoxDecoration(
-                      color: skill == 1 ? Colors.white : Colors.deepOrange[200],
+                      color: skill == 1
+                          ? const Color.fromARGB(255, 21, 24, 29)
+                          : Colors.grey,
                       borderRadius: BorderRadius.circular(8.sp),
-                      border: skill == 1
-                          ? Border.all(
-                              color: Colors.deepOrange[400]!,
-                              width: 2,
-                            )
-                          : null,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '반숙',
-                          style: TextStyle(
-                            color: skill == 1
-                                ? Colors.deepOrange[400]
-                                : Colors.white,
-                            fontSize: 18.sp,
+                      boxShadow: [
+                        if (skill == 1)
+                          const BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 4,
                           ),
-                        ),
-                        Icon(
-                          skill == 1 ? Icons.check : null,
-                          size: 28.sp,
-                          color: Colors.deepOrange[400],
-                        ),
                       ],
+                    ),
+                    child: Text(
+                      '반숙',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                      ),
                     ),
                   ),
                 ),
@@ -464,34 +369,24 @@ class PlayStyle extends ConsumerWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.only(left: 10.w, right: 10.w),
                     decoration: BoxDecoration(
-                      color: skill == 2 ? Colors.white : Colors.deepOrange[200],
+                      color: skill == 2
+                          ? const Color.fromARGB(255, 21, 24, 29)
+                          : Colors.grey,
                       borderRadius: BorderRadius.circular(8.sp),
-                      border: skill == 2
-                          ? Border.all(
-                              color: Colors.deepOrange[400]!,
-                              width: 2,
-                            )
-                          : null,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '클경',
-                          style: TextStyle(
-                            color: skill == 2
-                                ? Colors.deepOrange[400]
-                                : Colors.white,
-                            fontSize: 18.sp,
+                      boxShadow: [
+                        if (skill == 2)
+                          const BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 4,
                           ),
-                        ),
-                        Icon(
-                          skill == 2 ? Icons.check : null,
-                          size: 28.sp,
-                          color: Colors.deepOrange[400],
-                        ),
                       ],
+                    ),
+                    child: Text(
+                      '클경',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                      ),
                     ),
                   ),
                 ),
@@ -505,34 +400,24 @@ class PlayStyle extends ConsumerWidget {
                     alignment: Alignment.center,
                     padding: EdgeInsets.only(left: 10.w, right: 10.w),
                     decoration: BoxDecoration(
-                      color: skill == 3 ? Colors.white : Colors.deepOrange[200],
+                      color: skill == 3
+                          ? const Color.fromARGB(255, 21, 24, 29)
+                          : Colors.grey,
                       borderRadius: BorderRadius.circular(8.sp),
-                      border: skill == 3
-                          ? Border.all(
-                              color: Colors.deepOrange[400]!,
-                              width: 2,
-                            )
-                          : null,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '트라이',
-                          style: TextStyle(
-                            color: skill == 3
-                                ? Colors.deepOrange[400]
-                                : Colors.white,
-                            fontSize: 18.sp,
+                      boxShadow: [
+                        if (skill == 3)
+                          const BoxShadow(
+                            color: Colors.grey,
+                            blurRadius: 4,
                           ),
-                        ),
-                        Icon(
-                          skill == 3 ? Icons.check : null,
-                          size: 28.sp,
-                          color: Colors.deepOrange[400],
-                        ),
                       ],
+                    ),
+                    child: Text(
+                      '트라이',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18.sp,
+                      ),
                     ),
                   ),
                 ),
@@ -765,14 +650,14 @@ class _PlayTimeState extends ConsumerState<PlayTime> {
                       width: 80.w,
                       height: 50.h,
                       decoration: BoxDecoration(
-                        color: Colors.deepOrange[100],
+                        color: const Color.fromARGB(255, 21, 24, 29),
                         borderRadius: BorderRadius.circular(8.sp),
                       ),
                       alignment: Alignment.center,
                       child: Text(
                         weekday.toString(),
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 18.sp,
                         ),
                       ),
@@ -812,13 +697,13 @@ class _PlayTimeState extends ConsumerState<PlayTime> {
                       height: 50.h,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: Colors.deepOrange[100],
+                        color: const Color.fromARGB(255, 21, 24, 29),
                         borderRadius: BorderRadius.circular(8.sp),
                       ),
                       child: Text(
                         weekend.toString(),
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontSize: 18.sp,
                         ),
                       ),

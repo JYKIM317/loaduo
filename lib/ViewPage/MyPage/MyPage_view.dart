@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:loaduo/ViewPage/InitialDataPages/InitialData/InitialDataPage_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:loaduo/ViewPage/MyPage/AddMyCharacter/AddMyCharacter_view.dart';
 import 'package:loaduo/ViewPage/MyPage/MyPage_provider.dart';
@@ -19,6 +21,7 @@ import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/RaidForTodayPostView
 import 'package:loaduo/ViewPage/GganbuPage/FindStatic/StaticPostView/StaticPostView_view.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/RaidForTodayPostView/RaidForTodayPostView_viewmodel.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindStatic/StaticPostView/StaticPostView_viewmodel.dart';
+import 'MyChatting/MyChatting_view.dart';
 
 class MyPage extends ConsumerStatefulWidget {
   final String uid;
@@ -69,6 +72,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                   if (isMe)
                     IconButton(
                       onPressed: () {
+                        ref.read(initialDataIndex.notifier).page0();
                         ref.read(myPageInfo.notifier).remove();
                         Navigator.push(
                           context,
@@ -98,30 +102,58 @@ class _MyPageState extends ConsumerState<MyPage> {
               if (isMe)
                 Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ApiDataPage(),
-                        ),
-                      );
-                    },
-                    icon: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.fromLTRB(6.w, 4.h, 6.w, 4.h),
-                      decoration: BoxDecoration(
-                        color: Colors.deepOrange[400],
-                        borderRadius: BorderRadius.circular(8.sp),
-                      ),
-                      child: Text(
-                        'API Key',
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                          color: Colors.white,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MyChatting(),
+                            ),
+                          );
+                        },
+                        icon: Icon(
+                          CustomIcon.chat,
+                          size: 24.sp,
+                          color: Colors.blueAccent[100],
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          progress?.show();
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          String? _apikey = prefs.getString('apikey');
+                          progress?.dismiss();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  ApiDataPage(initialApiKey: _apikey),
+                            ),
+                          );
+                        },
+                        icon: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.fromLTRB(6.w, 4.h, 6.w, 4.h),
+                          decoration: BoxDecoration(
+                            color: Colors.deepOrange[400],
+                            borderRadius: BorderRadius.circular(8.sp),
+                          ),
+                          child: Text(
+                            'API Key',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
             ],
@@ -175,32 +207,46 @@ class _MyPageState extends ConsumerState<MyPage> {
                             children: <TextSpan>[
                               TextSpan(
                                 style: TextStyle(color: Colors.deepOrange[400]),
-                                text: infoData['concern'].toString(), //concern
+                                text: infoData['concern']
+                                    .toString()
+                                    .replaceAll(RegExp(r'\[|\]'), ''), //concern
                               ),
                               const TextSpan(
-                                text: ' 깐부를 찾고 있어요\n저는 레이드를 ',
+                                text: ' 를 해요',
                               ),
-                              TextSpan(
-                                style: TextStyle(color: Colors.deepOrange[400]),
-                                text: infoData['raidDistribute']
-                                    .toString(), //raidDistribute
-                              ),
-                              const TextSpan(
-                                text: '\n레이드는 주로 ',
-                              ),
-                              TextSpan(
-                                style: TextStyle(color: Colors.deepOrange[400]),
-                                text: infoData['raidSkill']
-                                    .toString(), //raidSkill
-                              ),
-                              const TextSpan(
-                                text: ' 파티를 가는 편이고\n레이드를 돌 때는 ',
-                              ),
-                              TextSpan(
-                                style: TextStyle(color: Colors.deepOrange[400]),
-                                text:
-                                    infoData['raidMood'].toString(), //raidMood
-                              ),
+                              if (infoData['concern'].contains('레이드'))
+                                const TextSpan(
+                                  text: '\n저는 레이드를 ',
+                                ),
+                              if (infoData['concern'].contains('레이드'))
+                                TextSpan(
+                                  style:
+                                      TextStyle(color: Colors.deepOrange[400]),
+                                  text: infoData['raidDistribute']
+                                      .toString(), //raidDistribute
+                                ),
+                              if (infoData['concern'].contains('레이드'))
+                                const TextSpan(
+                                  text: '\n레이드는 주로 ',
+                                ),
+                              if (infoData['concern'].contains('레이드'))
+                                TextSpan(
+                                  style:
+                                      TextStyle(color: Colors.deepOrange[400]),
+                                  text: infoData['raidSkill']
+                                      .toString(), //raidSkill
+                                ),
+                              if (infoData['concern'].contains('레이드'))
+                                const TextSpan(
+                                  text: ' 파티를 가는 편이고\n레이드를 돌 때는 ',
+                                ),
+                              if (infoData['concern'].contains('레이드'))
+                                TextSpan(
+                                  style:
+                                      TextStyle(color: Colors.deepOrange[400]),
+                                  text: infoData['raidMood']
+                                      .toString(), //raidMood
+                                ),
                               const TextSpan(
                                 text: '\n평일은 ',
                               ),
@@ -453,6 +499,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                   alignment: Alignment.center,
                   children: [
                     Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           height: 20.h,

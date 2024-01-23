@@ -16,6 +16,10 @@
 ///         Author:    Dave Gandy
 ///         License:   SIL ()
 ///         Homepage:  http://fortawesome.github.com/Font-Awesome/
+/// * Entypo, Copyright (C) 2012 by Daniel Bruce
+///         Author:    Daniel Bruce
+///         License:   SIL (http://scripts.sil.org/OFL)
+///         Homepage:  http://www.entypo.com
 /// * Font Awesome 5, Copyright (C) 2016 by Dave Gandy
 ///         Author:    Dave Gandy
 ///         License:   SIL (https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt)
@@ -71,6 +75,8 @@ class CustomIcon {
       IconData(0xe813, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData slayer =
       IconData(0xe814, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData chat =
+      IconData(0xe815, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData deadeye =
       IconData(0xe816, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData gunslinger =

@@ -27,7 +27,7 @@ class CreateGganbuPostViewModel {
       'weekdayPlaytime': weekdayPlaytime,
       'weekendPlaytime': weekendPlaytime,
       'detail': detail,
-      'postTime': now.millisecondsSinceEpoch,
+      'postTime': now,
     };
     await CreateGganbuPostModel().uploadData(data: postInfo);
     await CreateGganbuPostModel().linkGganbuPost(uid: uid);

@@ -69,7 +69,7 @@ void main() async {
 
   //Firebase auth login
   await FirebaseAuth.instance.signInAnonymously();
-  _apikey = prefs.getString('apikey') ?? 'null';
+  _apikey = prefs.getString('apikey');
   _initialdata = prefs.getBool('initialdata') ?? false;
   String? userUID = FirebaseAuth.instance.currentUser!.uid;
 
@@ -138,7 +138,7 @@ class RoutePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final myApiKey = ref.watch(apikey);
     final myInitialDataExist = ref.watch(initialDataExist);
-    if (myApiKey == 'null') {
+    if (myApiKey == null) {
       return ApiDataPage();
     }
     if (!myInitialDataExist) {
@@ -149,14 +149,14 @@ class RoutePage extends ConsumerWidget {
 }
 
 /////////////////////////////////////
-final apikey = StateNotifierProvider<ApikeyNotifier, String>((ref) {
+final apikey = StateNotifierProvider<ApikeyNotifier, String?>((ref) {
   return ApikeyNotifier();
 });
 
-class ApikeyNotifier extends StateNotifier<String> {
-  ApikeyNotifier() : super(_apikey ?? 'null');
+class ApikeyNotifier extends StateNotifier<String?> {
+  ApikeyNotifier() : super(_apikey);
 
-  update(String apikey) {
+  update(String? apikey) {
     //final SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.setString('apikey', apikey);
     state = apikey;

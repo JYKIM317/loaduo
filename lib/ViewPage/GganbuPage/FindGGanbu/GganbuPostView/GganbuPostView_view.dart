@@ -149,11 +149,11 @@ class _GganbuPostViewState extends State<GganbuPostView> {
                 progress: progress,
                 post: post,
               ),
-              SizedBox(),
+              Conversation(),
               PostSetting(
                 progress: progress,
                 address: post['uid'],
-              )
+              ),
             ][pageIndex]),
           ],
         ),

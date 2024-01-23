@@ -8,7 +8,8 @@ import 'package:loaduo/ShowToastMsg.dart';
 import 'ApiDataPage_viewmodel.dart';
 
 class ApiDataPage extends ConsumerStatefulWidget {
-  const ApiDataPage({super.key});
+  final String? initialApiKey;
+  const ApiDataPage({super.key, this.initialApiKey});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ApiDataPageState();
@@ -17,6 +18,15 @@ class ApiDataPage extends ConsumerStatefulWidget {
 class _ApiDataPageState extends ConsumerState<ApiDataPage> {
   TextEditingController apiTextController = TextEditingController();
   String? apiText;
+
+  @override
+  void initState() {
+    if (widget.initialApiKey != null) {
+      apiText = widget.initialApiKey;
+      apiTextController.text = widget.initialApiKey!;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +130,7 @@ class _ApiDataPageState extends ConsumerState<ApiDataPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        ref.read(apikey.notifier).update('nulll');
+                        ref.read(apikey.notifier).update('null');
                         final myInitialDataExist = ref.watch(initialDataExist);
                         Navigator.pushAndRemoveUntil(
                           context,

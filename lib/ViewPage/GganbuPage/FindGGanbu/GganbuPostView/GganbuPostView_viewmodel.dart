@@ -23,4 +23,46 @@ class GganbuPostViewModel {
   Future<void> removePostData({required String address}) async {
     await GganbuPostModel().removePost(address: address);
   }
+
+  Future<void> existConversation({
+    required String address,
+    required String uid,
+    required Map<String, dynamic> post,
+    required Map<String, dynamic> requestUserData,
+  }) async {
+    await GganbuPostModel()
+        .getChattingExist(
+      address: address,
+      uid: uid,
+    )
+        .then((exist) async {
+      if (exist) {
+        return;
+      } else {
+        bool hostCredential =
+                post['representCharacter'] == post['credentialCharacter'],
+            guestCredential = requestUserData['representCharacter'] ==
+                (requestUserData['credentialCharacter'] ?? '');
+
+        Map<String, dynamic> info = {
+          address: {
+            'name': post['representCharacter'],
+            'server': post['representServer'],
+            'credential': hostCredential,
+          },
+          uid: {
+            'name': requestUserData['representCharacter'],
+            'server': requestUserData['representServer'],
+            'credential': guestCredential,
+          },
+        };
+        await GganbuPostModel().setChattingAddress(
+          address: address,
+          uid: uid,
+          info: info,
+        );
+        return;
+      }
+    });
+  }
 }

@@ -7,6 +7,10 @@ final initialDataIndex =
 
 class InitialIndexNotifier extends StateNotifier<int> {
   InitialIndexNotifier() : super(0);
+  page0() {
+    state = 0;
+  }
+
   page1() {
     state = 1;
   }
