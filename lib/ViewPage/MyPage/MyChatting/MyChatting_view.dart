@@ -4,6 +4,7 @@ import 'package:loaduo/CustomIcon.dart';
 import 'MyChatting_viewmodel.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loaduo/ViewPage/ChattingPage/ChattingPage_view.dart';
 
 class MyChatting extends StatefulWidget {
   const MyChatting({super.key});
@@ -60,123 +61,152 @@ class _MyChattingState extends State<MyChatting> {
                     padding: EdgeInsets.fromLTRB(16.w, 34.h, 16.w, 44.h),
                     itemCount: chatAddressList.length,
                     itemBuilder: (BuildContext ctx, int idx) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const SizedBox();
-                      }
-                      return Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 8.h),
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 21, 24, 29),
-                          borderRadius: BorderRadius.circular(8.sp),
-                        ),
-                        child: StreamBuilder(
-                          stream: FirebaseDatabase.instance
-                              .ref(chatAddressList[idx])
-                              .onValue,
-                          builder:
-                              (BuildContext context2, AsyncSnapshot snapshot2) {
-                            Map<dynamic, dynamic>? chat = snapshot2
-                                .data?.snapshot.value as Map<dynamic, dynamic>?;
-                            DateTime? lastTextDate;
-                            String lastTextTime = '채팅 내역이 없습니다.';
-                            late String? uid;
-                            if (chat == null) {
-                              return const SizedBox();
-                            } else {
-                              uid = chat['info']
-                                  .keys
-                                  .where((element) => element != userUID)
-                                  .first;
+                      return StreamBuilder(
+                        stream: FirebaseDatabase.instance
+                            .ref(chatAddressList[idx])
+                            .onValue,
+                        builder:
+                            (BuildContext context2, AsyncSnapshot snapshot2) {
+                          Map<dynamic, dynamic>? chat = snapshot2
+                              .data?.snapshot.value as Map<dynamic, dynamic>?;
+                          DateTime? lastTextDate;
+                          String lastTextTime = '채팅 내역이 없습니다.';
+                          late String? uid;
+                          if (chat == null) {
+                            return SizedBox(
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 18.sp),
+                                  SizedBox(height: 60.h),
+                                ],
+                              ),
+                            );
+                          } else {
+                            uid = chat['info']
+                                .keys
+                                .where((element) => element != userUID)
+                                .first;
+                          }
+                          List<MapEntry<dynamic, dynamic>>? chatToList;
+                          if (chat['Messages'] != null) {
+                            chatToList = chat['Messages'].entries.toList();
+                            chatToList!.sort(
+                              (a, b) {
+                                DateTime timeA =
+                                    DateTime.parse(a.value['sendTime']);
+                                DateTime timeB =
+                                    DateTime.parse(b.value['sendTime']);
+                                return timeA.compareTo(timeB);
+                              },
+                            );
+                            lastTextDate = DateTime.parse(
+                                chatToList.last.value['sendTime']);
+                            DateTime now = DateTime.now();
+                            final difference = now.difference(lastTextDate);
+                            if (difference.inDays >= 1) {
+                              lastTextTime =
+                                  '${lastTextDate.month}월 ${lastTextDate.day}일';
+                            } else if (difference.inDays == 0) {
+                              lastTextTime =
+                                  '${lastTextDate.hour >= 12 ? '오후' : '오전'} ${lastTextDate.hour > 12 ? lastTextDate.hour - 12 : lastTextDate.hour}시 ${lastTextDate.minute.toString().padLeft(2, '0')}분';
                             }
-                            if (chat['Messages'] != null) {
-                              lastTextDate = DateTime.parse(
-                                  chat['Messages'].values.last['sendTime']);
-                              DateTime now = DateTime.now();
-                              final difference = lastTextDate.difference(now);
-                              if (difference.inDays >= 1) {
-                                lastTextTime =
-                                    '${lastTextDate.month}월 ${lastTextDate.day}일';
-                              } else if (difference.inDays == 0) {
-                                lastTextTime =
-                                    '${lastTextDate.hour.toString().padLeft(2, '0')}:${lastTextDate.minute.toString().padLeft(2, '0')}';
-                              }
-                            }
-                            return Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text.rich(
-                                      TextSpan(
-                                        text: chat['info'][uid]['name'],
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 18.sp,
+                          }
+                          String address = '${chatAddressList[idx]}/Messages';
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChattingPage(
+                                    info: chat['info'][userUID],
+                                    otherPersonInfo: chat['info'][uid],
+                                    address: address,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 8.h),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 21, 24, 29),
+                                borderRadius: BorderRadius.circular(8.sp),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text.rich(
+                                        TextSpan(
+                                          text: chat['info'][uid]['name'],
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 18.sp,
+                                          ),
+                                          children: <TextSpan>[
+                                            const TextSpan(text: ' '),
+                                            TextSpan(
+                                              text: chat['info'][uid]['server'],
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12.sp,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        children: <TextSpan>[
-                                          const TextSpan(text: ' '),
-                                          TextSpan(
-                                            text: chat['info'][uid]['server'],
+                                      ),
+                                      SizedBox(width: 4.w),
+                                      Icon(
+                                        chat['info'][uid]['credential']
+                                            ? CustomIcon.check
+                                            : CustomIcon.checkEmpty,
+                                        size: 21.sp,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 4.h),
+                                  SizedBox(
+                                    height: 60.h,
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: SizedBox(
+                                            child: Text(
+                                              chat['Messages'] != null
+                                                  ? chatToList!
+                                                      .last.value['text']
+                                                  : '',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 18.sp,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: double.infinity,
+                                          alignment: Alignment.bottomCenter,
+                                          child: Text(
+                                            lastTextTime,
                                             style: TextStyle(
                                               color: Colors.grey,
                                               fontSize: 12.sp,
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(width: 4.w),
-                                    Icon(
-                                      chat['info'][uid]['credential']
-                                          ? CustomIcon.check
-                                          : CustomIcon.checkEmpty,
-                                      size: 21.sp,
-                                      color: Colors.white,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 4.h),
-                                SizedBox(
-                                  height: 60.h,
-                                  child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: SizedBox(
-                                          child: Text(
-                                            chat['Messages'] != null
-                                                ? chat['Messages']
-                                                    .values
-                                                    .last['text']
-                                                : '',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 18.sp,
-                                            ),
-                                          ),
                                         ),
-                                      ),
-                                      Container(
-                                        height: double.infinity,
-                                        alignment: Alignment.bottomCenter,
-                                        child: Text(
-                                          lastTextTime,
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 12.sp,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       );
                     },
                     separatorBuilder: (ctx, idx) {

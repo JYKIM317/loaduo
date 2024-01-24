@@ -8,6 +8,7 @@ import 'GganbuPostView_viewmodel.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loaduo/ViewPage/MyPage/MyPage_viewmodel.dart';
+import 'package:loaduo/ViewPage/ChattingPage/ChattingPage_view.dart';
 
 class Detail extends StatelessWidget {
   final Map<String, dynamic> post;
@@ -293,9 +294,19 @@ class _ConversationState extends State<Conversation> {
               final uid = chatList.keys.elementAt(idx);
               DateTime? lastTextDate;
               String lastTextTime = '채팅 내역이 없습니다.';
+
+              List<MapEntry<dynamic, dynamic>>? chatToList;
               if (chatList[uid]['Messages'] != null) {
-                lastTextDate = DateTime.parse(
-                    chatList[uid]['Messages'].values.last['sendTime']);
+                chatToList = chatList[uid]['Messages'].entries.toList();
+                chatToList!.sort(
+                  (a, b) {
+                    DateTime timeA = DateTime.parse(a.value['sendTime']);
+                    DateTime timeB = DateTime.parse(b.value['sendTime']);
+                    return timeA.compareTo(timeB);
+                  },
+                );
+                lastTextDate =
+                    DateTime.parse(chatToList.last.value['sendTime']);
                 DateTime now = DateTime.now();
                 final difference = lastTextDate.difference(now);
                 if (difference.inDays >= 1) {
@@ -305,84 +316,99 @@ class _ConversationState extends State<Conversation> {
                       '${lastTextDate.hour.toString().padLeft(2, '0')}:${lastTextDate.minute.toString().padLeft(2, '0')}';
                 }
               }
-              return Container(
-                width: double.infinity,
-                padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 8.h),
-                decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 21, 24, 29),
-                  borderRadius: BorderRadius.circular(8.sp),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text.rich(
-                          TextSpan(
-                            text: chatList[uid]['info'][uid]['name'],
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.sp,
+              String address = 'Chatting/Gganbu/$userUID/$uid/Messages';
+              return InkWell(
+                onTap: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChattingPage(
+                        info: chatList[uid]['info'][userUID],
+                        otherPersonInfo: chatList[uid]['info'][uid],
+                        address: address,
+                      ),
+                    ),
+                  ).then((value) {
+                    setState(() {});
+                  });
+                },
+                child: Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 8.h),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 21, 24, 29),
+                    borderRadius: BorderRadius.circular(8.sp),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              text: chatList[uid]['info'][uid]['name'],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18.sp,
+                              ),
+                              children: <TextSpan>[
+                                const TextSpan(text: ' '),
+                                TextSpan(
+                                  text: chatList[uid]['info'][uid]['server'],
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                              ],
                             ),
-                            children: <TextSpan>[
-                              const TextSpan(text: ' '),
-                              TextSpan(
-                                text: chatList[uid]['info'][uid]['server'],
+                          ),
+                          SizedBox(width: 4.w),
+                          Icon(
+                            chatList[uid]['info'][uid]['credential']
+                                ? CustomIcon.check
+                                : CustomIcon.checkEmpty,
+                            size: 21.sp,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 4.h),
+                      SizedBox(
+                        height: 60.h,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                child: Text(
+                                  chatList[uid]['Messages'] != null
+                                      ? chatToList!.last.value['text']
+                                      : '',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18.sp,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: double.infinity,
+                              alignment: Alignment.bottomCenter,
+                              child: Text(
+                                lastTextTime,
                                 style: TextStyle(
                                   color: Colors.grey,
                                   fontSize: 12.sp,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 4.w),
-                        Icon(
-                          chatList[uid]['info'][uid]['credential']
-                              ? CustomIcon.check
-                              : CustomIcon.checkEmpty,
-                          size: 21.sp,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 4.h),
-                    SizedBox(
-                      height: 60.h,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: SizedBox(
-                              child: Text(
-                                chatList[uid]['Messages'] != null
-                                    ? chatList[uid]['Messages']
-                                        .values
-                                        .last['text']
-                                    : '',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18.sp,
-                                ),
-                              ),
                             ),
-                          ),
-                          Container(
-                            height: double.infinity,
-                            alignment: Alignment.bottomCenter,
-                            child: Text(
-                              lastTextTime,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               );
             },
