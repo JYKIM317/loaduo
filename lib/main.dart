@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,9 +14,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'ViewPage/InitialDataPages/ApiData/ApiDataPage_view.dart';
 import 'ViewPage/InitialDataPages/InitialData/InitialDataPage_view.dart';
 import 'ViewPage/MainPage/MainPage_view.dart';
+import 'Policy/TermsOfService_view.dart';
 
 String? _apikey;
-bool? _initialdata;
+bool? _initialdata, _policyAgree;
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -101,6 +103,18 @@ void main() async {
     }
   }
 
+  try {
+    final policyDB = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userUID)
+        .collection('Policy')
+        .doc('TermsOfService')
+        .get();
+    _policyAgree = policyDB.get('assent') ?? false;
+  } catch (e) {
+    _policyAgree = false;
+  }
+
   runApp(
     const ProviderScope(
       child: ScreenUtilInit(
@@ -136,8 +150,13 @@ class RoutePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final myPolicyAssent = ref.watch(policyAgree);
     final myApiKey = ref.watch(apikey);
     final myInitialDataExist = ref.watch(initialDataExist);
+
+    if (!myPolicyAssent) {
+      return ProgressHUD(child: TermsOfService());
+    }
     if (myApiKey == null) {
       return ApiDataPage();
     }
@@ -180,6 +199,22 @@ class InitialDataNotifier extends StateNotifier<bool> {
   existFalse() {
     //final SharedPreferences prefs = await SharedPreferences.getInstance();
     //await prefs.setString('apikey', apikey);
+    state = false;
+  }
+}
+
+final policyAgree = StateNotifierProvider<PolicyNotifier, bool>((ref) {
+  return PolicyNotifier();
+});
+
+class PolicyNotifier extends StateNotifier<bool> {
+  PolicyNotifier() : super(_policyAgree ?? false);
+
+  setTrue() {
+    state = true;
+  }
+
+  setFalse() {
     state = false;
   }
 }
