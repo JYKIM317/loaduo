@@ -1,3 +1,5 @@
+import 'package:firebase_database/firebase_database.dart';
+
 import 'GganbuPostView_model.dart';
 
 class GganbuPostViewModel {
@@ -48,11 +50,13 @@ class GganbuPostViewModel {
           address: {
             'name': post['representCharacter'],
             'server': post['representServer'],
+            'uid': address,
             'credential': hostCredential,
           },
           uid: {
             'name': requestUserData['representCharacter'],
             'server': requestUserData['representServer'],
+            'uid': uid,
             'credential': guestCredential,
           },
         };
@@ -64,5 +68,18 @@ class GganbuPostViewModel {
         return;
       }
     });
+  }
+
+  Future<Map<dynamic, dynamic>> getChattingInfo({
+    required String address,
+    required String uid,
+  }) async {
+    DataSnapshot chattingInfo = await GganbuPostModel().getChattingData(
+      address: address,
+      uid: uid,
+    );
+    Map<dynamic, dynamic> userInfos =
+        chattingInfo.value as Map<dynamic, dynamic>;
+    return userInfos;
   }
 }

@@ -133,7 +133,6 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
         splashColor: Colors.transparent,
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:loaduo/ShowToastMsg.dart';
 import 'GuildPostView_viewmodel.dart';
+import 'package:loaduo/Report/Report_view.dart';
 
 class GuildPostView extends StatefulWidget {
   final Map<String, dynamic> post;
@@ -41,6 +42,32 @@ class _GuildPostViewState extends State<GuildPostView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (post['uid'] != userUID)
+                      Container(
+                        alignment: Alignment.centerRight,
+                        padding: EdgeInsets.only(right: 16.w),
+                        child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProgressHUD(
+                                  child: Report(
+                                    postType: 'GuildPost',
+                                    uid: post['uid'],
+                                    address: post['uid'],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          icon: Icon(
+                            Icons.error,
+                            color: Colors.red[400],
+                            size: 24.sp,
+                          ),
+                        ),
+                      ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Text(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'StaticPostView_widget.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:loaduo/Report/Report_view.dart';
 
 class StaticPostView extends StatefulWidget {
   final Map<String, dynamic> post;
@@ -35,6 +36,32 @@ class _StaticPostViewState extends State<StaticPostView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 44.h),
+            if (post['raidLeader'] != userUID)
+              Container(
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.only(right: 16.w),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProgressHUD(
+                          child: Report(
+                            postType: 'StaticPost',
+                            uid: post['raidLeader'],
+                            address: post['address'],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.error,
+                    color: Colors.red[400],
+                    size: 24.sp,
+                  ),
+                ),
+              ),
             Container(
               width: double.infinity,
               height: 100.h,

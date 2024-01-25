@@ -61,6 +61,17 @@ class GganbuPostModel {
     return exist;
   }
 
+  Future<DataSnapshot> getChattingData({
+    required String address,
+    required String uid,
+  }) async {
+    DataSnapshot chattingInfo = await FirebaseDatabase.instance
+        .ref('Chatting/Gganbu/$address/$uid/info')
+        .get();
+
+    return chattingInfo;
+  }
+
   Future<void> setChattingAddress({
     required String address,
     required String uid,

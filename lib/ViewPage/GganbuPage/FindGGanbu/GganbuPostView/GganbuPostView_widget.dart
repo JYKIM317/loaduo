@@ -217,15 +217,34 @@ class Detail extends StatelessWidget {
                   if (userData['representServer'] != null &&
                       userData['representCharacter'] != null) {
                     //대화 있는지 검사 후 없으면 생성하는 로직
-                    await GganbuPostViewModel().existConversation(
+                    await GganbuPostViewModel()
+                        .existConversation(
                       address: post['uid'],
                       uid: userUID,
                       post: post,
                       requestUserData: userData,
-                    );
-                    progress?.dismiss();
-                    //navigator to chatroom
-                    //Navigator.push(context, MaterialPageRoute(builder: ((context) => Chatting()));
+                    )
+                        .then((_) async {
+                      await GganbuPostViewModel()
+                          .getChattingInfo(
+                        address: post['uid'],
+                        uid: userUID,
+                      )
+                          .then((info) {
+                        progress?.dismiss();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChattingPage(
+                              address:
+                                  'Chatting/Gganbu/${post['uid']}/$userUID/Messages',
+                              info: info[userUID],
+                              otherPersonInfo: info[post['uid']],
+                            ),
+                          ),
+                        );
+                      });
+                    });
                   } else {
                     progress?.dismiss();
                     showToast('내 원정대를 등록해주세요\n[내 정보] - [내 원정대 등록하기]');

@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_progress_hud/flutter_progress_hud.dart';
+import 'package:loaduo/Report/Report_view.dart';
 
 class ChattingPage extends StatefulWidget {
   final Map<dynamic, dynamic> info;
@@ -46,6 +48,29 @@ class _ChattingPageState extends State<ChattingPage> {
             centerTitle: false,
             backgroundColor: Colors.white,
             titleSpacing: 2,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProgressHUD(
+                        child: Report(
+                          postType: 'Chatting',
+                          uid: otherPersonInfo['uid'],
+                          address: address,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.error,
+                  color: Colors.red[400],
+                  size: 24.sp,
+                ),
+              )
+            ],
             title: Row(
               children: [
                 Text.rich(
