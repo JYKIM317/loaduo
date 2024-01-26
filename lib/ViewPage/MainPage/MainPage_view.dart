@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:loaduo/ViewPage/MainPage/BlockPage/BlockPage_view.dart';
+import 'package:loaduo/ViewPage/MainPage/MainPage_viewmodel.dart';
 import 'MainPage_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
@@ -36,6 +38,12 @@ class _MainPageState extends ConsumerState<MainPage> {
     } on PlatformException {
       debugPrint('PlatformException was thrown');
     }
+  }
+
+  Future<bool> isBlockUser() async {
+    String? userUID = FirebaseAuth.instance.currentUser!.uid;
+    bool blockState = await MainPageViewModel().blockUserCheck(uid: userUID);
+    return blockState;
   }
 
   @override
@@ -74,7 +82,20 @@ class _MainPageState extends ConsumerState<MainPage> {
       });
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => initPlugin());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await initPlugin();
+      await isBlockUser().then((blockState) {
+        if (blockState) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => BlockUserPage()),
+            (route) => false,
+          );
+        } else {
+          return;
+        }
+      });
+    });
 
     super.initState();
   }
