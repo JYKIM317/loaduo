@@ -199,6 +199,8 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                         MaterialPageRoute(
                           builder: (context) =>
                               MyExpedition(expedition: expedition),
+                          settings: const RouteSettings(
+                              name: 'CreateRaidForToday_SelectCharacter'),
                         ),
                       ).then((character) async {
                         if (character != null) {
@@ -218,6 +220,8 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                                 child: CreateRaidForTodayPost(
                                     myCharacter: character),
                               ),
+                              settings: const RouteSettings(
+                                  name: 'CreateRaidForTodayPost'),
                             ),
                           ).then((value) {
                             bool create = value ?? false;
@@ -464,6 +468,8 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                                                 post: newestPost,
                                               ),
                                             ),
+                                            settings: const RouteSettings(
+                                                name: 'RaidForTodayPostView'),
                                           ),
                                         ).then((value) {
                                           bool leave = value ?? false;

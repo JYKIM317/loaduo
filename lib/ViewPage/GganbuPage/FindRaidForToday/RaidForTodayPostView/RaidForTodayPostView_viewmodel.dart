@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'RaidForTodayPostView_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
+import 'package:loaduo/gaEventLog.dart';
 
 class RaidForTodayPostViewModel {
   Future<List<Map<String, dynamic>>> getJoinCharacterList(
@@ -48,6 +49,7 @@ class RaidForTodayPostViewModel {
       } catch (e) {
         print(e);
       }
+      await gaEvent(eventName: 'Request_RaidForToday', eventParams: data);
     });
   }
 
@@ -75,6 +77,7 @@ class RaidForTodayPostViewModel {
         } catch (e) {
           print(e);
         }
+        await gaEvent(eventName: 'Denied_Request_RaidForToday');
       }
     });
   }
@@ -110,6 +113,9 @@ class RaidForTodayPostViewModel {
           } catch (e) {
             print(e);
           }
+          await gaEvent(
+              eventName: 'Accept_Request_RaidForToday',
+              eventParams: characterData);
         });
       } else {
         result = false;

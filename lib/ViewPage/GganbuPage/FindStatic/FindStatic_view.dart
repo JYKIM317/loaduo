@@ -137,6 +137,8 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                         MaterialPageRoute(
                           builder: (context) =>
                               MyExpedition(expedition: expedition),
+                          settings: const RouteSettings(
+                              name: 'CreateStatic_SelectCharacter'),
                         ),
                       ).then((character) async {
                         if (character != null) {
@@ -155,6 +157,8 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                               builder: (context) => ProgressHUD(
                                   child:
                                       CreateStaticPost(myCharacter: character)),
+                              settings:
+                                  const RouteSettings(name: 'CreateStaticPost'),
                             ),
                           ).then((value) {
                             bool create = value ?? false;
@@ -315,6 +319,8 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                                                 post: newestPost,
                                               ),
                                             ),
+                                            settings: const RouteSettings(
+                                                name: 'StaticPostView'),
                                           ),
                                         ).then((value) {
                                           bool leave = value ?? false;

@@ -236,8 +236,10 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: ((context) =>
-                          ProgressHUD(child: CreateGganbuPost(myInfo: value))),
+                      builder: (context) => ProgressHUD(
+                        child: CreateGganbuPost(myInfo: value),
+                      ),
+                      settings: RouteSettings(name: 'CreateGganbuPost'),
                     ),
                   ).then((value) {
                     bool create = value ?? false;
@@ -509,6 +511,8 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                                             post: post,
                                           ),
                                         ),
+                                        settings: const RouteSettings(
+                                            name: 'GganbuPostView'),
                                       ),
                                     );
                                   },

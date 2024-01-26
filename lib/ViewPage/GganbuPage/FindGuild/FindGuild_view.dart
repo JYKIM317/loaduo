@@ -172,13 +172,15 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                         await Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: ((context) => ProgressHUD(
-                                  child: CreateGuildPost(
-                                    guildName: character['body']
-                                        ['ArmoryProfile']['GuildName'],
-                                    server: value['representServer'],
-                                  ),
-                                )),
+                            builder: (context) => ProgressHUD(
+                              child: CreateGuildPost(
+                                guildName: character['body']['ArmoryProfile']
+                                    ['GuildName'],
+                                server: value['representServer'],
+                              ),
+                            ),
+                            settings:
+                                const RouteSettings(name: 'CreateGuildPost'),
                           ),
                         ).then((value) {
                           bool create = value ?? false;
@@ -412,6 +414,8 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                                             post: post,
                                           ),
                                         ),
+                                        settings: const RouteSettings(
+                                            name: 'GuildPostView'),
                                       ),
                                     ).then((value) {
                                       bool leave = value ?? false;

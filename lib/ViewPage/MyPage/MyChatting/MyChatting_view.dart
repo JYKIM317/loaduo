@@ -122,6 +122,8 @@ class _MyChattingState extends State<MyChatting> {
                                     otherPersonInfo: chat['info'][uid],
                                     address: address,
                                   ),
+                                  settings:
+                                      const RouteSettings(name: 'ChattingPage'),
                                 ),
                               );
                             },

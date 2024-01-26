@@ -241,6 +241,7 @@ class Detail extends StatelessWidget {
                               info: info[userUID],
                               otherPersonInfo: info[post['uid']],
                             ),
+                            settings: const RouteSettings(name: 'ChattingPage'),
                           ),
                         );
                       });
@@ -327,7 +328,7 @@ class _ConversationState extends State<Conversation> {
                 lastTextDate =
                     DateTime.parse(chatToList.last.value['sendTime']);
                 DateTime now = DateTime.now();
-                final difference = lastTextDate.difference(now);
+                final difference = now.difference(lastTextDate);
                 if (difference.inDays >= 1) {
                   lastTextTime = '${lastTextDate.month}월 ${lastTextDate.day}일';
                 } else if (difference.inDays == 0) {
@@ -346,6 +347,7 @@ class _ConversationState extends State<Conversation> {
                         otherPersonInfo: chatList[uid]['info'][uid],
                         address: address,
                       ),
+                      settings: const RouteSettings(name: 'ChattingPage'),
                     ),
                   ).then((value) {
                     setState(() {});

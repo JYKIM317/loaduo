@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 import 'ViewPage/InitialDataPages/ApiData/ApiDataPage_view.dart';
 import 'ViewPage/InitialDataPages/InitialData/InitialDataPage_view.dart';
@@ -128,6 +129,8 @@ void main() async {
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
+  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
@@ -139,6 +142,9 @@ class MyApp extends ConsumerWidget {
         useMaterial3: true,
         fontFamily: 'Jamsil_M',
       ),
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
       home: RoutePage(),
     );
   }

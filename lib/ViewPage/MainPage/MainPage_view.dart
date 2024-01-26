@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 import 'MainPage_provider.dart';
@@ -10,6 +11,7 @@ import 'package:loaduo/CustomIcon.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({super.key});
@@ -20,6 +22,21 @@ class MainPage extends ConsumerStatefulWidget {
 
 class _MainPageState extends ConsumerState<MainPage> {
   String? userUID = FirebaseAuth.instance.currentUser!.uid;
+
+  Future<void> initPlugin() async {
+    try {
+      final TrackingStatus status =
+          await AppTrackingTransparency.trackingAuthorizationStatus;
+      if (status == TrackingStatus.notDetermined) {
+        await Future.delayed(const Duration(milliseconds: 200));
+        final TrackingStatus status =
+            await AppTrackingTransparency.requestTrackingAuthorization();
+        debugPrint(status.toString());
+      }
+    } on PlatformException {
+      debugPrint('PlatformException was thrown');
+    }
+  }
 
   @override
   void initState() {
@@ -47,9 +64,7 @@ class _MainPageState extends ConsumerState<MainPage> {
         );
       }
 
-      FirebaseMessaging.onMessageOpenedApp.listen((message) {
-        print(message);
-      });
+      FirebaseMessaging.onMessageOpenedApp.listen((message) {});
 
       FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) async {
         await FirebaseFirestore.instance
@@ -58,6 +73,9 @@ class _MainPageState extends ConsumerState<MainPage> {
             .update({'fcmToken': fcmToken});
       });
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => initPlugin());
+
     super.initState();
   }
 
