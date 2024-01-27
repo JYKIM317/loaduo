@@ -105,7 +105,13 @@ class _ApiDataPageState extends ConsumerState<ApiDataPage> {
                           ref.read(apikey.notifier).update(apiText!);
                           await ApiDataViewModel().saveAPI(apiText!);
                           Future.microtask(() {
-                            Navigator.pop(context);
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RoutePage(),
+                              ),
+                              (route) => false,
+                            );
                           });
                         } else {
                           showToast('API Key를 입력해주세요');
@@ -131,13 +137,10 @@ class _ApiDataPageState extends ConsumerState<ApiDataPage> {
                     TextButton(
                       onPressed: () {
                         ref.read(apikey.notifier).update('null');
-                        final myInitialDataExist = ref.watch(initialDataExist);
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => myInitialDataExist
-                                ? RoutePage()
-                                : InitialDataPage(),
+                            builder: (context) => RoutePage(),
                           ),
                           (route) => false,
                         );

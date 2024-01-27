@@ -30,7 +30,7 @@ class _MainPageState extends ConsumerState<MainPage> {
       final TrackingStatus status =
           await AppTrackingTransparency.trackingAuthorizationStatus;
       if (status == TrackingStatus.notDetermined) {
-        await Future.delayed(const Duration(milliseconds: 200));
+        await Future.delayed(const Duration(milliseconds: 1000));
         final TrackingStatus status =
             await AppTrackingTransparency.requestTrackingAuthorization();
         debugPrint(status.toString());
@@ -83,7 +83,7 @@ class _MainPageState extends ConsumerState<MainPage> {
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await initPlugin();
+      initPlugin();
       await isBlockUser().then((blockState) {
         if (blockState) {
           Navigator.pushAndRemoveUntil(
@@ -91,8 +91,6 @@ class _MainPageState extends ConsumerState<MainPage> {
             MaterialPageRoute(builder: (context) => BlockUserPage()),
             (route) => false,
           );
-        } else {
-          return;
         }
       });
     });

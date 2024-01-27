@@ -212,7 +212,7 @@ class _MyPageState extends ConsumerState<MyPage> {
                                     .replaceAll(RegExp(r'\[|\]'), ''), //concern
                               ),
                               const TextSpan(
-                                text: ' 를 해요',
+                                text: ' (을)를 해요',
                               ),
                               if (infoData['concern'].contains('레이드'))
                                 const TextSpan(
