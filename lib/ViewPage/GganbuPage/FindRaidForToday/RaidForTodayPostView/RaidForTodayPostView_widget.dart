@@ -924,6 +924,7 @@ class RequestUser extends StatelessWidget {
                                   .removeRequest(
                                 address: address,
                                 uid: character['uid'],
+                                accept: result,
                               )
                                   .then((_) {
                                 progress?.dismiss();

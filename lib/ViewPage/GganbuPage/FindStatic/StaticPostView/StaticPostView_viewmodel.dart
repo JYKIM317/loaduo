@@ -57,15 +57,17 @@ class StaticPostViewModel {
   Future<void> removeRequest({
     required String address,
     required String uid,
+    bool? accept,
   }) async {
     String? userUID = FirebaseAuth.instance.currentUser!.uid;
+    accept ??= false;
     await StaticPostModel()
         .requestCharacterRemove(
       address: address,
       uid: uid,
     )
         .then((_) async {
-      if (uid != userUID) {
+      if (uid != userUID && !accept!) {
         try {
           await http.post(
             Uri.parse(
@@ -165,7 +167,11 @@ class StaticPostViewModel {
   Future<Map<String, dynamic>> getPostData({required String address}) async {
     Map<String, dynamic> postData = {};
     await StaticPostModel().getPostDoc(address: address).then((post) {
-      postData = post.data() as Map<String, dynamic>;
+      Map<String, dynamic>? readyPostData =
+          post.data() as Map<String, dynamic>?;
+      if (readyPostData != null && readyPostData.isNotEmpty) {
+        postData = readyPostData;
+      }
     });
     return postData;
   }
