@@ -23,12 +23,12 @@ class _CreateGganbuPostState extends State<CreateGganbuPost> {
   @override
   void initState() {
     character = widget.myInfo['representCharacter'];
-    credential = widget.myInfo['credentialCharacter'];
+    credential = widget.myInfo['credentialCharacter'] ?? '';
     server = widget.myInfo['representServer'];
-    skill = widget.myInfo['raidSkill'];
-    mood = widget.myInfo['raidMood'];
-    distribute = widget.myInfo['raidDistribute'];
-    concern = widget.myInfo['concern'];
+    skill = widget.myInfo['raidSkill'] ?? '';
+    mood = widget.myInfo['raidMood'] ?? '';
+    distribute = widget.myInfo['raidDistribute'] ?? '';
+    concern = widget.myInfo['concern'] ?? [];
     weekdayTime = widget.myInfo['weekdayPlaytime'];
     weekendTime = widget.myInfo['weekendPlaytime'];
     super.initState();
@@ -385,7 +385,7 @@ class _CreateGganbuPostState extends State<CreateGganbuPost> {
                         .uploadPost(
                       uid: userUID,
                       representCharacter: character!,
-                      credentialCharacter: credential ?? '',
+                      credentialCharacter: credential!,
                       representServer: server!,
                       raidSkill: skill!,
                       raidMood: mood!,
