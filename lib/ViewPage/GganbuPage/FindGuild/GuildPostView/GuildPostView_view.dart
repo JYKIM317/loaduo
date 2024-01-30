@@ -29,6 +29,43 @@ class _GuildPostViewState extends State<GuildPostView> {
   Widget build(BuildContext context) {
     final progress = ProgressHUD.of(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 21, 24, 29).withOpacity(0.9),
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.white,
+          ),
+        ),
+        actions: [
+          if (post['uid'] != userUID)
+            Padding(
+              padding: EdgeInsets.only(right: 16.w),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProgressHUD(
+                        child: Report(
+                          postType: 'GuildPost',
+                          uid: post['uid'],
+                          address: post['uid'],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.error,
+                  color: Colors.red[400],
+                  size: 24.sp,
+                ),
+              ),
+            ),
+        ],
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -38,36 +75,10 @@ class _GuildPostViewState extends State<GuildPostView> {
             Expanded(
               child: SingleChildScrollView(
                 physics: const ClampingScrollPhysics(),
-                padding: EdgeInsets.only(top: 74.h, bottom: 34.h),
+                padding: EdgeInsets.only(top: 20.h, bottom: 34.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (post['uid'] != userUID)
-                      Container(
-                        alignment: Alignment.centerRight,
-                        padding: EdgeInsets.only(right: 16.w),
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ProgressHUD(
-                                  child: Report(
-                                    postType: 'GuildPost',
-                                    uid: post['uid'],
-                                    address: post['uid'],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.error,
-                            color: Colors.red[400],
-                            size: 24.sp,
-                          ),
-                        ),
-                      ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       child: Text(

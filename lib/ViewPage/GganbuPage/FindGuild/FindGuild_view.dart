@@ -221,6 +221,13 @@ class _FindGuildState extends ConsumerState<FindGuild> {
             size: 36.sp,
           ),
         ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          ),
+        ),
         body: Stack(
           children: [
             Container(
@@ -231,7 +238,7 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 16.w, top: 84.h),
+                    padding: EdgeInsets.only(left: 16.w),
                     child: Text(
                       '길드',
                       style: TextStyle(

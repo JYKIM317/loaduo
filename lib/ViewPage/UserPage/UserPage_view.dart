@@ -25,6 +25,13 @@ class UserPage extends ConsumerWidget {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        ),
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -32,11 +39,10 @@ class UserPage extends ConsumerWidget {
         child: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
           child: Padding(
-            padding: EdgeInsets.only(top: 44.h, bottom: 44.h),
+            padding: EdgeInsets.only(top: 20.h, bottom: 44.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 40.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.w),
                   child: Container(

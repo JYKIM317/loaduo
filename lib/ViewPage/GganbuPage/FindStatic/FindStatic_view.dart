@@ -194,6 +194,13 @@ class _FindStaticState extends ConsumerState<FindStatic> {
             size: 36.sp,
           ),
         ),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          ),
+        ),
         body: Stack(
           children: [
             Container(
@@ -204,7 +211,7 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(left: 16.w, top: 84.h),
+                    padding: EdgeInsets.only(left: 16.w),
                     child: Text(
                       '고정공대',
                       style: TextStyle(

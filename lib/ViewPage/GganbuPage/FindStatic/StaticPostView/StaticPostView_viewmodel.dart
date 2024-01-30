@@ -3,7 +3,6 @@ import 'StaticPostView_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:loaduo/gaEventLog.dart';
 
 class StaticPostViewModel {
   Future<List<Map<String, dynamic>>> getJoinCharacterList(
@@ -49,7 +48,6 @@ class StaticPostViewModel {
       } catch (e) {
         print(e);
       }
-      await gaEvent(eventName: 'Request_Static', eventParams: data);
     });
     ;
   }
@@ -80,7 +78,6 @@ class StaticPostViewModel {
         } catch (e) {
           print(e);
         }
-        await gaEvent(eventName: 'Denied_Request_Static');
       }
     });
   }
@@ -114,8 +111,6 @@ class StaticPostViewModel {
           } catch (e) {
             print(e);
           }
-          await gaEvent(
-              eventName: 'Accept_Request_Static', eventParams: characterData);
         });
       } else {
         result = false;

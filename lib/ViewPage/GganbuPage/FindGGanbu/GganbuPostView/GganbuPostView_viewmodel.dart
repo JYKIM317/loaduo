@@ -1,5 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:loaduo/gaEventLog.dart';
 import 'GganbuPostView_model.dart';
 
 class GganbuPostViewModel {
@@ -64,10 +63,6 @@ class GganbuPostViewModel {
           address: address,
           uid: uid,
           info: info,
-        );
-        await gaEvent(
-          eventName: 'Create_Chatting',
-          eventParams: info,
         );
         return;
       }

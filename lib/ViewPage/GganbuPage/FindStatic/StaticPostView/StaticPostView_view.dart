@@ -28,6 +28,42 @@ class _StaticPostViewState extends State<StaticPostView> {
   Widget build(BuildContext context) {
     final progress = ProgressHUD.of(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 21, 24, 29).withOpacity(0.9),
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.white,
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 16.w),
+            child: IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProgressHUD(
+                      child: Report(
+                        postType: 'StaticPost',
+                        uid: post['raidLeader'],
+                        address: post['address'],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(
+                Icons.error,
+                color: Colors.red[400],
+                size: 24.sp,
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -35,59 +71,34 @@ class _StaticPostViewState extends State<StaticPostView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 44.h),
+            SizedBox(height: 20.h),
             if (post['raidLeader'] != userUID)
               Container(
-                alignment: Alignment.centerRight,
-                padding: EdgeInsets.only(right: 16.w),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProgressHUD(
-                          child: Report(
-                            postType: 'StaticPost',
-                            uid: post['raidLeader'],
-                            address: post['address'],
-                          ),
-                        ),
+                width: double.infinity,
+                height: 100.h,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${post['raid']}  파티 모집',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24.sp,
                       ),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.error,
-                    color: Colors.red[400],
-                    size: 24.sp,
-                  ),
+                    ),
+                    Text(
+                      '#고정공대',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            Container(
-              width: double.infinity,
-              height: 100.h,
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '${post['raid']}  파티 모집',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.sp,
-                    ),
-                  ),
-                  Text(
-                    '#고정공대',
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 18.sp,
-                    ),
-                  ),
-                ],
-              ),
-            ),
             if (post['raidLeader'] == userUID)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
