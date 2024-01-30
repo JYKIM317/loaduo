@@ -19,6 +19,7 @@ import 'Policy/TermsOfService_view.dart';
 
 String? _apikey;
 bool? _initialdata, _policyAgree;
+List<String>? _blockedUserList;
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -74,6 +75,7 @@ void main() async {
   await FirebaseAuth.instance.signInAnonymously();
   _apikey = prefs.getString('apikey');
   _initialdata = prefs.getBool('initialdata') ?? false;
+  _blockedUserList = prefs.getStringList('blockedUserList') ?? [];
   String? userUID = FirebaseAuth.instance.currentUser!.uid;
 
   initializeNotification();
@@ -100,6 +102,7 @@ void main() async {
       await FirebaseFirestore.instance.collection('Users').doc(userUID).set({
         'lastLogin': DateTime.now(),
         'fcmToken': fcmToken,
+        'credentialCharacter': '',
       });
     }
   }
@@ -221,5 +224,18 @@ class PolicyNotifier extends StateNotifier<bool> {
 
   setFalse() {
     state = false;
+  }
+}
+
+final blockedUserList =
+    StateNotifierProvider<BlockedUserNotifier, List<String>>((ref) {
+  return BlockedUserNotifier();
+});
+
+class BlockedUserNotifier extends StateNotifier<List<String>> {
+  BlockedUserNotifier() : super(_blockedUserList ?? []);
+
+  add(String user) {
+    state.add(user);
   }
 }

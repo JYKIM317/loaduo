@@ -22,6 +22,7 @@ import 'package:loaduo/ViewPage/GganbuPage/FindStatic/StaticPostView/StaticPostV
 import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/RaidForTodayPostView/RaidForTodayPostView_viewmodel.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindStatic/StaticPostView/StaticPostView_viewmodel.dart';
 import 'MyChatting/MyChatting_view.dart';
+import 'package:loaduo/main.dart';
 
 class MyPage extends ConsumerStatefulWidget {
   final String uid;
@@ -53,7 +54,14 @@ class _MyPageState extends ConsumerState<MyPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 40.h),
+          if (!isMe)
+            IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+              ),
+            ),
+          SizedBox(height: 20.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -99,6 +107,43 @@ class _MyPageState extends ConsumerState<MyPage> {
                     ),
                 ],
               ),
+              if (!isMe)
+                Padding(
+                  padding: EdgeInsets.only(right: 16.w),
+                  child: IconButton(
+                    onPressed: () async {
+                      progress?.show();
+                      MyPageViewModel()
+                          .addBlockedUser(uid: widget.uid)
+                          .then((result) {
+                        progress?.dismiss();
+                        if (result) {
+                          ref.read(blockedUserList.notifier).add(widget.uid);
+                          showToast('대상을 차단하셨습니다.');
+                        } else {
+                          showToast('이미 차단 된 대상입니다.');
+                        }
+                      });
+                    },
+                    icon: Row(
+                      children: [
+                        Text(
+                          '차단하기',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                        SizedBox(width: 4.w),
+                        Icon(
+                          Icons.block,
+                          size: 24.sp,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               if (isMe)
                 Padding(
                   padding: EdgeInsets.only(right: 16.w),

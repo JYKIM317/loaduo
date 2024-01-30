@@ -74,4 +74,25 @@ class MyPageViewModel {
     Map<String, dynamic> userPost = await MyPageModel().getUserPostData(uid);
     return userPost;
   }
+
+  Future<bool> addBlockedUser({
+    required String uid,
+  }) async {
+    late bool result;
+
+    await MyPageModel().getMyBlockUser().then((blockList) async {
+      List<String> blockedUserList = blockList;
+      if (blockedUserList.contains(uid)) {
+        result = false;
+      } else {
+        blockedUserList.add(uid);
+        await MyPageModel().updateMyBlockUser(
+          blockUserList: blockedUserList,
+        );
+        result = true;
+      }
+    });
+
+    return result;
+  }
 }

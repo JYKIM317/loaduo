@@ -2,6 +2,7 @@ import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loaduo/main.dart';
 import 'StaticPostView_viewmodel.dart';
 import 'package:loaduo/lostark_info.dart';
 import 'package:loaduo/CustomIcon.dart';
@@ -13,8 +14,9 @@ import 'package:loaduo/ViewPage/UserPage/UserPage_view.dart';
 import 'package:loaduo/ViewPage/MyPage/MyPage_view.dart';
 import 'package:loaduo/ViewPage/SearchUserPage/SearchUserPage_viewmodel.dart';
 import 'package:loaduo/ViewPage/InitialDataPages/ApiData/ApiDataPage_view.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class JoinUser extends StatelessWidget {
+class JoinUser extends ConsumerWidget {
   final String address, leader, raid, detail;
   final progress;
   const JoinUser({
@@ -27,8 +29,9 @@ class JoinUser extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     String? userUID = FirebaseAuth.instance.currentUser!.uid;
+    List<String> blockedUsers = ref.watch(blockedUserList);
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
@@ -322,7 +325,11 @@ class JoinUser extends StatelessWidget {
                                                     color: character['uid'] ==
                                                             userUID
                                                         ? Colors.amber
-                                                        : Colors.white,
+                                                        : blockedUsers.contains(
+                                                                character[
+                                                                    'uid'])
+                                                            ? Colors.red
+                                                            : Colors.white,
                                                     fontSize: 18.sp,
                                                   ),
                                                 ),

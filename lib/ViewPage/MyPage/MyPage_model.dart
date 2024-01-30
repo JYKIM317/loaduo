@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyPageModel {
   Future<dynamic> getUserData(String uid) async {
@@ -89,5 +90,19 @@ class MyPageModel {
       }
     });
     return postDatas;
+  }
+
+  Future<List<String>> getMyBlockUser() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> blockedUserList = prefs.getStringList('blockedUserList') ?? [];
+
+    return blockedUserList;
+  }
+
+  Future<void> updateMyBlockUser({
+    required List<String> blockUserList,
+  }) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('blockedUserList', blockUserList);
   }
 }
