@@ -678,15 +678,36 @@ class UserPage extends ConsumerWidget {
                             String transcendence = 'Element_008',
                                 elixir = 'Element_009';
 
+                            String? advanced;
+                            if (equipArmor.contains(
+                                    userData['ArmoryEquipment'][idx]['Type']) ||
+                                userData['ArmoryEquipment'][idx]['Type'] ==
+                                    '무기') {
+                              if (tooltip['Element_005'] != null &&
+                                  tooltip['Element_005']['type'] ==
+                                      'SingleTextBox') {
+                                advanced = 'Element_005';
+                              }
+                            }
+
                             if (tooltip['Element_007'] != null) {
                               transcendence =
                                   tooltip['Element_007']['type'] == 'Progress'
-                                      ? 'Element_008'
-                                      : 'Element_007';
+                                      ? (advanced == null
+                                          ? 'Element_008'
+                                          : 'Element_009')
+                                      : (advanced == null
+                                          ? 'Element_007'
+                                          : 'Element_008');
                               elixir =
                                   tooltip['Element_007']['type'] == 'Progress'
-                                      ? 'Element_009'
-                                      : 'Element_008';
+                                      ? (advanced == null
+                                          ? 'Element_009'
+                                          : 'Element_010')
+                                      : (advanced == null
+                                          ? 'Element_008'
+                                          : 'Element_009');
+
                               if (tooltip[transcendence]['type'] ==
                                       'IndentStringGroup' &&
                                   tooltip[transcendence]['value']['Element_000']
@@ -928,34 +949,59 @@ class UserPage extends ConsumerWidget {
                                                     ),
                                                 ],
                                               ),
-                                            //초월
-                                            if (equipArmor.contains(
-                                                    userData['ArmoryEquipment']
+
+                                            Row(
+                                              children: [
+                                                //초월
+                                                if (equipArmor.contains(userData[
+                                                            'ArmoryEquipment']
                                                         [idx]['Type']) &&
-                                                tooltip[transcendence] !=
-                                                    null &&
-                                                tooltip[transcendence]
-                                                        ['type'] ==
-                                                    'IndentStringGroup' &&
-                                                tooltip[transcendence]['value']
+                                                    tooltip[transcendence] !=
+                                                        null &&
+                                                    tooltip[transcendence]
+                                                            ['type'] ==
+                                                        'IndentStringGroup' &&
+                                                    tooltip[transcendence]
+                                                                        [
+                                                                        'value']
+                                                                    [
+                                                                    'Element_000']
+                                                                ['contentStr']
+                                                            ['Element_005'] !=
+                                                        null)
+                                                  Text(
+                                                    tooltip[transcendence]
+                                                                    ['value']
                                                                 ['Element_000']
-                                                            ['contentStr']
-                                                        ['Element_005'] !=
-                                                    null)
-                                              Text(
-                                                tooltip[transcendence]['value']
-                                                            ['Element_000']
-                                                        ['topStr']
-                                                    .replaceAllMapped(
-                                                        RegExp(r'<[^>]*>'),
-                                                        (match) {
-                                                  return '';
-                                                }),
-                                                style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 14.sp,
-                                                ),
-                                              ),
+                                                            ['topStr']
+                                                        .replaceAllMapped(
+                                                            RegExp(r'<[^>]*>'),
+                                                            (match) {
+                                                      return '';
+                                                    }),
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 14.sp,
+                                                    ),
+                                                  ),
+                                                SizedBox(width: 4.w),
+                                                //상급 재련
+                                                if (advanced != null)
+                                                  Text(
+                                                    tooltip[advanced]['value']
+                                                        .toString()
+                                                        .replaceAll(
+                                                            RegExp(r'<[^>]*>'),
+                                                            ''),
+                                                    style: TextStyle(
+                                                      color: Colors
+                                                          .deepOrange[400],
+                                                      fontSize: 14.sp,
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
+
                                             //악세서리
                                             if (equipAccessory.contains(
                                                     userData['ArmoryEquipment']
