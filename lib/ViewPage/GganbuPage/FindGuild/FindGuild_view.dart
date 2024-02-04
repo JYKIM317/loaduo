@@ -223,6 +223,7 @@ class _FindGuildState extends ConsumerState<FindGuild> {
         ),
         appBar: AppBar(
           backgroundColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.arrow_back_ios_new_rounded),

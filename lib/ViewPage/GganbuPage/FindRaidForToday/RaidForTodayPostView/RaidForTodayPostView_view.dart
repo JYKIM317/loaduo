@@ -32,6 +32,7 @@ class _RaidForTodayPostViewState extends State<RaidForTodayPostView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 21, 24, 29).withOpacity(0.9),
+        surfaceTintColor: Colors.transparent,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(

@@ -177,7 +177,7 @@ class RaidForTodayPostModel {
             .doc(address)
             .update({'raidLeader': leftUserUid}).then((_) async {
           try {
-            await http.post(
+            http.post(
               Uri.parse(
                   'https://asia-northeast3-loaduo.cloudfunctions.net/pushFcm/leader'),
               headers: <String, String>{

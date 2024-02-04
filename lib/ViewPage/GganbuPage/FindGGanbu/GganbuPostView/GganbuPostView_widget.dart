@@ -1,11 +1,9 @@
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
-import 'package:loaduo/CustomIcon.dart';
 import 'package:loaduo/ShowToastMsg.dart';
 import 'package:loaduo/ViewPage/MyPage/MyPage_view.dart';
 import 'GganbuPostView_viewmodel.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loaduo/ViewPage/MyPage/MyPage_viewmodel.dart';
 import 'package:loaduo/ViewPage/ChattingPage/ChattingPage_view.dart';
@@ -240,6 +238,7 @@ class Detail extends StatelessWidget {
                                   'Chatting/Gganbu/${post['uid']}/$userUID/Messages',
                               info: info[userUID],
                               otherPersonInfo: info[post['uid']],
+                              members: info.keys.toList(),
                             ),
                             settings: const RouteSettings(name: 'ChattingPage'),
                           ),
@@ -269,175 +268,6 @@ class Detail extends StatelessWidget {
               ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-class Conversation extends StatefulWidget {
-  const Conversation({super.key});
-
-  @override
-  State<Conversation> createState() => _ConversationState();
-}
-
-class _ConversationState extends State<Conversation> {
-  @override
-  Widget build(BuildContext context) {
-    String? userUID = FirebaseAuth.instance.currentUser!.uid;
-    return SizedBox(
-      width: double.infinity,
-      height: double.infinity,
-      child: FutureBuilder(
-        future: FirebaseDatabase.instance.ref('Chatting/Gganbu/$userUID').get(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return SizedBox(
-              height: 246.h,
-              child: Center(
-                  child: CircularProgressIndicator(
-                color: Colors.deepOrange[400],
-              )),
-            );
-          }
-          Map<dynamic, dynamic>? chatList =
-              snapshot.data.value as Map<dynamic, dynamic>?;
-          if (chatList == null) {
-            return const SizedBox();
-          }
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const ClampingScrollPhysics(),
-            padding: EdgeInsets.fromLTRB(16.w, 34.h, 16.w, 44.h),
-            itemCount: chatList.length,
-            itemBuilder: (BuildContext ctx, int idx) {
-              final uid = chatList.keys.elementAt(idx);
-              DateTime? lastTextDate;
-              String lastTextTime = '채팅 내역이 없습니다.';
-
-              List<MapEntry<dynamic, dynamic>>? chatToList;
-              if (chatList[uid]['Messages'] != null) {
-                chatToList = chatList[uid]['Messages'].entries.toList();
-                chatToList!.sort(
-                  (a, b) {
-                    DateTime timeA = DateTime.parse(a.value['sendTime']);
-                    DateTime timeB = DateTime.parse(b.value['sendTime']);
-                    return timeA.compareTo(timeB);
-                  },
-                );
-                lastTextDate =
-                    DateTime.parse(chatToList.last.value['sendTime']);
-                DateTime now = DateTime.now();
-                final difference = now.difference(lastTextDate);
-                if (difference.inDays >= 1) {
-                  lastTextTime = '${lastTextDate.month}월 ${lastTextDate.day}일';
-                } else if (difference.inDays == 0) {
-                  lastTextTime =
-                      '${lastTextDate.hour.toString().padLeft(2, '0')}:${lastTextDate.minute.toString().padLeft(2, '0')}';
-                }
-              }
-              String address = 'Chatting/Gganbu/$userUID/$uid/Messages';
-              return InkWell(
-                onTap: () async {
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChattingPage(
-                        info: chatList[uid]['info'][userUID],
-                        otherPersonInfo: chatList[uid]['info'][uid],
-                        address: address,
-                      ),
-                      settings: const RouteSettings(name: 'ChattingPage'),
-                    ),
-                  ).then((value) {
-                    setState(() {});
-                  });
-                },
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 8.h),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 21, 24, 29),
-                    borderRadius: BorderRadius.circular(8.sp),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              text: chatList[uid]['info'][uid]['name'],
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.sp,
-                              ),
-                              children: <TextSpan>[
-                                const TextSpan(text: ' '),
-                                TextSpan(
-                                  text: chatList[uid]['info'][uid]['server'],
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 12.sp,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(width: 4.w),
-                          Icon(
-                            chatList[uid]['info'][uid]['credential']
-                                ? CustomIcon.check
-                                : CustomIcon.checkEmpty,
-                            size: 21.sp,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 4.h),
-                      SizedBox(
-                        height: 60.h,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                child: Text(
-                                  chatList[uid]['Messages'] != null
-                                      ? chatToList!.last.value['text']
-                                      : '',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18.sp,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: double.infinity,
-                              alignment: Alignment.bottomCenter,
-                              child: Text(
-                                lastTextTime,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-            separatorBuilder: (ctx, idx) {
-              return SizedBox(height: 10.h);
-            },
-          );
-        },
       ),
     );
   }

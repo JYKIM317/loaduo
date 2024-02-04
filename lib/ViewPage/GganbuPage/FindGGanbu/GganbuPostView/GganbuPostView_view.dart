@@ -30,6 +30,7 @@ class _GganbuPostViewState extends State<GganbuPostView> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 21, 24, 29).withOpacity(0.9),
+        surfaceTintColor: Colors.transparent,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
           icon: const Icon(
@@ -135,39 +136,6 @@ class _GganbuPostViewState extends State<GganbuPostView> {
                             ],
                           ),
                           child: Text(
-                            '대화',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 4.w),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () {
-                          if (pageIndex != 2) {
-                            setState(() {
-                              pageIndex = 2;
-                            });
-                          }
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(vertical: 8.h),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 21, 24, 29),
-                            boxShadow: [
-                              if (pageIndex == 2)
-                                BoxShadow(
-                                  color: Colors.deepOrange[400]!,
-                                  blurRadius: 4,
-                                ),
-                            ],
-                          ),
-                          child: Text(
                             '모집 설정',
                             style: TextStyle(
                               color: Colors.white,
@@ -187,7 +155,6 @@ class _GganbuPostViewState extends State<GganbuPostView> {
                 progress: progress,
                 post: post,
               ),
-              Conversation(),
               PostSetting(
                 progress: progress,
                 address: post['uid'],

@@ -21,7 +21,6 @@ import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/RaidForTodayPostView
 import 'package:loaduo/ViewPage/GganbuPage/FindStatic/StaticPostView/StaticPostView_view.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindRaidForToday/RaidForTodayPostView/RaidForTodayPostView_viewmodel.dart';
 import 'package:loaduo/ViewPage/GganbuPage/FindStatic/StaticPostView/StaticPostView_viewmodel.dart';
-import 'MyChatting/MyChatting_view.dart';
 import 'package:loaduo/main.dart';
 
 class MyPage extends ConsumerStatefulWidget {
@@ -147,58 +146,36 @@ class _MyPageState extends ConsumerState<MyPage> {
               if (isMe)
                 Padding(
                   padding: EdgeInsets.only(right: 16.w),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MyChatting(),
-                            ),
-                          );
-                        },
-                        icon: Icon(
-                          CustomIcon.chat,
-                          size: 24.sp,
-                          color: Colors.blueAccent[100],
+                  child: IconButton(
+                    onPressed: () async {
+                      progress?.show();
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      String? _apikey = prefs.getString('apikey');
+                      progress?.dismiss();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ApiDataPage(initialApiKey: _apikey),
+                        ),
+                      );
+                    },
+                    icon: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.fromLTRB(6.w, 4.h, 6.w, 4.h),
+                      decoration: BoxDecoration(
+                        color: Colors.deepOrange[400],
+                        borderRadius: BorderRadius.circular(8.sp),
+                      ),
+                      child: Text(
+                        'API Key',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: Colors.white,
                         ),
                       ),
-                      SizedBox(
-                        width: 4.w,
-                      ),
-                      IconButton(
-                        onPressed: () async {
-                          progress?.show();
-                          final SharedPreferences prefs =
-                              await SharedPreferences.getInstance();
-                          String? _apikey = prefs.getString('apikey');
-                          progress?.dismiss();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ApiDataPage(initialApiKey: _apikey),
-                            ),
-                          );
-                        },
-                        icon: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.fromLTRB(6.w, 4.h, 6.w, 4.h),
-                          decoration: BoxDecoration(
-                            color: Colors.deepOrange[400],
-                            borderRadius: BorderRadius.circular(8.sp),
-                          ),
-                          child: Text(
-                            'API Key',
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
             ],

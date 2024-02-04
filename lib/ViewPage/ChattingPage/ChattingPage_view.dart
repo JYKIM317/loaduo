@@ -6,16 +6,21 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:loaduo/Report/Report_view.dart';
+import 'package:loaduo/ViewPage/MyPage/MyPage_view.dart';
 
 class ChattingPage extends StatefulWidget {
   final Map<dynamic, dynamic> info;
   final Map<dynamic, dynamic> otherPersonInfo;
+  final Map<dynamic, dynamic>? raidInfo;
+  final List<dynamic> members;
   final String address;
   const ChattingPage({
     super.key,
     required this.info,
     required this.address,
     required this.otherPersonInfo,
+    required this.members,
+    this.raidInfo,
   });
 
   @override
@@ -29,16 +34,19 @@ class _ChattingPageState extends State<ChattingPage> {
   late String address;
   late Map<dynamic, dynamic> info;
   late Map<dynamic, dynamic> otherPersonInfo;
+  late Map<dynamic, dynamic>? raidInfo;
   @override
   void initState() {
     address = widget.address;
     info = widget.info;
     otherPersonInfo = widget.otherPersonInfo;
+    raidInfo = widget.raidInfo;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    List<dynamic> members = widget.members;
     return Scaffold(
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -47,6 +55,7 @@ class _ChattingPageState extends State<ChattingPage> {
           appBar: AppBar(
             centerTitle: false,
             backgroundColor: Colors.white,
+            surfaceTintColor: Colors.transparent,
             titleSpacing: 2,
             actions: [
               IconButton(
@@ -57,7 +66,9 @@ class _ChattingPageState extends State<ChattingPage> {
                       builder: (context) => ProgressHUD(
                         child: Report(
                           postType: 'Chatting',
-                          uid: otherPersonInfo['uid'],
+                          uid: raidInfo == null
+                              ? otherPersonInfo['uid']
+                              : 'raid',
                           address: address,
                         ),
                       ),
@@ -75,7 +86,9 @@ class _ChattingPageState extends State<ChattingPage> {
               children: [
                 Text.rich(
                   TextSpan(
-                    text: otherPersonInfo['name'],
+                    text: raidInfo != null
+                        ? raidInfo!['title']
+                        : otherPersonInfo['name'],
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18.sp,
@@ -83,7 +96,9 @@ class _ChattingPageState extends State<ChattingPage> {
                     children: <TextSpan>[
                       const TextSpan(text: ' '),
                       TextSpan(
-                        text: otherPersonInfo['server'],
+                        text: raidInfo != null
+                            ? raidInfo!['subtitle']
+                            : otherPersonInfo['server'],
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 12.sp,
@@ -93,13 +108,14 @@ class _ChattingPageState extends State<ChattingPage> {
                   ),
                 ),
                 SizedBox(width: 4.w),
-                Icon(
-                  otherPersonInfo['credential']
-                      ? CustomIcon.check
-                      : CustomIcon.checkEmpty,
-                  size: 21.sp,
-                  color: Colors.black,
-                ),
+                if (raidInfo == null)
+                  Icon(
+                    otherPersonInfo['credential']
+                        ? CustomIcon.check
+                        : CustomIcon.checkEmpty,
+                    size: 21.sp,
+                    color: Colors.black,
+                  ),
               ],
             ),
           ),
@@ -125,8 +141,8 @@ class _ChattingPageState extends State<ChattingPage> {
                     return timeA.compareTo(timeB);
                   },
                 );
-                /* 채팅 300개 이상일 시 최적화를 위해 대화 삭제 */
-                if (chatToList.length >= 300) {
+                /* 채팅 100개 이상일 시 최적화를 위해 대화 삭제 */
+                if (chatToList.length >= 100) {
                   FirebaseDatabase.instance
                       .ref('$address/${chatToList.first.key}')
                       .remove();
@@ -146,6 +162,10 @@ class _ChattingPageState extends State<ChattingPage> {
                     itemCount: chatToList.length,
                     itemBuilder: (BuildContext ctx, int idx) {
                       Map<dynamic, dynamic> thisMessage = chatToList[idx].value;
+                      Map<dynamic, dynamic>? beforeMessage;
+                      if (idx != 0) {
+                        beforeMessage = chatToList[idx - 1].value;
+                      }
                       bool isMe = thisMessage['uid'] == userUID;
                       DateTime sendTime =
                           DateTime.parse(thisMessage['sendTime']);
@@ -154,88 +174,131 @@ class _ChattingPageState extends State<ChattingPage> {
                       return Align(
                         alignment:
                             isMe ? Alignment.centerRight : Alignment.centerLeft,
-                        child: Row(
-                          mainAxisAlignment: isMe
-                              ? MainAxisAlignment.end
-                              : MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                        child: Column(
                           children: [
-                            if (isMe)
-                              Text(
-                                '${afternoon ? '오후' : '오전'} ${sendTime.hour > 12 ? sendTime.hour - 12 : sendTime.hour}:${sendTime.minute.toString().padLeft(2, '0')}',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12.sp,
+                            if (!isMe &&
+                                (beforeMessage == null ||
+                                    thisMessage['uid'] != beforeMessage['uid']))
+                              Container(
+                                width: double.infinity,
+                                alignment: Alignment.bottomLeft,
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ProgressHUD(
+                                          child: Material(
+                                              child: MyPage(
+                                                  uid: thisMessage['uid'])),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.only(bottom: 4.h),
+                                    child: Text.rich(
+                                      TextSpan(
+                                        text: thisMessage['name'],
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 18.sp,
+                                        ),
+                                        children: <TextSpan>[
+                                          if (!isMe)
+                                            TextSpan(
+                                              text: ' ${thisMessage['server']}',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 12.sp,
+                                              ),
+                                            )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            if (isMe) SizedBox(width: 4.w),
-                            Container(
-                              constraints: BoxConstraints(maxWidth: 200.w),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10.w, vertical: 10.h),
-                              decoration: BoxDecoration(
-                                color: isMe
-                                    ? Colors.deepOrange[400]
-                                    : Colors.white,
-                                borderRadius: BorderRadius.circular(8.sp),
-                              ),
-                              child: Text(
-                                thisMessage['text'],
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: isMe ? Colors.white : Colors.black,
-                                  fontSize: 16.sp,
+                            Row(
+                              mainAxisAlignment: isMe
+                                  ? MainAxisAlignment.end
+                                  : MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                if (isMe)
+                                  Text(
+                                    '${afternoon ? '오후' : '오전'} ${sendTime.hour > 12 ? sendTime.hour - 12 : sendTime.hour}:${sendTime.minute.toString().padLeft(2, '0')}',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
+                                if (isMe) SizedBox(width: 4.w),
+                                Container(
+                                  constraints: BoxConstraints(maxWidth: 200.w),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10.w, vertical: 10.h),
+                                  decoration: BoxDecoration(
+                                    color: isMe
+                                        ? Colors.deepOrange[400]
+                                        : Colors.white,
+                                    borderRadius: BorderRadius.circular(8.sp),
+                                  ),
+                                  child: Text(
+                                    thisMessage['text'],
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: isMe ? Colors.white : Colors.black,
+                                      fontSize: 16.sp,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                if (!isMe) SizedBox(width: 4.w),
+                                if (!isMe)
+                                  Text(
+                                    '${afternoon ? '오후' : '오전'} ${sendTime.hour > 12 ? sendTime.hour - 12 : sendTime.hour}:${sendTime.minute.toString().padLeft(2, '0')}',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
+                              ],
                             ),
-                            if (!isMe) SizedBox(width: 4.w),
-                            if (!isMe)
-                              Text(
-                                '${afternoon ? '오후' : '오전'} ${sendTime.hour > 12 ? sendTime.hour - 12 : sendTime.hour}:${sendTime.minute.toString().padLeft(2, '0')}',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
                           ],
                         ),
                       );
                     },
                     separatorBuilder: (ctx, idx) {
-                      if (idx != 0) {
-                        DateTime thisMessageTime =
-                            DateTime.parse(chatToList[idx].value['sendTime']);
-                        DateTime nextMessageTime = DateTime.parse(
-                            chatToList[idx + 1].value['sendTime'] ??
-                                thisMessageTime.toString());
+                      DateTime thisMessageTime =
+                          DateTime.parse(chatToList[idx].value['sendTime']);
+                      DateTime nextMessageTime = DateTime.parse(
+                          chatToList[idx + 1].value['sendTime'] ??
+                              thisMessageTime.toString());
 
-                        if (nextMessageTime
-                                .difference(thisMessageTime)
-                                .inDays >=
-                            1) {
-                          return Align(
-                            alignment: Alignment.center,
-                            child: Container(
-                              margin: EdgeInsets.symmetric(vertical: 20.h),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 50.w, vertical: 10.h),
-                              decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(16.sp),
-                              ),
-                              child: Text(
-                                '${nextMessageTime.year}년 ${nextMessageTime.month}월 ${nextMessageTime.day}일',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14.sp,
-                                ),
+                      if (nextMessageTime.difference(thisMessageTime).inDays >=
+                          1) {
+                        return Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            margin: EdgeInsets.symmetric(vertical: 20.h),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 50.w, vertical: 10.h),
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                              borderRadius: BorderRadius.circular(16.sp),
+                            ),
+                            child: Text(
+                              '${nextMessageTime.year}년 ${nextMessageTime.month}월 ${nextMessageTime.day}일',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14.sp,
                               ),
                             ),
-                          );
-                        }
+                          ),
+                        );
                       }
 
                       return SizedBox(height: 10.h);
@@ -278,6 +341,7 @@ class _ChattingPageState extends State<ChattingPage> {
                       uid: userUID!,
                       text: text,
                       sendTime: now,
+                      members: members,
                     );
                   }
                 },

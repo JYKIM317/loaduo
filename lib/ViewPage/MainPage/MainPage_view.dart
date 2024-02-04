@@ -13,6 +13,7 @@ import 'package:loaduo/CustomIcon.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:loaduo/ViewPage/MyChatting/MyChatting_view.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
 class MainPage extends ConsumerStatefulWidget {
@@ -116,6 +117,7 @@ class _MainPageState extends ConsumerState<MainPage> {
           child: [
             GganbuPage(),
             ProgressHUD(child: SearchUserPage()),
+            MyChatting(),
             ProgressHUD(child: MyPage(uid: userUID!)),
           ][currentIndex],
         ),
@@ -131,7 +133,11 @@ class _MainPageState extends ConsumerState<MainPage> {
             label: '유저 검색',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_pin),
+            icon: Icon(CustomIcon.chat),
+            label: '채팅',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_pin_rounded),
             label: '내 정보',
           ),
         ],

@@ -235,6 +235,48 @@ app.post("/leader", (data, res) => {
   }
 });
 
+app.post("/message", (data, res) => {
+  var sendUID = data.body.call;
+  if (sendUID!=null && sendUID!="" &&
+  sendUID!=undefined) {
+    console.log(sendUID);
+    db.collection("Users").doc(sendUID).get()
+        .then((snapshot) => {
+          var fcmToken = snapshot.data().fcmToken;
+          if (fcmToken!=null && fcmToken!="" &&
+            fcmToken!=undefined) {
+            var payload = {
+              token: fcmToken,
+              notification: {
+                title: data.body.name,
+                body: data.body.text,
+              },
+              apns: {
+                payload: {
+                  aps: {
+                    "category": "Message Category",
+                    "content-available": 1,
+                  },
+                },
+              },
+            };
+            admin.messaging().send(payload)
+                  .then((response) => {
+                    res.status(200).send("ok");
+                    console.log(response);
+                    console.log("message fcm fail");
+                  }).catch((e) => {
+                    res.status(500).send(e);
+                  });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            console.log("message fcm fail");
+          });
+  }
+});
+
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 

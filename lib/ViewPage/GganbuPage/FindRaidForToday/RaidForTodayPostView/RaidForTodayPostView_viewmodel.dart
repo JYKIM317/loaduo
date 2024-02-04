@@ -37,7 +37,7 @@ class RaidForTodayPostViewModel {
     )
         .then((_) async {
       try {
-        await http.post(
+        http.post(
           Uri.parse(
               'https://asia-northeast3-loaduo.cloudfunctions.net/pushFcm/request'),
           headers: <String, String>{
@@ -66,7 +66,7 @@ class RaidForTodayPostViewModel {
         .then((_) async {
       if (uid != userUID && !accept!) {
         try {
-          await http.post(
+          http.post(
             Uri.parse(
                 'https://asia-northeast3-loaduo.cloudfunctions.net/pushFcm/denied'),
             headers: <String, String>{
@@ -101,7 +101,7 @@ class RaidForTodayPostViewModel {
         )
             .then((_) async {
           try {
-            await http.post(
+            http.post(
               Uri.parse(
                   'https://asia-northeast3-loaduo.cloudfunctions.net/pushFcm/accept'),
               headers: <String, String>{
@@ -142,7 +142,7 @@ class RaidForTodayPostViewModel {
               .removeJoinCharacter(address: address, uid: uid)
               .then((_) async {
             try {
-              await http.post(
+              http.post(
                 Uri.parse(
                     'https://asia-northeast3-loaduo.cloudfunctions.net/pushFcm/leave'),
                 headers: <String, String>{

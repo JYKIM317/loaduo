@@ -8,6 +8,7 @@ class MyChattingModel {
         .collection('Users')
         .doc(userUID)
         .collection('Chattings')
+        .orderBy('resentMessageTime', descending: true)
         .get();
 
     return snapshot;

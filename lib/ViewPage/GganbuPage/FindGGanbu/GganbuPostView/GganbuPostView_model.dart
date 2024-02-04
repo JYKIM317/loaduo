@@ -40,12 +40,7 @@ class GganbuPostModel {
           .doc(address)
           .collection('MyPosts')
           .doc('GganbuPost')
-          .delete()
-          .then((_) async {
-        await FirebaseDatabase.instance
-            .ref('Chatting/Gganbu/$address')
-            .remove();
-      });
+          .delete();
     });
   }
 
@@ -85,6 +80,15 @@ class GganbuPostModel {
       await FirebaseFirestore.instance
           .collection('Users')
           .doc(uid)
+          .collection('Chattings')
+          .doc('Chatting Gganbu $address $uid')
+          .set({
+        'resentMessageTime': now,
+        'resentCheckTime': now,
+      });
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(address)
           .collection('Chattings')
           .doc('Chatting Gganbu $address $uid')
           .set({

@@ -38,6 +38,15 @@ class _ReportState extends State<Report> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
+        appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+            ),
+          ),
+        ),
         body: SizedBox(
           width: double.infinity,
           height: double.infinity,
@@ -46,7 +55,7 @@ class _ReportState extends State<Report> {
               Expanded(
                 child: SingleChildScrollView(
                   physics: const ClampingScrollPhysics(),
-                  padding: EdgeInsets.fromLTRB(16.w, 70.h, 16.w, 44.h),
+                  padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 44.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
