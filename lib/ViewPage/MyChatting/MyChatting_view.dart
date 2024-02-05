@@ -44,7 +44,16 @@ class _MyChattingState extends State<MyChatting> {
                 child: FutureBuilder(
                   future: MyChattingViewModel().getMyChatAddressList(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    List<String> chatAddressList = snapshot.data ?? [];
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return SizedBox(
+                        height: 246.h,
+                        child: Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.deepOrange[400],
+                        )),
+                      );
+                    }
+                    List<String> chatAddressList = snapshot.data;
                     return ListView.separated(
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
