@@ -404,7 +404,7 @@ class JoinUser extends ConsumerWidget {
                       showDialog(
                           barrierDismissible: true,
                           context: context,
-                          builder: (BuildContext context) {
+                          builder: (BuildContext context2) {
                             return AlertDialog(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16.sp),
@@ -427,6 +427,7 @@ class JoinUser extends ConsumerWidget {
                                   children: [
                                     InkWell(
                                       onTap: () async {
+                                        Navigator.pop(context2);
                                         progress?.show();
                                         await StaticPostViewModel()
                                             .leaveParty(
@@ -436,7 +437,6 @@ class JoinUser extends ConsumerWidget {
                                             .then((_) {
                                           progress?.dismiss();
                                           Future.microtask(() {
-                                            Navigator.pop(context);
                                             Navigator.pop(context, true);
                                           });
                                         });
