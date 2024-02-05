@@ -10,8 +10,9 @@ class CreateStaticPostViewModel {
     required Map<String, dynamic> myCharacter,
   }) async {
     DateTime now = DateTime.now();
+    //non-empty string and not contain '.' '#' '$' '[' or ']''
     String address =
-        '${raidLeader}_${now.year}.${now.month}.${now.day}_${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+        '${raidLeader}_${now.toString().replaceAll(RegExp(r'\.|\#|\$|\[|\]|\/\/| '), '_')}';
     Map<String, dynamic> postInfo = {
       'raidLeader': raidLeader,
       'raid': raid,
@@ -23,6 +24,16 @@ class CreateStaticPostViewModel {
       'address': address,
     };
 
+    Map<String, dynamic> characterInfo = {
+      'name': myCharacter['CharacterName'],
+      'server': myCharacter['ServerName'],
+      'uid': raidLeader,
+      'credential': myCharacter['credential'],
+    };
+    String title = raid;
+    String subtitle = '고정공대';
+    Map<String, dynamic> chatInfo = {raidLeader: characterInfo};
+
     await CreateStaticPostModel().uploadData(
       data: postInfo,
       character: myCharacter,
@@ -31,6 +42,13 @@ class CreateStaticPostViewModel {
     await CreateStaticPostModel().linkStaticPost(
       uid: raidLeader,
       address: address,
+    );
+    await CreateStaticPostModel().setChattingAddress(
+      address: address,
+      uid: raidLeader,
+      info: chatInfo,
+      title: title,
+      subtitle: subtitle,
     );
   }
 }

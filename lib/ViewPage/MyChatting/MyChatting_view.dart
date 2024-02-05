@@ -85,6 +85,7 @@ class _MyChattingState extends State<MyChatting> {
                               if (chat['raid'] != null) {
                                 title = chat['raid']['title'];
                                 subtitle = chat['raid']['subtitle'];
+                                uid = userUID;
                               } else {
                                 uid = chat['info']
                                     .keys

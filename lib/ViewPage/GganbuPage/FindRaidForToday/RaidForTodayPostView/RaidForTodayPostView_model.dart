@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:firebase_database/firebase_database.dart';
 
 class RaidForTodayPostModel {
   Future<QuerySnapshot> joinChracterData({required String address}) async {
@@ -197,6 +198,8 @@ class RaidForTodayPostModel {
             .collection('RaidForTodayPost')
             .doc(address)
             .delete();
+
+        await removeChattingAddress(address: address);
       }
     });
   }
@@ -222,5 +225,49 @@ class RaidForTodayPostModel {
         .collection('RaidForTodayPost')
         .doc(address)
         .update(postData);
+  }
+
+  Future<void> setUserToChattingAddress({
+    required String address,
+    required String uid,
+    required Map<String, dynamic> info,
+  }) async {
+    await FirebaseDatabase.instance
+        .ref('Chatting/RaidForToday/$address/info')
+        .update({uid: info}).then((_) async {
+      DateTime now = DateTime.now();
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(uid)
+          .collection('Chattings')
+          .doc('Chatting RaidForToday $address')
+          .set({
+        'resentMessageTime': now,
+        'resentCheckTime': now,
+      });
+    });
+  }
+
+  Future<void> removeUserToChattingAddress({
+    required String address,
+    required String uid,
+  }) async {
+    await FirebaseDatabase.instance
+        .ref('Chatting/RaidForToday/$address/info/$uid')
+        .remove()
+        .then((_) async {
+      await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(uid)
+          .collection('Chattings')
+          .doc('Chatting RaidForToday $address')
+          .delete();
+    });
+  }
+
+  Future<void> removeChattingAddress({required String address}) async {
+    await FirebaseDatabase.instance
+        .ref('Chatting/RaidForToday/$address')
+        .remove();
   }
 }

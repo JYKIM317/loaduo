@@ -19,7 +19,12 @@ class MyPageModel {
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         String postName = documentSnapshot.id;
         if (postName == 'GganbuPost') {
-          String postAddress = await documentSnapshot.get('address');
+          String postAddress = '';
+          try {
+            postAddress = await documentSnapshot.get('address');
+          } catch (e) {
+            postAddress = '';
+          }
           await FirebaseFirestore.instance
               .collection('RegisteredPost')
               .doc('FindPages')
@@ -33,7 +38,12 @@ class MyPageModel {
             }
           });
         } else if (postName == 'GuildPost') {
-          String postAddress = await documentSnapshot.get('address');
+          String postAddress = '';
+          try {
+            postAddress = await documentSnapshot.get('address');
+          } catch (e) {
+            postAddress = '';
+          }
           await FirebaseFirestore.instance
               .collection('RegisteredPost')
               .doc('FindPages')
@@ -48,8 +58,13 @@ class MyPageModel {
           });
         } else if (postName == 'RaidForTodayPost') {
           List<Map<String, dynamic>> raidForTodayPostList = [];
-          List<dynamic> postAddress = await documentSnapshot.get('address');
-          for (String eachPostAddress in postAddress) {
+          List<dynamic>? postAddress;
+          try {
+            postAddress = await documentSnapshot.get('address');
+          } catch (e) {
+            postAddress = [];
+          }
+          for (String eachPostAddress in postAddress ?? []) {
             await FirebaseFirestore.instance
                 .collection('RegisteredPost')
                 .doc('FindPages')
@@ -68,8 +83,13 @@ class MyPageModel {
           }
         } else if (postName == 'StaticPost') {
           List<Map<String, dynamic>> staticPostList = [];
-          List<dynamic> postAddress = await documentSnapshot.get('address');
-          for (String eachPostAddress in postAddress) {
+          List<dynamic>? postAddress;
+          try {
+            postAddress = await documentSnapshot.get('address');
+          } catch (e) {
+            postAddress = [];
+          }
+          for (String eachPostAddress in postAddress ?? []) {
             await FirebaseFirestore.instance
                 .collection('RegisteredPost')
                 .doc('FindPages')

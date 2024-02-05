@@ -99,6 +99,19 @@ class StaticPostViewModel {
           characterData: characterData,
         )
             .then((_) async {
+          Map<String, dynamic> characterInfo = {
+            'name': characterData['CharacterName'],
+            'server': characterData['ServerName'],
+            'uid': characterData['uid'],
+            'credential': characterData['credential'],
+          };
+
+          await StaticPostModel().setUserToChattingAddress(
+            address: address,
+            uid: characterData['uid'],
+            info: characterInfo,
+          );
+
           try {
             http.post(
               Uri.parse(
@@ -135,8 +148,14 @@ class StaticPostViewModel {
               .then((_) async {
             await StaticPostModel()
                 .removeJoinCharacter(address: address, uid: uid);
+
+            await StaticPostModel()
+                .removeUserToChattingAddress(address: address, uid: uid);
           });
         } else {
+          await StaticPostModel()
+              .removeUserToChattingAddress(address: address, uid: uid);
+
           await StaticPostModel()
               .removeJoinCharacter(address: address, uid: uid)
               .then((_) async {

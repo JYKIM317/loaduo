@@ -100,6 +100,19 @@ class RaidForTodayPostViewModel {
           characterData: characterData,
         )
             .then((_) async {
+          Map<String, dynamic> characterInfo = {
+            'name': characterData['CharacterName'],
+            'server': characterData['ServerName'],
+            'uid': characterData['uid'],
+            'credential': characterData['credential'],
+          };
+
+          await RaidForTodayPostModel().setUserToChattingAddress(
+            address: address,
+            uid: characterData['uid'],
+            info: characterInfo,
+          );
+
           try {
             http.post(
               Uri.parse(
@@ -136,11 +149,17 @@ class RaidForTodayPostViewModel {
               .then((_) async {
             await RaidForTodayPostModel()
                 .removeJoinCharacter(address: address, uid: uid);
+
+            await RaidForTodayPostModel()
+                .removeUserToChattingAddress(address: address, uid: uid);
           });
         } else {
           await RaidForTodayPostModel()
               .removeJoinCharacter(address: address, uid: uid)
               .then((_) async {
+            await RaidForTodayPostModel()
+                .removeUserToChattingAddress(address: address, uid: uid);
+
             try {
               http.post(
                 Uri.parse(
