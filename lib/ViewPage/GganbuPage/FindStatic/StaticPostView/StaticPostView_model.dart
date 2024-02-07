@@ -49,17 +49,7 @@ class StaticPostModel {
           .doc('FindPages')
           .collection('StaticPost')
           .doc(address)
-          .get()
-          .then((existData) async {
-        if (existData.exists) {
-          await FirebaseFirestore.instance
-              .collection('RegisteredPost')
-              .doc('FindPages')
-              .collection('StaticPost')
-              .doc(address)
-              .update({'raidPlayer': FieldValue.increment(1)}).then(
-                  (_) async {});
-        }
+          .update({'raidPlayer': FieldValue.increment(1)}).then((_) async {
         await FirebaseFirestore.instance
             .collection('Users')
             .doc(characterData['uid'])
