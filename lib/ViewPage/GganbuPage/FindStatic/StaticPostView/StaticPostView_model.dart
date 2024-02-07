@@ -64,7 +64,7 @@ class StaticPostModel {
               .doc(characterData['uid'])
               .collection('MyPosts')
               .doc('StaticPost')
-              .update({'address': post});
+              .set({'address': post});
         });
       });
     });

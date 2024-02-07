@@ -64,7 +64,7 @@ class RaidForTodayPostModel {
               .doc(characterData['uid'])
               .collection('MyPosts')
               .doc('RaidForTodayPost')
-              .update({'address': post});
+              .set({'address': post});
         });
       });
     });
