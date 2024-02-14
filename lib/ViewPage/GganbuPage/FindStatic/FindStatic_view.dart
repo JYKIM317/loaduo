@@ -413,27 +413,24 @@ class _FindStaticState extends ConsumerState<FindStatic> {
                                                 ],
                                               ),
                                             ),
-                                            Row(
-                                              children: [
-                                                Text.rich(
+                                            Text.rich(
+                                              overflow: TextOverflow.ellipsis,
+                                              TextSpan(
+                                                text: '#',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 18.sp,
+                                                ),
+                                                children: <TextSpan>[
                                                   TextSpan(
-                                                    text: '#',
+                                                    text: post['raid'],
                                                     style: TextStyle(
-                                                      color: Colors.grey,
+                                                      color: Colors.white,
                                                       fontSize: 18.sp,
                                                     ),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text: post['raid'],
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18.sp,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),

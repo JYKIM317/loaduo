@@ -19,9 +19,53 @@ const cors = require("cors");
 admin.initializeApp(functions.config().firebase);
 
 const db = admin.firestore();
+const rtdb = admin.database();
 
 const app = express();
 app.use(cors({origin: true}));
+
+exports.createAnonymousChat = functions.region("asia-northeast3").https.onRequest((data, response) => {
+  // 대기중인 유저 불러오기
+  db.collection("MatchMakingStandBy").orderBy("registeredTime").get().then((standByUserList) => {
+    let firstStandbyUser = null;
+    let secondStandbyUser = null;
+    let firstUID;
+    let secondUID;
+    let info;
+    if (standByUserList.docs.length >= 2) {
+      for (const standByUser of standByUserList.docs) {
+        if (firstStandbyUser === null) {
+          db.collection("MatchMakingStandBy").doc(standByUser.id).delete();
+          firstStandbyUser = standByUser.data();
+        } else if (secondStandbyUser === null) {
+          db.collection("MatchMakingStandBy").doc(standByUser.id).delete();
+          secondStandbyUser = standByUser.data();
+        } else {
+          break;
+        }
+      }
+      if (firstStandbyUser !== null && secondStandbyUser !== null) {
+        delete firstStandbyUser["registeredTime"];
+        firstUID = firstStandbyUser.uid;
+        delete secondStandbyUser["registeredTime"];
+        secondUID = secondStandbyUser.uid;
+        info = {
+          [firstUID]: firstStandbyUser,
+          [secondUID]: secondStandbyUser,
+        };
+        const chatAddress = `Chatting/Anonymous/${firstUID}_${secondUID}`;
+        const chatData = {
+          "info": info,
+          "lastMessageTime": data.body.time,
+        };
+        rtdb.ref(chatAddress).set(chatData).then(() => {
+          db.collection("Users").doc(firstUID).collection("AnonymousChat").doc("address").set({"chatAddress": chatAddress});
+          db.collection("Users").doc(secondUID).collection("AnonymousChat").doc("address").set({"chatAddress": chatAddress});
+        });
+      }
+    }
+  });
+});
 
 exports.pushFcm = functions.region("asia-northeast3").https.onRequest(app);
 

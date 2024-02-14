@@ -498,67 +498,55 @@ class _FindGuildState extends ConsumerState<FindGuild> {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
-                                            Row(
-                                              children: [
-                                                Text.rich(
+                                            Text.rich(
+                                              overflow: TextOverflow.ellipsis,
+                                              TextSpan(
+                                                text: '#',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 18.sp,
+                                                ),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                    text: '${post['server']} ',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                  ),
                                                   TextSpan(
                                                     text: '#',
                                                     style: TextStyle(
                                                       color: Colors.grey,
                                                       fontSize: 18.sp,
                                                     ),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text:
-                                                            '${post['server']} ',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18.sp,
-                                                        ),
-                                                      )
-                                                    ],
                                                   ),
-                                                ),
-                                                Text.rich(
+                                                  TextSpan(
+                                                    text:
+                                                        '${post['guildType']} ',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                  ),
                                                   TextSpan(
                                                     text: '#',
                                                     style: TextStyle(
                                                       color: Colors.grey,
                                                       fontSize: 18.sp,
                                                     ),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text:
-                                                            '${post['guildType']} ',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18.sp,
-                                                        ),
-                                                      )
-                                                    ],
                                                   ),
-                                                ),
-                                                Text.rich(
                                                   TextSpan(
-                                                    text: '#',
+                                                    text: post['level'] != 0
+                                                        ? '${post['level']} 이상 '
+                                                        : '레벨 제한 없음',
                                                     style: TextStyle(
-                                                      color: Colors.grey,
+                                                      color: Colors.white,
                                                       fontSize: 18.sp,
                                                     ),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text: post['level'] != 0
-                                                            ? '${post['level']} 이상 '
-                                                            : '레벨 제한 없음',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18.sp,
-                                                        ),
-                                                      )
-                                                    ],
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),

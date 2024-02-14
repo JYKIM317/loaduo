@@ -572,130 +572,117 @@ class _FindGganbuState extends ConsumerState<FindGganbu> {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                             ),
-                                            Row(
-                                              children: [
-                                                Text.rich(
+                                            Text.rich(
+                                              overflow: TextOverflow.ellipsis,
+                                              TextSpan(
+                                                text: '#',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 18.sp,
+                                                ),
+                                                children: <TextSpan>[
                                                   TextSpan(
-                                                    text: '#',
+                                                    text:
+                                                        '${post['representServer']} ',
                                                     style: TextStyle(
-                                                      color: Colors.grey,
+                                                      color: Colors.white,
                                                       fontSize: 18.sp,
                                                     ),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text:
-                                                            '${post['representServer']} ',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18.sp,
-                                                        ),
-                                                      )
-                                                    ],
                                                   ),
-                                                ),
-                                                if (post['concern'].length >= 1)
-                                                  Text.rich(
+                                                  if (post['concern'].length >=
+                                                      1)
                                                     TextSpan(
                                                       text: '#',
                                                       style: TextStyle(
                                                         color: Colors.grey,
                                                         fontSize: 18.sp,
                                                       ),
-                                                      children: <TextSpan>[
-                                                        TextSpan(
-                                                          text:
-                                                              '${post['concern'][0]} ',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 18.sp,
-                                                          ),
-                                                        )
-                                                      ],
                                                     ),
-                                                  ),
-                                                if (post['concern'].length >= 2)
-                                                  Text.rich(
+                                                  if (post['concern'].length >=
+                                                      1)
+                                                    TextSpan(
+                                                      text:
+                                                          '${post['concern'][0]} ',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18.sp,
+                                                      ),
+                                                    ),
+                                                  if (post['concern'].length >=
+                                                      2)
                                                     TextSpan(
                                                       text: '#',
                                                       style: TextStyle(
                                                         color: Colors.grey,
                                                         fontSize: 18.sp,
                                                       ),
-                                                      children: <TextSpan>[
-                                                        TextSpan(
-                                                          text:
-                                                              '${post['concern'][1]} ',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 18.sp,
-                                                          ),
-                                                        )
-                                                      ],
                                                     ),
-                                                  ),
-                                                if (post['concern'].length >= 3)
-                                                  Text.rich(
+                                                  if (post['concern'].length >=
+                                                      2)
+                                                    TextSpan(
+                                                      text:
+                                                          '${post['concern'][1]} ',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18.sp,
+                                                      ),
+                                                    ),
+                                                  if (post['concern'].length >=
+                                                      3)
                                                     TextSpan(
                                                       text: '#',
                                                       style: TextStyle(
                                                         color: Colors.grey,
                                                         fontSize: 18.sp,
                                                       ),
-                                                      children: <TextSpan>[
-                                                        TextSpan(
-                                                          text:
-                                                              '${post['concern'][2]} ',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 18.sp,
-                                                          ),
-                                                        )
-                                                      ],
                                                     ),
-                                                  ),
-                                              ],
+                                                  if (post['concern'].length >=
+                                                      3)
+                                                    TextSpan(
+                                                      text:
+                                                          '${post['concern'][2]} ',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18.sp,
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
                                             ),
-                                            Row(
-                                              children: [
-                                                Text.rich(
+                                            Text.rich(
+                                              overflow: TextOverflow.ellipsis,
+                                              TextSpan(
+                                                text: '#',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 18.sp,
+                                                ),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                    text:
+                                                        '평일 ${post['weekdayPlaytime']}시 ',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                  ),
                                                   TextSpan(
                                                     text: '#',
                                                     style: TextStyle(
                                                       color: Colors.grey,
                                                       fontSize: 18.sp,
                                                     ),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text:
-                                                            '평일 ${post['weekdayPlaytime']}시 ',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18.sp,
-                                                        ),
-                                                      )
-                                                    ],
                                                   ),
-                                                ),
-                                                Text.rich(
                                                   TextSpan(
-                                                    text: '#',
+                                                    text:
+                                                        '주말 ${post['weekendPlaytime']}시 ',
                                                     style: TextStyle(
-                                                      color: Colors.grey,
+                                                      color: Colors.white,
                                                       fontSize: 18.sp,
                                                     ),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text:
-                                                            '주말 ${post['weekendPlaytime']}시 ',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18.sp,
-                                                        ),
-                                                      )
-                                                    ],
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),

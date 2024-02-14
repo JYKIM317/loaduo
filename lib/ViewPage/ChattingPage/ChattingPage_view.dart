@@ -58,27 +58,30 @@ class _ChattingPageState extends State<ChattingPage> {
             surfaceTintColor: Colors.transparent,
             titleSpacing: 2,
             actions: [
-              IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProgressHUD(
-                        child: Report(
-                          postType: 'Chatting',
-                          uid: raidInfo == null
-                              ? otherPersonInfo['uid']
-                              : 'raid',
-                          address: address,
+              Padding(
+                padding: EdgeInsets.only(right: 16.w),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProgressHUD(
+                          child: Report(
+                            postType: 'Chatting',
+                            uid: raidInfo == null
+                                ? otherPersonInfo['uid']
+                                : 'raid',
+                            address: address,
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
-                icon: Icon(
-                  Icons.error,
-                  color: Colors.red[400],
-                  size: 24.sp,
+                    );
+                  },
+                  icon: Icon(
+                    Icons.error,
+                    color: Colors.red[400],
+                    size: 24.sp,
+                  ),
                 ),
               )
             ],
@@ -246,7 +249,9 @@ class _ChattingPageState extends State<ChattingPage> {
                                     borderRadius: BorderRadius.circular(8.sp),
                                   ),
                                   child: Text(
-                                    thisMessage['text'],
+                                    thisMessage['text'] != '##### 친구맺기신청 #####'
+                                        ? thisMessage['text']
+                                        : ' ',
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       color: isMe ? Colors.white : Colors.black,

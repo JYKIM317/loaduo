@@ -565,70 +565,58 @@ class _FindRaidForTodayState extends ConsumerState<FindRaidForToday> {
                                                 ],
                                               ),
                                             ),
-                                            Row(
-                                              children: [
-                                                Text.rich(
+                                            Text.rich(
+                                              overflow: TextOverflow.ellipsis,
+                                              TextSpan(
+                                                text: '#',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 18.sp,
+                                                ),
+                                                children: <TextSpan>[
                                                   TextSpan(
-                                                    text: '#',
+                                                    text: '${post['raid']} ',
                                                     style: TextStyle(
-                                                      color: Colors.grey,
+                                                      color: Colors.white,
                                                       fontSize: 18.sp,
                                                     ),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text:
-                                                            '${post['raid']} ',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18.sp,
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
+                                                  )
+                                                ],
+                                              ),
                                             ),
-                                            Row(
-                                              children: [
-                                                Text.rich(
+                                            Text.rich(
+                                              overflow: TextOverflow.ellipsis,
+                                              TextSpan(
+                                                text: '#',
+                                                style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 18.sp,
+                                                ),
+                                                children: <TextSpan>[
+                                                  TextSpan(
+                                                    text: '${post['skill']} ',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 18.sp,
+                                                    ),
+                                                  ),
                                                   TextSpan(
                                                     text: '#',
                                                     style: TextStyle(
                                                       color: Colors.grey,
                                                       fontSize: 18.sp,
                                                     ),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text:
-                                                            '${post['skill']} ',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18.sp,
-                                                        ),
-                                                      )
-                                                    ],
                                                   ),
-                                                ),
-                                                Text.rich(
                                                   TextSpan(
-                                                    text: '#',
+                                                    text:
+                                                        '${startTime.hour}시 ${startTime.minute}분 ',
                                                     style: TextStyle(
-                                                      color: Colors.grey,
+                                                      color: Colors.white,
                                                       fontSize: 18.sp,
                                                     ),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                        text:
-                                                            '${startTime.hour}시 ${startTime.minute}분 ',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 18.sp,
-                                                        ),
-                                                      )
-                                                    ],
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),

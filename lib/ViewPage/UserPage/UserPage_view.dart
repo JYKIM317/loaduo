@@ -24,6 +24,15 @@ class UserPage extends ConsumerWidget {
               userData['ArmoryCard']['Effects'].last['Items'].last['Name'];
     }
 
+    List<dynamic> stats = [];
+    if (userData['ArmoryProfile']['Stats'] != null) {
+      List<dynamic> badStats = ['최대 생명력', '공격력', '제압', '인내', '숙련'];
+      stats = userData['ArmoryProfile']['Stats'];
+      stats.sort(
+          (a, b) => int.parse(b['Value']).compareTo(int.parse(a['Value'])));
+      stats.removeWhere((element) => badStats.contains(element['Type']));
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -663,6 +672,51 @@ class UserPage extends ConsumerWidget {
                   thickness: 2.h,
                   height: 40.h,
                 ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Container(
+                      width: double.infinity,
+                      height: 44.h,
+                      padding: EdgeInsets.fromLTRB(10.w, 10.h, 10.w, 10.h),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 21, 24, 29),
+                        borderRadius: BorderRadius.circular(8.sp),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            '특성비 :',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                          SizedBox(width: 16.w),
+                          Expanded(
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: stats.length,
+                              itemBuilder: (BuildContext ctx, int idx) {
+                                return Text(
+                                  '${stats[idx]['Type']} ${stats[idx]['Value']}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.sp,
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (ctx, idx) {
+                                return SizedBox(width: 10.w);
+                              },
+                            ),
+                          ),
+                        ],
+                      )),
+                ),
+                SizedBox(height: 4.h),
                 userData['ArmoryEquipment'] != null
                     ? Container(
                         alignment: Alignment.topLeft,

@@ -115,7 +115,7 @@ class _MainPageState extends ConsumerState<MainPage> {
           height: double.infinity,
           color: Colors.white,
           child: [
-            GganbuPage(),
+            ProgressHUD(child: GganbuPage()),
             ProgressHUD(child: SearchUserPage()),
             MyChatting(),
             ProgressHUD(child: MyPage(uid: userUID!)),

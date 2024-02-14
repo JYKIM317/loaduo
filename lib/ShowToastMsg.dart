@@ -5,10 +5,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 showToast(String msg) {
   Fluttertoast.showToast(
     msg: msg,
-    gravity: ToastGravity.CENTER,
-    backgroundColor: Colors.grey[100],
+    gravity: ToastGravity.BOTTOM,
+    backgroundColor: Colors.deepOrange[400],
     fontSize: 18.sp,
-    textColor: Colors.deepOrange[400],
-    toastLength: Toast.LENGTH_SHORT,
+    textColor: Colors.white,
+    toastLength: Toast.LENGTH_LONG,
   );
 }
