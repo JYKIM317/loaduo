@@ -10,6 +10,8 @@ class ReportViewModel {
   }) async {
     String? reporter = FirebaseAuth.instance.currentUser!.uid;
     DateTime reportTime = DateTime.now();
+    address = address.replaceAll(RegExp(r'\/'), '_');
+    print('this is replaceAll method after $address');
 
     String reportDay =
         '${reportTime.year}.${reportTime.month.toString().padLeft(2, '0')}.${reportTime.day.toString().padLeft(2, '0')}';
