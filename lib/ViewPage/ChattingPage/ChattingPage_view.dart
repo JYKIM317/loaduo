@@ -57,6 +57,12 @@ class _ChattingPageState extends State<ChattingPage> {
             backgroundColor: Colors.white,
             surfaceTintColor: Colors.transparent,
             titleSpacing: 2,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            ),
             actions: [
               Padding(
                 padding: EdgeInsets.only(right: 16.w),
@@ -87,27 +93,30 @@ class _ChattingPageState extends State<ChattingPage> {
             ],
             title: Row(
               children: [
-                Text.rich(
-                  TextSpan(
-                    text: raidInfo != null
-                        ? raidInfo!['title']
-                        : otherPersonInfo['name'],
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18.sp,
-                    ),
-                    children: <TextSpan>[
-                      const TextSpan(text: ' '),
-                      TextSpan(
-                        text: raidInfo != null
-                            ? raidInfo!['subtitle']
-                            : otherPersonInfo['server'],
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12.sp,
-                        ),
+                Container(
+                  constraints: BoxConstraints(maxWidth: 220.w),
+                  child: Text.rich(
+                    TextSpan(
+                      text: raidInfo != null
+                          ? raidInfo!['title']
+                          : otherPersonInfo['name'],
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 18.sp,
                       ),
-                    ],
+                      children: <TextSpan>[
+                        const TextSpan(text: ' '),
+                        TextSpan(
+                          text: raidInfo != null
+                              ? raidInfo!['subtitle']
+                              : otherPersonInfo['server'],
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12.sp,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(width: 4.w),
